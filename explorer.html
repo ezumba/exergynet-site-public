@@ -124,8 +124,8 @@ body.light-mode .warn{border-left-color:rgba(0,127,159,.32)}
 
   <section class="grid" aria-label="Network vital signs">
     <div class="vital"><div class="k">L0 Network Status</div><div class="v" id="v-status">ONLINE</div><div class="s">sequencer responsive</div></div>
-    <div class="vital"><div class="k">Latest Block Time</div><div class="v" id="v-block">~1.2s</div><div class="s cyan">rolling average</div></div>
-    <div class="vital"><div class="k">Active Aggregator Nodes</div><div class="v" id="v-nodes">07</div><div class="s">testnet cluster</div></div>
+    <div class="vital"><div class="k">Latest Block Time</div><div class="v" id="v-block">--</div><div class="s cyan">rolling average</div></div>
+    <div class="vital"><div class="k">Active Aggregator Nodes</div><div class="v" id="v-nodes">--</div><div class="s">testnet cluster</div></div>
     <div class="vital"><div class="k">Cryptographic Standard</div><div class="v" id="v-crypto">RISC-V</div><div class="s amber">Groth16 / STARK-ready</div></div>
     <div class="vital"><div class="k">Total Proofs Ingested</div><div class="v" id="v-proofs">--</div><div class="s">lifetime verified</div></div>
     <div class="vital"><div class="k">Avg Block Interval</div><div class="v" id="v-interval">--</div><div class="s cyan">seconds between proofs</div></div>
@@ -175,16 +175,17 @@ body.light-mode .warn{border-left-color:rgba(0,127,159,.32)}
 const NETWORKS = {
   testnet: {
     label: 'TESTNET',
-    apiUrl: 'https://explorer-api.exergynet.org/api/l0/transactions',
+    apiUrl: 'https://explorer-api.exergynet.org/api/l0/transactions?network=testnet',
+    statsUrl: 'https://explorer-api.exergynet.org/api/l0/stats?network=testnet',
     note: 'Non-production settlement environment',
-    nodes: '07', block: '~1.2s', crypto: 'RISC-V', live: 'Live Testnet'
+    nodes: '--', block: '--', crypto: 'RISC-V', live: 'Live Testnet'
   },
   mainnet: {
     label: 'MAINNET',
-    apiUrl: 'https://explorer-api.exergynet.org/api/l0/transactions',
-    statsUrl: 'https://explorer-api.exergynet.org/api/l0/stats',
+    apiUrl: 'https://explorer-api.exergynet.org/api/l0/transactions?network=mainnet',
+    statsUrl: 'https://explorer-api.exergynet.org/api/l0/stats?network=mainnet',
     note: 'Production network — Base Mainnet L2 settlement layer.',
-    nodes: '...', block: '...', crypto: 'RISC-V', live: 'Mainnet View'
+    nodes: '--', block: '--', crypto: 'RISC-V', live: 'Mainnet View'
   }
 };
 let activeNetwork = localStorage.getItem('exergy_explorer_network') || 'testnet';
@@ -426,7 +427,9 @@ setInterval(renderLedger, 1000);
 let _lastBlockTimes = [];
 async function pollStats() {
   try {
-    const r = await fetch('https://explorer-api.exergynet.org/api/l0/stats');
+    const cfg = NETWORKS[activeNetwork];
+    if (!cfg.statsUrl) return;
+    const r = await fetch(cfg.statsUrl);
     const s = await r.json();
     document.getElementById('v-nodes').textContent = String(s.active_nodes ?? '--');
     document.getElementById('v-proofs').textContent = (s.total_proofs_ingested ?? '--').toLocaleString();
