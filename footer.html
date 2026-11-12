@@ -1,0 +1,110 @@
+<!-- footer.html -->
+<footer id="main-footer">
+  <div class="footer-inner">
+
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <span class="footer-pulse"></span>
+        ExergyNet
+      </div>
+      <p class="footer-tagline">Execution infrastructure<br>for machine intelligence</p>
+      <div class="footer-chain-badges">
+        <span class="footer-chain-badge sol" title="Settlement Subsystem — Historical Architecture">LNES-03 Settlement</span>
+        <span class="footer-chain-badge base" title="Settlement Subsystem — Base L2">LNES-04 Settlement</span>
+      </div>
+      <div class="footer-status" style="margin-top:1rem;">
+        <span class="footer-status-dot"></span>
+        LNES-03 &middot; Solana &middot; Investigating
+      </div>
+      <div class="footer-status" style="margin-top:0.4rem;">
+        <span class="footer-status-dot" style="background:var(--blue,#4e9eff);box-shadow:0 0 8px rgba(78,158,255,0.4);"></span>
+        LNES-04 &middot; Base L2 &middot; Live
+      </div>
+    </div>
+
+    <nav class="footer-nav" aria-label="Footer navigation">
+
+      <div class="footer-col">
+        <div class="footer-col-label">Product</div>
+        <a href="architecture.html">Architecture</a>
+        <a href="whitepaper.html">Architecture Overview</a>
+        <a href="vmn.html" style="color:var(--accent);">VMN (Local Memory)</a>
+        <a href="omega-carrier.html">Omega Carrier</a>
+        <a href="vanguard.html">Vanguard</a>
+        <a href="https://storage.exergynet.org" target="_blank" rel="noopener">Exergy Vault</a>
+        <a href="lnes06.html">Edge Witness</a>
+        <a href="machines.html">Machine Infrastructure</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Benchmarks &amp; Security</div>
+        <a href="benchmarks.html">Benchmarks</a>
+        <a href="design-partner.html">Benchmark Your Workload</a>
+        <a href="security.html">Authority Control (LNES-22)</a>
+        <a href="proof.html">On-Chain Proof</a>
+        <a href="x402-security-brief.html">x402 Security Brief</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Developers</div>
+        <a href="docs.html">Documentation</a>
+        <a href="sdk.html">SDK Reference</a>
+        <a href="api-integration.html">API Integration</a>
+        <a href="glossary.html">Glossary</a>
+        <a href="mcp.html">MCP Gateway</a>
+        <a href="developers.html">Build Apps</a>
+        <a href="https://github.com/ezumba/vanguard-memory-node" target="_blank" rel="noopener">GitHub</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Network</div>
+        <a href="protocol.html">Protocol</a>
+        <a href="nodes.html">Node Operations</a>
+        <a href="connect.html">Compute Partner Access</a>
+        <a href="explorer.html">Explorer</a>
+        <a href="token.html">Token Info (Historical)</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Enterprise</div>
+        <a href="enterprise.html">Enterprise</a>
+        <a href="design-partner.html">Design Partnership</a>
+        <a href="certificate_physical_presence.html">Presence Certificate</a>
+        <a href="ghost-witness.html">Ghost-Witness</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Company</div>
+        <a href="roadmap.html">Roadmap</a>
+        <a href="journals.html">Journal</a>
+        <a href="faq.html">FAQ</a>
+        <a href="legal.html">Legal</a>
+        <a href="https://discord.gg/EXERGYNET" target="_blank" rel="noopener">Discord</a>
+        <a href="https://x.com/ExergyNet" target="_blank" rel="noopener">X / Twitter</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Also on ExergyNet</div>
+        <a href="apps.html">App Store</a>
+        <a href="space.html">Live Space</a>
+        <a href="voice.html">Voice Stack</a>
+        <a href="orderbook.html">Orderbook</a>
+      </div>
+
+    </nav>
+
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-copy">&copy; <span id="footer-year"></span> ExergyNet. All rights reserved.</div>
+    <div class="footer-program">Program: <code>7BCPpUMB&hellip;4CcCL</code></div>
+  </div>
+
+</footer>
+
+<script>
+  (function() {
+    var el = document.getElementById("footer-year");
+    if (el) el.textContent = new Date().getFullYear();
+  })();
+</script>

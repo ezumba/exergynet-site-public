@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SDK Reference | ExergyNet</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta name="description" content="ExergyNet SDK reference — current integration surfaces for developers: persistent memory (VMN), MCP tooling, Vanguard's OpenAI-compatible API, and the ElizaOS plugin. The Solana Unidirectional Membrane SDK is retained as legacy.">
+<link rel="stylesheet" href="style.css">
+<script>
+// Inline theme init to prevent flash
+(function(){
+  var t = localStorage.getItem('exg-theme');
+  if (!t) {
+    t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+</head>
+<body>
+
+<canvas id="circuit-canvas"></canvas>
+
+<div class="site-wrap">
+
+  <!-- Header will be injected here -->
+  <div id="site-header"></div>
+
+<main class="page">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="glow-accent" style="width:520px;height:380px;top:-100px;right:-200px;"></div>
+    <div class="glow-blue"   style="width:480px;height:360px;bottom:-120px;left:-150px;"></div>
+    
+    <div class="container">
+      <div class="hero-eyebrow" style="margin-bottom:1.25rem;"><span class="dot"></span>Developer SDKs</div>
+      <h1>ExergyNet<br><span class="accent">SDK Reference</span></h1>
+      <p class="hero-sub">Integrate the ExergyNet substrate by capability — persistent state, evidence, orchestration, and authority — not by chain. Start with the surfaces below; the original Solana membrane SDK is retained as legacy.</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- STATUS NOTICE (Wave-1 accuracy correction) -->
+    <div class="card" style="border-left:3px solid var(--amber,#d4a017); margin-bottom:1.5rem; padding:1rem 1.25rem;">
+      <strong style="display:block; margin-bottom:0.35rem;">STATUS NOTICE &mdash; Surface availability (verified 2026-11-11)</strong>
+      <ul style="margin:0; padding-left:1.25rem; font-size:13px; color:var(--text-soft);">
+        <li><strong>VMN:</strong> current package is <code>@lnes/vanguard-memory-node</code> (npm). The unscoped <code>vanguard-memory-node</code> is an older 1.5.0 line and no longer the documented install target.</li>
+        <li><strong>MCP Gateway:</strong> the <code>https://exergynet.org/mcp</code> write-settlement path is <strong>disabled</strong>. For read-only lookups use the <code>exergynet-mcp-server</code> npm package; see <a href="mcp.html">MCP status</a>.</li>
+        <li><strong>Vanguard API:</strong> <code>https://api.exergynet.org/v1</code> was <strong>not resolving</strong> at verification time (DNS). Treat as UNAVAILABLE until this notice is updated.</li>
+        <li><strong>ElizaOS plugin:</strong> <code>@elizaos/plugin-exergynet</code> is not currently published on npm. Installation instructions below are retained for when the package is released.</li>
+        <li><strong>Solana legacy SDK:</strong> <code>exergynet-agent-sdk</code> targets LNES-03 (under investigation for transaction failures). The npm-published version line is 0.1.x; Solana settlement is not operational.</li>
+      </ul>
+    </div>
+
+    <!-- CURRENT INTEGRATION SURFACES -->
+    <section>
+      <div class="section-label">Start Here — Current Surfaces</div>
+      <h2>What to integrate now</h2>
+      <p style="max-width:720px; margin-bottom:1.5rem;">These are the current, supported ways to build on ExergyNet, ordered by developer job: persistent state &rarr; evidence &rarr; orchestration &rarr; authority.</p>
+      <div class="card-grid">
+        <div class="card accent-border">
+          <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;"><h3 style="margin:0;">Persistent State &mdash; VMN</h3><span class="badge badge-green">Live</span></div>
+          <p>Local, deterministic xLMP memory over MCP. Deterministic retrieval, content-addressed, no cloud required.</p>
+          <pre style="margin-top:0.75rem;"><code>npm install @lnes/vanguard-memory-node</code></pre>
+          <div style="margin-top:0.75rem;"><a href="vmn.html" class="btn btn-ghost" style="font-size:12px;">VMN &rarr;</a></div>
+        </div>
+        <div class="card blue-border">
+          <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;"><h3 style="margin:0;">Tooling &mdash; MCP Gateway</h3><span class="badge badge-green">Live</span></div>
+          <p>Connect compatible agents to ExergyNet memory, evidence, and authority-scoped tools via Model Context Protocol.</p>
+          <pre style="margin-top:0.75rem;"><code>https://exergynet.org/mcp</code></pre>
+          <div style="margin-top:0.75rem;"><a href="mcp.html" class="btn btn-ghost" style="font-size:12px;">MCP &rarr;</a></div>
+        </div>
+        <div class="card accent-border">
+          <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;"><h3 style="margin:0;">Orchestration &mdash; Vanguard</h3><span class="badge badge-green">Live</span></div>
+          <p>OpenAI-compatible API for reasoning and execution coordination over bounded evidence. Point an existing client at the endpoint and swap the key.</p>
+          <pre style="margin-top:0.75rem;"><code>https://api.exergynet.org/v1</code></pre>
+          <div style="margin-top:0.75rem;"><a href="vanguard.html" class="btn btn-ghost" style="font-size:12px;">Vanguard &rarr;</a></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;"><h3 style="margin:0;">Agents &mdash; ElizaOS Plugin</h3><span class="badge badge-green">Recommended</span></div>
+          <p>Zero-boilerplate integration for ElizaOS agents.</p>
+          <pre style="margin-top:0.75rem;"><code>npm install @elizaos/plugin-exergynet</code></pre>
+          <div style="margin-top:0.75rem;"><a href="docs.html" class="btn btn-ghost" style="font-size:12px;">Docs &rarr;</a></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PACKAGE INFO (LEGACY) -->
+    <section>
+      <div class="section-label">Legacy</div>
+      <h2>Solana Unidirectional Membrane SDK <span class="badge badge-amber" style="font-size:0.7rem;vertical-align:middle;">Legacy</span></h2>
+      <p style="max-width:720px; margin-bottom:1.25rem; color:var(--text-soft);">The original <code>exergynet-agent-sdk</code> targets the LNES-03 Solana membrane. It remains available for existing integrations; new projects should use the current surfaces above. Solana settlement liveness is under investigation &mdash; see <a href="proof.html">verification status</a>.</p>
+      
+      <div class="card accent-border" style="margin-bottom:1.5rem;">
+        <ul class="spec-list">
+          <li><span class="spec-key">Package</span>   <span class="spec-val"><code>exergynet-agent-sdk</code></span></li>
+          <li><span class="spec-key">Version</span>   <span class="spec-val"><code>1.0.0-omega</code> <span style="font-size:11px;color:var(--text-soft);">(npm-published line is 0.1.x; 1.0.0-omega is the design version &mdash; verified 2026-11-11)</span></span></li>
+          <li><span class="spec-key">Registry</span>  <span class="spec-val">npm</span></li>
+          <li><span class="spec-key">Language</span>  <span class="spec-val">TypeScript</span></li>
+          <li><span class="spec-key">ElizaOS</span>   <span class="spec-val"><code>@elizaos/plugin-exergynet</code> <span class="badge badge-green">Recommended</span> <span style="font-size:11px;color:var(--text-soft);">(package publication pending &mdash; not yet on npm, verified 2026-11-11)</span></span></li>
+        </ul>
+      </div>
+
+      <div class="code-label">INSTALL — ALL DEPENDENCIES</div>
+      <pre><code>npm install exergynet-agent-sdk @solana/web3.js @solana/spl-token bs58 tweetnacl</code></pre>
+
+      <div class="code-label">IMPORT AND VERIFY PROGRAM ID</div>
+      <pre><code><span style="color:var(--blue);">import</span> { ExergyNetClient, LNES_PROGRAM_ID, TRANSIENT_EXG_MINT }
+  <span style="color:var(--blue);">from</span> <span style="color:var(--accent);">"exergynet-agent-sdk"</span>;
+
+console.log(LNES_PROGRAM_ID.toBase58());
+// Expected: 7BCPpUMBxQMPomsgTaJsQdLEfycNwPWqkQD1Cea4CcCL
+// Note: a second program ID (Fe8KhdiFWhKcPWH2N2Svqc3VSpK9EzN8nMh9pQ3cPCeD) appears in the
+// legacy exergynet-agent-sdk README ("LNES-01" era). Two IDs are in circulation across
+// public surfaces; canonical lineage is pending operator confirmation. The site pages
+// reference 7BCP...CcCL.</code></pre>
+    </section>
+
+    <!-- API REFERENCE -->
+    <section>
+      <div class="section-label">API Reference</div>
+      <h2>Core Methods</h2>
+
+      <div class="card-grid">
+        <div class="card accent-border">
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+            <code style="font-size:14px;">mcpHandshake()</code>
+            <span class="badge badge-blue">AUTH</span>
+          </div>
+          <p>Executes the strict Ed25519 cryptographic handshake with the Neural Gateway. Enforces replay protection and returns access clearance.</p>
+        </div>
+
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+            <code style="font-size:14px;">createOpenJobInstruction()</code>
+            <span class="badge badge-amber">WRITE</span>
+          </div>
+          <p>Builds the transaction instruction to lock 0.002 Native SOL. Returns a ready-to-sign <code>TransactionInstruction</code>.</p>
+        </div>
+
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+            <code style="font-size:14px;">Automated Settlement</code>
+            <span class="badge badge-gray">AUTONOMOUS</span>
+          </div>
+          <p>The LNES-03 Settlement Router handles settlement autonomously after escrow lock. No client-side settlement calls needed.</p>
+        </div>
+
+        <div class="card">
+          <div style="display:flex; align-items:center; gap:0.75rem; margin-bottom:0.75rem;">
+            <code style="font-size:14px;">getDiscriminator()</code>
+            <span class="badge badge-gray">UTILITY</span>
+          </div>
+          <p>Returns the 8-byte Anchor instruction discriminator for raw instruction construction.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPLETE INTEGRATION EXAMPLE -->
+    <section>
+      <div class="section-label">Complete Integration</div>
+      <h2>Full Kinetic Strike Example</h2>
+      <div class="card" style="border-left:3px solid var(--amber,#d4a017); margin-bottom:1.25rem; padding:1rem 1.25rem;">
+        <strong style="display:block; margin-bottom:0.35rem;">TARGET DESIGN &mdash; NOT CURRENTLY OPERATIONAL (verified 2026-11-11)</strong>
+        <p style="margin:0; font-size:13px; color:var(--text-soft);">The Solana LNES-03 settlement path is under active investigation for transaction failures ("Do not rely on it for settlement" &mdash; <a href="proof.html">verification status</a>). Running this example today should not broadcast a transaction you treat as settlement-capable, and no production integrator should route real capital through it. Retained as the target integration design for when settlement is re-verified.</p>
+      </div>
+      <p style="max-width:660px; margin-bottom:1.25rem;">End-to-end TypeScript implementation for submitting a compute job.</p>
+
+      <div class="json-block">
+        <pre><code><span style="color:var(--blue);">import</span> { ExergyNetClient, LNES_PROGRAM_ID, TRANSIENT_EXG_MINT } from <span style="color:var(--accent);">"exergynet-agent-sdk"</span>;
+<span style="color:var(--blue);">import</span> * as web3 from <span style="color:var(--accent);">"@solana/web3.js"</span>;
+<span style="color:var(--blue);">import</span> * as spl from <span style="color:var(--accent);">"@solana/spl-token"</span>;
+
+<span style="color:var(--blue);">const</span> client = <span style="color:var(--blue);">new</span> ExergyNetClient(<span style="color:var(--accent);">"https://exergynet.org"</span>);
+
+<span style="color:var(--blue);">async function</span> executeKineticStrike() {
+  <span style="color:var(--text-faint);">// 1. MCP Handshake</span>
+  <span style="color:var(--blue);">await</span> client.mcpHandshake(agentWallet);
+
+  <span style="color:var(--text-faint);">// 2. Build &amp; send open_job transaction</span>
+  <span style="color:var(--blue);">const</span> tx = <span style="color:var(--blue);">await</span> client.createOpenJobInstruction({
+    jobId, axiomHash, payer: agentWallet.publicKey
+  });
+
+  <span style="color:var(--text-faint);">// 3. Sign + broadcast</span>
+  <span style="color:var(--blue);">const</span> sig = <span style="color:var(--blue);">await</span> web3.sendAndConfirmTransaction(connection, tx, [agentWallet]);
+  console.log(<span style="color:var(--accent);">"Kinetic Strike submitted:"</span>, sig);
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- ELIZAOS ALTERNATIVE -->
+    <section>
+      <div class="section-label">Recommended Alternative</div>
+      <h2>ElizaOS Plugin — Zero Boilerplate</h2>
+      <p>For ElizaOS agents, the official plugin abstracts everything into a single action.</p>
+
+      <div class="card accent-border">
+        <div class="code-label">INSTALL</div>
+        <pre><code>pnpm install @elizaos/plugin-exergynet</code></pre>
+        
+        <div class="code-label" style="margin-top:1rem;">CHARACTER CONFIG</div>
+        <pre><code>{
+  "name": "YourAgent",
+  "plugins": ["@elizaos/plugin-exergynet"],
+  "settings": {
+    "secrets": {
+      "SOLANA_PRIVATE_KEY": "your_base58_key"
+    }
+  }
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section" style="border-top:1px solid var(--border);">
+      <div class="container">
+        <h2>Deploy Your First Kinetic Strike</h2>
+        <p>Start integrating verifiable compute today.</p>
+        <div class="btn-row" style="justify-content:center;">
+          <a href="docs.html"  class="btn btn-primary">Full Integration Guide</a>
+          <a href="proof.html" class="btn btn-secondary">Verify Program ID</a>
+          <a href="mcp.html"   class="btn btn-ghost">MCP Gateway &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+  <!-- Footer will be injected here -->
+  <div id="site-footer"></div>
+
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Live Space · ExergyNet</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta property="og:title" content="🎙️ Live Space on ExergyNet">
+<meta property="og:description" content="Listen to a live audio Space — no app needed.">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/twemoji.min.js" crossorigin="anonymous"></script>
+<style>
+:root {
+  --bg:#080d12; --surface:#0f1620; --surface2:#141d2b; --surface3:#1a2433;
+  --border:#1e2c3d; --border2:#253349;
+  --text:#e6edf3; --muted:#6e7f94; --hint:#3d5068;
+  --teal:#00C896; --teal-d:rgba(0,200,150,.12); --teal-glow:rgba(0,200,150,.25);
+  --gold:#f0b429; --gold-d:rgba(240,180,41,.12);
+  --red:#e05252; --red-d:rgba(224,82,82,.12);
+  --ghost:#9b8cc4; --ghost-d:rgba(155,140,196,.1);
+  --purple:#7c6fa0; --blue:#3b82f6;
+  --host-col:#00C896; --cohost-col:#7c6fa0; --speaker-col:#f0b429;
+  --radius:18px; --radius-sm:12px;
+  --nav-h:60px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
+
+/* ── Invite / landing ──────────────────────────────────────────────────────── */
+#invite-wrap{display:flex;align-items:center;justify-content:center;height:100vh;padding:20px;background:var(--bg)}
+.invite-card{width:100%;max-width:420px;background:var(--surface);border:.5px solid var(--border2);border-radius:var(--radius);padding:28px 24px;box-shadow:0 24px 80px rgba(0,0,0,.7)}
+.live-chip{display:inline-flex;align-items:center;gap:8px;background:var(--red-d);color:var(--red);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;letter-spacing:.5px;border:.5px solid rgba(224,82,82,.25)}
+.live-chip .dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.invite-card h1{font-size:22px;font-weight:800;margin:14px 0 5px;line-height:1.25}
+.invite-card .sub{color:var(--muted);font-size:13px;line-height:1.5}
+.room-pill{font-family:monospace;font-size:11px;color:var(--teal);background:var(--teal-d);border-radius:8px;padding:7px 12px;margin:10px 0;word-break:break-all}
+.btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:13px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;text-decoration:none;margin-top:8px;border:none;cursor:pointer;transition:opacity .15s,transform .1s}
+.btn:active{transform:scale(.97)}
+.btn-teal{background:var(--teal);color:#031b14}
+.btn-ghost{background:var(--ghost-d);color:#c4b5fd;border:.5px solid var(--ghost)}
+.btn-green{background:#3ddc84;color:#06251a}
+.btn-outline{background:transparent;color:var(--muted);border:.5px solid var(--border2)}
+.divider{display:flex;align-items:center;gap:10px;color:var(--hint);font-size:11px;margin:14px 0 4px}
+.divider::before,.divider::after{content:'';flex:1;height:.5px;background:var(--border)}
+
+/* ── Name modal ────────────────────────────────────────────────────────────── */
+#modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+#modal-bg.open{display:flex}
+.modal-card{background:var(--surface);border:.5px solid var(--border2);border-radius:var(--radius);padding:26px 22px;width:100%;max-width:370px}
+.modal-card h2{font-size:18px;font-weight:800;margin-bottom:6px}
+.modal-card p{color:var(--muted);font-size:13px;margin-bottom:18px;line-height:1.5}
+.m-inp{width:100%;background:var(--surface2);border:.5px solid var(--border2);border-radius:10px;padding:12px 14px;color:var(--text);font-size:15px;outline:none;margin-bottom:10px}
+.m-inp:focus{border-color:var(--teal)}
+
+/* ── Sign-in modal (ghost gate) ─────────────────────────────────────────────── */
+#signin-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:210;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+#signin-modal.open{display:flex}
+.signin-card{background:var(--surface);border:.5px solid var(--border2);border-radius:var(--radius);padding:28px 24px;width:100%;max-width:380px;text-align:center}
+.signin-card .sc-logo{font-size:13px;font-weight:900;letter-spacing:1px;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:6px}
+.signin-card .sc-logo .sc-dot{width:8px;height:8px;background:var(--teal);border-radius:50%;display:inline-block}
+.signin-card h2{font-size:18px;font-weight:800;margin-bottom:6px}
+.signin-card .sc-sub{color:var(--muted);font-size:13px;margin-bottom:20px;line-height:1.5}
+.sc-oauth-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.sc-oauth-btn{background:var(--surface2);border:.5px solid var(--border2);border-radius:10px;padding:11px;color:var(--text);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;text-decoration:none}
+.sc-oauth-btn:hover{border-color:var(--teal);background:rgba(0,200,150,.08)}
+.sc-divider{display:flex;align-items:center;gap:10px;margin:14px 0}
+.sc-divider span{color:var(--muted);font-size:12px;white-space:nowrap}
+.sc-divider:before,.sc-divider:after{content:'';flex:1;height:.5px;background:var(--border)}
+.sc-inp{width:100%;background:var(--surface2);border:.5px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-size:14px;outline:none;margin-bottom:10px;box-sizing:border-box}
+.sc-inp:focus{border-color:var(--teal)}
+.sc-err{color:#ef4444;font-size:12px;margin:-4px 0 10px;text-align:left;display:none}
+.sc-footer{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:16px;flex-direction:column}
+.sc-divider-h{height:.5px;background:var(--border);width:100%;margin:14px 0}
+
+/* ── Profile preview panel ───────────────────────────────────────────────────── */
+#profile-panel{display:none;position:fixed;right:0;top:0;bottom:0;width:100%;max-width:320px;background:var(--surface);border-left:.5px solid var(--border2);z-index:180;flex-direction:column;overflow:hidden;box-shadow:-16px 0 48px rgba(0,0,0,.6);animation:slideInR .22s ease-out}
+#profile-panel.open{display:flex}
+@keyframes slideInR{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.pp-header{padding:18px 20px 14px;border-bottom:.5px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0}
+.pp-avatar{width:60px;height:60px;border-radius:50%;background:var(--ghost-d);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;overflow:hidden;border:2px solid var(--ghost)}
+.pp-avatar img{width:100%;height:100%;object-fit:cover}
+.pp-name{font-size:16px;font-weight:700}
+.pp-role{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+.pp-close{margin-left:auto;background:var(--surface2);border:none;width:32px;height:32px;border-radius:50%;color:var(--muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.pp-gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;padding:12px 16px;overflow-y:auto}
+.pp-img{aspect-ratio:1;background:var(--surface2);border-radius:8px;overflow:hidden;cursor:pointer}
+.pp-img img{width:100%;height:100%;object-fit:cover}
+.pp-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:28px;color:var(--hint)}
+.pp-empty{padding:24px 20px;color:var(--muted);font-size:13px;text-align:center}
+.pp-big-img{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:220;align-items:center;justify-content:center;cursor:pointer}
+.pp-big-img.open{display:flex}
+.pp-big-img img{max-width:92vw;max-height:90vh;border-radius:10px;object-fit:contain}
+
+/* ── Full-screen listener layout ──────────────────────────────────────────── */
+#listen-wrap{display:none;flex-direction:column;height:100vh;overflow:hidden}
+#listen-wrap.active{display:flex}
+
+/* Top bar */
+.top-bar{height:var(--nav-h);padding:0 18px;display:flex;align-items:center;gap:12px;background:var(--surface);border-bottom:.5px solid var(--border);flex-shrink:0;position:relative;z-index:10}
+.top-bar .space-title{font-size:15px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-bar .count-chip{background:var(--surface2);border:.5px solid var(--border2);border-radius:20px;padding:5px 11px;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;flex-shrink:0}
+.top-bar .count-chip .dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:pulse 1.4s infinite}
+.leave-btn{background:var(--red-d);color:var(--red);border:.5px solid rgba(224,82,82,.3);border-radius:10px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0}
+
+/* Main body: stage left, listeners right */
+.main-body{flex:1;display:flex;overflow:hidden}
+
+/* Stage column */
+.stage-col{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:0}
+.stage-section{padding:12px 16px 10px;border-bottom:.5px solid var(--border);flex-shrink:0}
+.sec-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.sec-label .on-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:pulse 1.4s infinite;flex-shrink:0}
+
+/* Speaker pips */
+.stage-roster{display:flex;flex-wrap:wrap;gap:12px}
+.s-pip{display:flex;flex-direction:column;align-items:center;gap:5px;width:62px}
+.s-pip .av{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;border:2.5px solid transparent;transition:border-color .2s,box-shadow .2s;overflow:hidden;position:relative;flex-shrink:0}
+.s-pip .av img{width:100%;height:100%;object-fit:cover}
+.s-pip .av.host-av{background:var(--teal-d);border-color:var(--host-col)}
+.s-pip .av.cohost-av{background:var(--ghost-d);border-color:var(--cohost-col)}
+.s-pip .av.speaker-av{background:var(--gold-d);border-color:var(--speaker-col)}
+.s-pip .av.speaking{animation:speakPulse 1s ease-in-out infinite}
+@keyframes speakPulse{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 5px var(--teal-glow)}}
+.s-pip .av.host-av.speaking{box-shadow:0 0 14px rgba(0,200,150,.5)}
+.s-pip .sname{font-size:10px;color:var(--text);text-align:center;max-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.s-pip .stag{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.s-pip .stag.host-tag{color:var(--host-col)}
+.s-pip .stag.cohost-tag{color:var(--cohost-col)}
+.s-pip .stag.speaker-tag{color:var(--speaker-col)}
+.waiting-stage{font-size:13px;color:var(--muted);padding:8px 0}
+
+/* Transcript feed */
+.transcript-col{flex:1;display:flex;flex-direction:column;overflow:hidden;border-top:.5px solid var(--border)}
+.transcript-hdr{padding:10px 16px 8px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.transcript-hdr .label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;display:flex;align-items:center;gap:7px}
+.transcript-feed{flex:1;overflow-y:auto;padding:4px 18px 14px;display:flex;flex-direction:column;gap:8px}
+.transcript-feed::-webkit-scrollbar{width:4px}
+.transcript-feed::-webkit-scrollbar-track{background:transparent}
+.transcript-feed::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+.tx-line{display:flex;gap:10px;align-items:flex-start;animation:fadeUp .25s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.tx-badge{font-size:9px;font-weight:800;letter-spacing:.3px;padding:3px 7px;border-radius:6px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.tx-badge.host{background:rgba(0,200,150,.18);color:var(--teal)}
+.tx-badge.cohost{background:rgba(124,111,160,.18);color:var(--ghost)}
+.tx-badge.speaker{background:rgba(240,180,41,.18);color:var(--gold)}
+.tx-name{font-size:11px;font-weight:700;color:var(--text);flex-shrink:0;white-space:nowrap;margin-top:2px}
+.tx-text{font-size:13px;color:var(--text);line-height:1.45;flex:1;opacity:.85}
+.tx-partial .tx-text{opacity:.5;font-style:italic}
+.tx-empty{color:var(--hint);font-size:13px;text-align:center;padding:24px 0;font-style:italic}
+
+/* Listeners sidebar */
+.listeners-col{width:280px;border-left:.5px solid var(--border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0}
+@media(max-width:720px){.listeners-col{display:none}}
+.lc-hdr{padding:14px 16px 10px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:.5px solid var(--border)}
+.lc-hdr .cnt{font-size:13px;font-weight:800;color:var(--text);letter-spacing:0;text-transform:none}
+.lc-grid{flex:1;overflow-y:auto;padding:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-content:start}
+.lc-grid::-webkit-scrollbar{width:4px}
+.lc-grid::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+.lpip{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;transition:transform .12s}
+.lpip:hover .lav{border-color:var(--teal)}
+.lpip:active{transform:scale(.92)}
+.lav{width:44px;height:44px;border-radius:50%;background:var(--surface2);border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;transition:border-color .2s}
+.lav img{width:100%;height:100%;object-fit:cover}
+.lav.ghost-lav{background:var(--ghost-d);border-color:var(--ghost)}
+.lname{font-size:9px;color:var(--muted);text-align:center;max-width:44px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.overflow-chip{grid-column:1/-1;text-align:center;font-size:12px;color:var(--hint);padding:8px 0;font-weight:600}
+
+/* Bottom CTA bar (ghost gate + speak) — single compact row */
+.speak-cta{padding:10px 16px;border-top:.5px solid var(--border);background:var(--surface);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.speak-cta p{font-size:11px;color:var(--muted);flex:1;line-height:1.4}
+.speak-cta .cta-btn{background:var(--teal);color:#031b14;border-radius:9px;padding:8px 14px;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap;flex-shrink:0;border:none;cursor:pointer}
+.speak-cta .gate-btn{background:var(--surface2);color:var(--teal);border:.5px solid var(--teal);border-radius:9px;padding:8px 14px;font-size:12px;font-weight:700;white-space:nowrap;flex-shrink:0;cursor:pointer}
+
+/* Audio unlock banner */
+#audio-unlock-btn{position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:99;background:var(--teal);color:#031b14;border:none;border-radius:12px;padding:12px 24px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(0,200,150,.35)}
+
+/* Emoji reaction floats */
+.reaction-float{position:fixed;bottom:20%;font-size:36px;pointer-events:none;z-index:9999;animation:floatUp 2s ease-out forwards;line-height:1}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}70%{opacity:.8;transform:translateY(-90px) scale(1.2)}100%{opacity:0;transform:translateY(-160px) scale(.8)}}
+img.emoji{width:1.1em;height:1.1em;vertical-align:-.15em;display:inline}
+
+/* Role color utils */
+.role-host{color:var(--host-col)}
+.role-cohost{color:var(--cohost-col)}
+.role-speaker{color:var(--speaker-col)}
+
+/* Mobile: slide-up listeners sheet */
+.lc-mobile-toggle{display:none;position:fixed;bottom:70px;right:16px;z-index:50;background:var(--surface);border:.5px solid var(--border2);border-radius:50%;width:48px;height:48px;align-items:center;justify-content:center;font-size:16px;box-shadow:0 4px 16px rgba(0,0,0,.5);cursor:pointer}
+@media(max-width:720px){.lc-mobile-toggle{display:flex}}
+
+/* Err box */
+.err-box{background:var(--red-d);border:.5px solid rgba(224,82,82,.3);border-radius:12px;padding:12px 14px;margin-top:10px;color:var(--red);font-size:13px}
+
+/* ── Top-bar icon buttons (chat + vanguard) ──────────────────────────────── */
+.tb-btn{background:var(--surface2);border:.5px solid var(--border2);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;flex-shrink:0;position:relative;transition:background .15s}
+.tb-btn:hover{background:var(--surface3)}
+.tb-btn.active{background:var(--teal-d);border-color:var(--teal)}
+.tb-badge{position:absolute;top:-4px;right:-4px;background:var(--red);border-radius:50%;width:14px;height:14px;font-size:8px;font-weight:800;color:#fff;display:none;align-items:center;justify-content:center}
+.tb-badge.has{display:flex}
+
+/* ── Chat slide panel ────────────────────────────────────────────────────── */
+#chat-panel{display:none;position:fixed;bottom:0;left:0;right:0;z-index:120;background:var(--surface);border-top:.5px solid var(--border2);flex-direction:column;height:55vh;box-shadow:0 -12px 40px rgba(0,0,0,.6)}
+#chat-panel.open{display:flex}
+@media(min-width:721px){
+  #chat-panel{left:auto;top:var(--nav-h);bottom:0;width:320px;border-top:none;border-left:.5px solid var(--border2);height:auto;box-shadow:-12px 0 40px rgba(0,0,0,.4)}
+}
+.chat-hdr{padding:12px 16px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:.5px solid var(--border);flex-shrink:0}
+.chat-hdr-label{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase}
+.chat-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:0 2px}
+#chat-feed{flex:1;overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+#chat-feed::-webkit-scrollbar{width:3px}
+#chat-feed::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+.chat-msg{display:flex;flex-direction:column;gap:1px;animation:fadeUp .2s ease-out}
+.chat-msg-meta{font-size:10px;font-weight:700}
+.chat-msg-meta.mine{color:var(--teal);text-align:right}
+.chat-msg-meta.theirs{color:var(--ghost)}
+.chat-msg-text{font-size:13px;line-height:1.45;color:var(--text);word-break:break-word;background:var(--surface2);border-radius:10px;padding:6px 10px;display:inline-block;max-width:85%}
+.chat-msg.mine-wrap{align-items:flex-end}
+.chat-empty{color:var(--hint);font-size:13px;text-align:center;padding:20px 0;font-style:italic}
+.chat-input-row{padding:8px 12px;border-top:.5px solid var(--border);display:flex;gap:8px;flex-shrink:0;background:var(--surface)}
+.chat-inp{flex:1;background:var(--surface2);border:.5px solid var(--border2);border-radius:10px;padding:9px 12px;font-size:13px;color:var(--text);outline:none}
+.chat-inp:focus{border-color:var(--teal)}
+.chat-send{background:var(--teal);color:#031b14;border:none;border-radius:9px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0}
+.chat-signin-bar{padding:10px 14px;text-align:center;font-size:12px;color:var(--muted)}
+.chat-signin-bar button{background:var(--surface2);border:.5px solid var(--teal);color:var(--teal);border-radius:8px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;margin-top:4px}
+
+/* ── Vanguard slide panel ─────────────────────────────────────────────────── */
+#vg-panel{display:none;position:fixed;bottom:0;left:0;right:0;z-index:130;background:var(--bg);border-top:.5px solid var(--border2);flex-direction:column;height:70vh;box-shadow:0 -12px 40px rgba(0,0,0,.7)}
+#vg-panel.open{display:flex}
+@media(min-width:721px){
+  #vg-panel{left:auto;top:var(--nav-h);bottom:0;width:360px;border-top:none;border-left:.5px solid var(--border2);height:auto}
+}
+.vg-hdr{padding:12px 16px 10px;display:flex;align-items:center;gap:10px;border-bottom:.5px solid var(--border);flex-shrink:0}
+.vg-hdr-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);animation:pulse 2s infinite;flex-shrink:0}
+.vg-hdr-label{font-size:13px;font-weight:700;color:var(--teal);flex:1}
+.vg-close{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer}
+#vg-feed{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
+#vg-feed::-webkit-scrollbar{width:3px}
+#vg-feed::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+.vg-bubble{padding:9px 12px;border-radius:12px;font-size:13px;line-height:1.5;max-width:88%;animation:fadeUp .2s ease-out;word-break:break-word}
+.vg-bubble.user{background:var(--teal-d);border:.5px solid rgba(0,200,150,.2);align-self:flex-end;color:var(--text)}
+.vg-bubble.assistant{background:var(--surface2);border:.5px solid var(--border2);color:var(--text)}
+.vg-bubble.thinking{opacity:.5;font-style:italic}
+.vg-empty{color:var(--hint);font-size:13px;text-align:center;padding:24px 14px;line-height:1.6}
+.vg-input-row{padding:8px 12px 12px;border-top:.5px solid var(--border);display:flex;gap:8px;flex-shrink:0;background:var(--bg)}
+.vg-inp{flex:1;background:var(--surface2);border:.5px solid var(--border2);border-radius:10px;padding:9px 12px;font-size:13px;color:var(--text);outline:none}
+.vg-inp:focus{border-color:var(--teal)}
+.vg-send{background:var(--teal);color:#031b14;border:none;border-radius:9px;padding:9px 14px;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0}
+.vg-signin-bar{padding:16px 14px;text-align:center}
+.vg-signin-bar p{color:var(--muted);font-size:13px;margin-bottom:10px}
+.vg-signin-bar button{background:var(--teal);color:#031b14;border:none;border-radius:10px;padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer}
+
+/* ── Toast notification ───────────────────────────────────────────────────── */
+.space-toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:999;background:var(--surface);border:.5px solid var(--border2);border-radius:12px;padding:10px 18px;font-size:13px;font-weight:600;color:var(--text);box-shadow:0 4px 20px rgba(0,0,0,.5);animation:fadeUp .25s ease-out;pointer-events:none;white-space:nowrap}
+
+/* ── Connecting overlay ──────────────────────────────────────────────────── */
+#connecting-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(8,13,18,.8);align-items:center;justify-content:center;flex-direction:column;gap:14px;backdrop-filter:blur(4px)}
+#connecting-overlay.show{display:flex}
+.conn-spinner{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.conn-label{font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+
+<!-- ── Name modal ─────────────────────────────────────────────────────────── -->
+<div id="modal-bg">
+  <div class="modal-card">
+    <h2>👻 Enter as Ghost Listener</h2>
+    <p>You'll listen in silence — no mic, no account needed.<br>Add a display name so others can see you, or stay anonymous.</p>
+    <input id="ghost-name" class="m-inp" placeholder="Display name (optional)" maxlength="24" autocomplete="off">
+    <button class="btn btn-ghost" id="enter-ghost-btn">👻 Enter as Ghost</button>
+    <button class="btn btn-outline" id="modal-cancel-btn" style="margin-top:6px;padding:10px">Cancel</button>
+  </div>
+</div>
+
+<!-- ── Sign-in gate modal (ghost can't chat) ─────────────────────────────── -->
+<div id="signin-modal">
+  <div class="signin-card">
+    <div class="sc-logo"><span class="sc-dot"></span> EXERGYNET</div>
+    <h2>Sign in to participate</h2>
+    <p class="sc-sub">React, chat, and raise your hand to speak.</p>
+
+    <!-- OAuth options — callbackUrl set dynamically by JS -->
+    <div class="sc-oauth-row">
+      <a class="sc-oauth-btn" id="sc-google-btn" href="#">
+        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Google
+      </a>
+      <a class="sc-oauth-btn" id="sc-twitter-btn" href="#">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.259 5.63L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        X
+      </a>
+    </div>
+
+    <div class="sc-divider"><span>or sign in with email</span></div>
+
+    <input type="email" id="sc-email" class="sc-inp" placeholder="Email address" autocomplete="email">
+    <input type="password" id="sc-pw" class="sc-inp" placeholder="Password" autocomplete="current-password">
+    <div id="sc-err" class="sc-err"></div>
+    <button class="btn btn-teal" id="sc-submit" style="width:100%;padding:13px" onclick="doSpaceSignIn()">Sign in →</button>
+
+    <div class="sc-divider-h"></div>
+    <a class="btn btn-outline" href="https://explorer-api.exergynet.org/downloads/ExergyNet-latest.apk" style="width:100%;padding:12px;text-align:center;display:block;box-sizing:border-box">⬇ Get ExergyNet App</a>
+    <button class="btn btn-outline" id="signin-close-btn" style="margin-top:8px;padding:10px;width:100%">Not now</button>
+  </div>
+</div>
+
+<!-- ── Listener profile panel ─────────────────────────────────────────────── -->
+<div id="profile-panel">
+  <div class="pp-header">
+    <div class="pp-avatar" id="pp-av">👤</div>
+    <div style="flex:1;min-width:0">
+      <div class="pp-name" id="pp-name">—</div>
+      <div class="pp-role" id="pp-role">—</div>
+    </div>
+    <button class="pp-close" id="pp-close-btn">✕</button>
+  </div>
+  <div class="pp-gallery" id="pp-gallery"></div>
+</div>
+<!-- Full-size image viewer -->
+<div class="pp-big-img" id="pp-big" onclick="closeBigImg()">
+  <img id="pp-big-img" src="" alt="">
+</div>
+
+<!-- ── Invite UI ──────────────────────────────────────────────────────────── -->
+<div id="invite-wrap">
+  <div class="invite-card">
+    <div id="invite-inner"></div>
+    <div id="invite-err"></div>
+  </div>
+</div>
+
+<!-- ── Full-screen listener UI ───────────────────────────────────────────── -->
+<div id="listen-wrap">
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div class="live-chip"><span class="dot"></span>LIVE</div>
+    <div class="space-title" id="top-room-label">Space</div>
+    <div class="count-chip"><span class="dot"></span><span id="top-listener-count">1</span> listening</div>
+    <button class="tb-btn" id="chat-toggle-btn" title="Space chat" onclick="toggleChatPanel()">💬<span class="tb-badge" id="chat-badge"></span></button>
+    <button class="tb-btn" id="vg-toggle-btn" title="Ask Vanguard AI" onclick="toggleVgPanel()">🤖</button>
+    <button class="leave-btn" id="leave-btn">Leave</button>
+  </div>
+
+  <!-- Main content: stage + transcript | listeners sidebar -->
+  <div class="main-body">
+
+    <!-- Stage + Transcript column -->
+    <div class="stage-col">
+
+      <!-- On Stage -->
+      <div class="stage-section">
+        <div class="sec-label"><span class="on-dot"></span>On Stage</div>
+        <div class="stage-roster" id="stage-roster">
+          <span class="waiting-stage">Waiting for speakers…</span>
+        </div>
+      </div>
+
+      <!-- Live Transcript -->
+      <div class="transcript-col">
+        <div class="transcript-hdr">
+          <div class="label"><span class="on-dot"></span>Live Transcript</div>
+        </div>
+        <div class="transcript-feed" id="tx-feed">
+          <div class="tx-empty" id="tx-empty">🎙️ Transcript will appear when speakers are active</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Listeners sidebar (desktop) -->
+    <div class="listeners-col" id="listeners-col">
+      <div class="lc-hdr">
+        Listeners
+        <span class="cnt" id="lc-count">1</span>
+      </div>
+      <div class="lc-grid" id="lc-grid"></div>
+    </div>
+
+  </div>
+
+  <!-- Unified bottom bar: ghost gate + speak CTA -->
+  <div class="speak-cta" id="ghost-gate">
+    <p>Ghost mode — listen only. Want to speak or chat?</p>
+    <button class="gate-btn" onclick="showSignInGate()">💬 Sign in</button>
+    <a class="cta-btn" href="https://explorer-api.exergynet.org/downloads/ExergyNet-latest.apk">⬇ Get App</a>
+  </div>
+
+</div>
+
+<!-- Listener sheet toggle (mobile) -->
+<button class="lc-mobile-toggle" id="lc-toggle-btn" title="Show listeners">
+  👥
+</button>
+
+<!-- Chat panel -->
+<div id="chat-panel">
+  <div class="chat-hdr">
+    <span class="chat-hdr-label">Space Chat</span>
+    <button class="chat-close" onclick="toggleChatPanel()">✕</button>
+  </div>
+  <div id="chat-feed">
+    <div class="chat-empty" id="chat-empty">No messages yet — say hello!</div>
+  </div>
+  <div id="chat-send-area"></div>
+</div>
+
+<!-- Vanguard AI panel -->
+<div id="vg-panel">
+  <div class="vg-hdr">
+    <span class="vg-hdr-dot"></span>
+    <span class="vg-hdr-label">Vanguard AI</span>
+    <button class="vg-close" onclick="toggleVgPanel()">✕</button>
+  </div>
+  <div id="vg-feed">
+    <div class="vg-empty" id="vg-empty">Ask Vanguard anything about this Space or the ExergyNet ecosystem.</div>
+  </div>
+  <div id="vg-input-area"></div>
+</div>
+
+<!-- Reconnecting overlay -->
+<div id="connecting-overlay">
+  <div class="conn-spinner"></div>
+  <div class="conn-label" id="conn-label">Connecting…</div>
+</div>
+
+<!-- LiveKit SDK -->
+<script src="https://cdn.jsdelivr.net/npm/livekit-client@2/dist/livekit-client.umd.min.js"></script>
+<script>
+// ── Config ────────────────────────────────────────────────────────────────────
+var TOKEN_URL     = 'https://livekit.exergynet.org/api/v1/livekit/guest-token';
+var AUTH_TOKEN_URL = 'https://livekit.exergynet.org/api/v1/livekit/token';
+var LK_URL        = 'wss://livekit.exergynet.org';
+
+// ── URL params ────────────────────────────────────────────────────────────────
+var params = new URLSearchParams(location.search);
+var roomId = (params.get('room') || '').trim();
+var hostId = (params.get('h')    || '').trim();
+if (!roomId) {
+  var m = location.pathname.match(/\/space[-/]([^\/?#]+)/);
+  if (m && m[1] !== 'index.html' && m[1] !== 'listen') roomId = decodeURIComponent(m[1]);
+}
+
+// ── State ─────────────────────────────────────────────────────────────────────
+var lkRoom        = null;
+var myIdentity    = '';
+var audioElements = [];
+var _audioUnlocked = false;
+var _nameMap      = {};    // identity → display name
+var _metaMap      = {};    // identity → metadata object
+var _txLines      = [];    // transcript history
+var _TX_MAX       = 120;
+var _listenerProfiles = {}; // identity → { name, role, images[] }
+var _spaceTitle       = '';  // display title of current room
+var _chatOpen         = false;
+var _vgOpen           = false;
+var _unreadChat       = 0;
+var _vgHistory        = [];  // {role, content}[] for Vanguard context
+var _vgThinking       = false;
+var _chatCanSend      = false; // true when we have canPublishData token
+
+// ── iOS audio unlock ──────────────────────────────────────────────────────────
+// ── Space background sound engine (mirrors BgSoundPlayer.kt synthesis) ────────
+var _bgCtx = null;
+var _bgGain = null;
+var _bgNodes = [];
+var _bgAudio = null;
+var _bgCurrentId = null;
+
+function _bgAudioCtx() {
+  if (!_bgCtx || _bgCtx.state === 'closed') {
+    _bgCtx = new (window.AudioContext || window.webkitAudioContext)();
+    _bgGain = _bgCtx.createGain();
+    _bgGain.connect(_bgCtx.destination);
+  }
+  if (_bgCtx.state === 'suspended') _bgCtx.resume();
+  return _bgCtx;
+}
+
+function _bgStop() {
+  _bgNodes.forEach(function(n) { try { n.stop ? n.stop(0) : n.disconnect(); } catch(e){} });
+  _bgNodes = [];
+  if (_bgAudio) { _bgAudio.pause(); _bgAudio.src = ''; _bgAudio = null; }
+  _bgCurrentId = null;
+}
+
+function _bgPlay(id, vol) {
+  if (_bgCurrentId === id) { if (_bgGain) _bgGain.gain.value = vol; return; }
+  _bgStop();
+  _bgCurrentId = id;
+  var ctx = _bgAudioCtx();
+  _bgGain.gain.value = vol;
+
+  if (id === 'edge_witness' || id === 'roots') {
+    var src = id === 'edge_witness' ? '/assets/spaces.edge.witness.mp3' : '/assets/spaces.roots.mp3';
+    _bgAudio = new Audio(src);
+    _bgAudio.loop = true;
+    _bgAudio.volume = vol;
+    // Route through AudioContext so it respects the same context as LiveKit
+    var ms = ctx.createMediaElementSource(_bgAudio);
+    ms.connect(_bgGain);
+    _bgNodes.push(ms);
+    _bgAudio.play().catch(function(){});
+    return;
+  }
+
+  var SR = ctx.sampleRate;
+  var BUF = 2; // seconds of looping buffer
+
+  if (id === 'white') {
+    var buf = ctx.createBuffer(1, SR * BUF, SR);
+    var d = buf.getChannelData(0);
+    for (var i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * 0.55;
+    var src2 = ctx.createBufferSource(); src2.buffer = buf; src2.loop = true;
+    src2.connect(_bgGain); src2.start(0); _bgNodes.push(src2);
+
+  } else if (id === 'rain') {
+    var buf = ctx.createBuffer(1, SR * BUF, SR);
+    var d = buf.getChannelData(0), lpf1 = 0, lpf2 = 0;
+    for (var i = 0; i < d.length; i++) {
+      var w = _gauss();
+      lpf1 = 0.97 * lpf1 + 0.03 * w;
+      lpf2 = 0.985 * lpf2 + 0.015 * lpf1;
+      d[i] = lpf2 * 1.4;
+    }
+    var src2 = ctx.createBufferSource(); src2.buffer = buf; src2.loop = true;
+    src2.connect(_bgGain); src2.start(0); _bgNodes.push(src2);
+
+  } else if (id === 'ocean') {
+    var buf = ctx.createBuffer(1, SR * BUF, SR);
+    var d = buf.getChannelData(0), lpf1 = 0;
+    for (var i = 0; i < d.length; i++) {
+      var t = i / SR;
+      var swell = 0.5 + 0.5 * Math.sin(2 * Math.PI * t / 7.0);
+      var swell2 = 0.55 + 0.45 * Math.sin(2 * Math.PI * t / 11.3 + 1.2);
+      var mod = swell * swell2;
+      var w = _gauss();
+      lpf1 = 0.96 * lpf1 + 0.04 * w;
+      d[i] = lpf1 * mod * 1.8;
+    }
+    // Loop a long-enough buffer so the swell cycle doesn't click at the seam
+    var longBuf = ctx.createBuffer(1, SR * 12, SR);
+    var ld = longBuf.getChannelData(0), lp = 0;
+    for (var i = 0; i < ld.length; i++) {
+      var t = i / SR;
+      var swell = 0.5 + 0.5 * Math.sin(2 * Math.PI * t / 7.0);
+      var swell2 = 0.55 + 0.45 * Math.sin(2 * Math.PI * t / 11.3 + 1.2);
+      var w = _gauss();
+      lp = 0.96 * lp + 0.04 * w;
+      ld[i] = lp * swell * swell2 * 1.8;
+    }
+    var src2 = ctx.createBufferSource(); src2.buffer = longBuf; src2.loop = true;
+    src2.connect(_bgGain); src2.start(0); _bgNodes.push(src2);
+
+  } else if (id === 'fire') {
+    var buf = ctx.createBuffer(1, SR * BUF, SR);
+    var d = buf.getChannelData(0), lp1 = 0, lp2 = 0;
+    for (var i = 0; i < d.length; i++) {
+      var crackle = (Math.random() < 1/180) ? _gauss() * 3.5 : _gauss() * 0.12;
+      lp1 = 0.94 * lp1 + 0.06 * crackle;
+      lp2 = 0.98 * lp2 + 0.02 * lp1;
+      d[i] = lp1 * 0.55 + lp2 * 0.45;
+    }
+    var src2 = ctx.createBufferSource(); src2.buffer = buf; src2.loop = true;
+    src2.connect(_bgGain); src2.start(0); _bgNodes.push(src2);
+
+  } else if (id === 'lofi') {
+    var buf = ctx.createBuffer(1, SR * BUF, SR);
+    var d = buf.getChannelData(0);
+    for (var i = 0; i < d.length; i++) {
+      var t = i / SR;
+      var vib = 1.0 + 0.003 * Math.sin(2 * Math.PI * 5.5 * t);
+      var chord = Math.sin(2*Math.PI*261.63*vib*t)*0.30 +
+                  Math.sin(2*Math.PI*329.63*vib*t)*0.22 +
+                  Math.sin(2*Math.PI*392.00*vib*t)*0.16 +
+                  Math.sin(2*Math.PI*523.25*vib*t)*0.08;
+      d[i] = chord + _gauss() * 0.04;
+    }
+    var src2 = ctx.createBufferSource(); src2.buffer = buf; src2.loop = true;
+    src2.connect(_bgGain); src2.start(0); _bgNodes.push(src2);
+
+  } else if (id === 'cafe') {
+    var buf = ctx.createBuffer(1, SR * BUF, SR);
+    var d = buf.getChannelData(0);
+    var b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+    for (var i = 0; i < d.length; i++) {
+      var w = _gauss();
+      b0 = 0.99886*b0 + w*0.0555179;
+      b1 = 0.99332*b1 + w*0.0750759;
+      b2 = 0.96900*b2 + w*0.1538520;
+      b3 = 0.86650*b3 + w*0.3104856;
+      b4 = 0.55000*b4 + w*0.5329522;
+      b5 = -0.7616*b5 - w*0.0168980;
+      var pink = b0+b1+b2+b3+b4+b5+b6+w*0.5362;
+      b6 = w*0.115926;
+      d[i] = pink * 0.18;
+    }
+    var src2 = ctx.createBufferSource(); src2.buffer = buf; src2.loop = true;
+    src2.connect(_bgGain); src2.start(0); _bgNodes.push(src2);
+
+  } else if (id === 'focus') {
+    var buf = ctx.createBuffer(1, SR * BUF, SR);
+    var d = buf.getChannelData(0);
+    for (var i = 0; i < d.length; i++) {
+      var t = i / SR;
+      d[i] = Math.sin(2*Math.PI*40*t)*0.28 +
+              Math.sin(2*Math.PI*528*t)*0.10 +
+              Math.sin(2*Math.PI*80*t)*0.15 +
+              _gauss()*0.03;
+    }
+    var src2 = ctx.createBufferSource(); src2.buffer = buf; src2.loop = true;
+    src2.connect(_bgGain); src2.start(0); _bgNodes.push(src2);
+  }
+}
+
+// Box-Muller Gaussian approximation
+function _gauss() {
+  var u = 0, v = 0;
+  while (u === 0) u = Math.random();
+  while (v === 0) v = Math.random();
+  return Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+}
+
+function handleBgSound(sid, vol) {
+  if (sid === 'stop' || !sid) { _bgStop(); return; }
+  _bgPlay(sid, vol);
+}
+
+function _unlockAudio() {
+  if (_audioUnlocked) return;
+  _audioUnlocked = true;
+  try { var c = new (window.AudioContext || window.webkitAudioContext)(); c.resume().then(function(){c.close();}); } catch(e) {}
+  try {
+    var v = document.createElement('video'); v.setAttribute('playsinline',''); v.muted = true;
+    v.srcObject = new MediaStream(); v.style.cssText='position:absolute;width:1px;height:1px;opacity:0;pointer-events:none';
+    document.body.appendChild(v); v.play().catch(function(){});
+  } catch(e) {}
+}
+
+// ── Twemoji ───────────────────────────────────────────────────────────────────
+function _twemoji(el) { if (window.twemoji) twemoji.parse(el, { folder:'svg', ext:'.svg' }); }
+
+// ── HTML escape ───────────────────────────────────────────────────────────────
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ── Floating emoji ────────────────────────────────────────────────────────────
+function _showReaction(emoji) {
+  var el = document.createElement('div');
+  el.className = 'reaction-float'; el.style.left = (12 + Math.random() * 76) + '%'; el.textContent = emoji;
+  document.body.appendChild(el); _twemoji(el);
+  setTimeout(function(){ if (el.parentNode) el.parentNode.removeChild(el); }, 2200);
+}
+
+// ── Participant helpers ───────────────────────────────────────────────────────
+function _getMeta(identity) {
+  return _metaMap[identity] || {};
+}
+function _resolveName(p) {
+  if (_nameMap[p.identity]) return _nameMap[p.identity];
+  var meta = _getMeta(p.identity);
+  if (meta.displayName) return meta.displayName;
+  if (p.identity.startsWith('ghost_')) {
+    var gm = p.identity.match(/^ghost_(.+)_[0-9a-f]{4,8}$/i);
+    return gm ? gm[1].replace(/_/g,' ') : 'Ghost';
+  }
+  return p.identity.slice(0,14);
+}
+function _getRole(p) {
+  var meta = _getMeta(p.identity);
+  if (meta.role) return meta.role;
+  return 'listener';
+}
+function _myDisplayName() {
+  if (!myIdentity) return 'Ghost';
+  var gm = myIdentity.match(/^ghost_(.+)_[0-9a-f]{4,8}$/i);
+  if (gm) return gm[1].replace(/_/g,' ').trim() || 'Ghost';
+  return myIdentity.startsWith('ghost_') ? 'Ghost' : myIdentity.slice(0,14);
+}
+
+// ── Role avatar icon / class ──────────────────────────────────────────────────
+function _roleAvClass(role) {
+  if (role==='host') return 'host-av';
+  if (role==='cohost') return 'cohost-av';
+  return 'speaker-av';
+}
+function _roleTagClass(role) {
+  if (role==='host') return 'host-tag';
+  if (role==='cohost') return 'cohost-tag';
+  return 'speaker-tag';
+}
+function _roleIcon(role, isGhost) {
+  if (isGhost) return '👻';
+  if (role==='host') return '🎙️';
+  if (role==='cohost') return '🎤';
+  return '🔊';
+}
+
+// ── Build avatar img HTML or icon ─────────────────────────────────────────────
+function _avImgHtml(meta, fallback) {
+  if (meta && meta.profileImage) {
+    return '<img src="data:image/jpeg;base64,' + esc(meta.profileImage) + '" alt="" style="width:100%;height:100%;object-fit:cover">';
+  }
+  return fallback;
+}
+
+// ── Stage roster ──────────────────────────────────────────────────────────────
+function _renderStage(speakers) {
+  var roster = document.getElementById('stage-roster');
+  if (!roster) return;
+  if (speakers.length === 0) {
+    roster.innerHTML = '<span class="waiting-stage">Waiting for speakers…</span>';
+    return;
+  }
+  var html = '';
+  speakers.forEach(function(s) {
+    var avClass = _roleAvClass(s.role) + (s.isSpeaking ? ' speaking' : '');
+    var tagClass = _roleTagClass(s.role);
+    var icon = _roleIcon(s.role, s.isGhost);
+    var avContent = _avImgHtml(_getMeta(s.id), icon);
+    html += '<div class="s-pip" data-identity="' + esc(s.id) + '" onclick="openProfilePanel(this)" style="cursor:pointer" title="View ' + esc(s.name) + '\'s profile">';
+    html += '<div class="av ' + avClass + '">' + avContent + '</div>';
+    html += '<div class="sname">' + esc(s.name) + '</div>';
+    html += '<div class="stag ' + tagClass + '">' + esc(s.role) + '</div>';
+    html += '</div>';
+  });
+  roster.innerHTML = html;
+  _twemoji(roster);
+}
+
+// ── Listeners grid ────────────────────────────────────────────────────────────
+var _MAX_VISIBLE_LISTENERS = 60;
+
+function _renderListeners(listeners, totalCount) {
+  var grid = document.getElementById('lc-grid');
+  var countEl = document.getElementById('lc-count');
+  var topEl = document.getElementById('top-listener-count');
+  if (!grid) return;
+
+  var total = totalCount || (listeners.length + 1);
+  if (countEl) countEl.textContent = total.toLocaleString();
+  if (topEl) topEl.textContent = total.toLocaleString();
+
+  var shown = listeners.slice(0, _MAX_VISIBLE_LISTENERS);
+  var html = '';
+  shown.forEach(function(l) {
+    var avClass = l.isGhost ? 'ghost-lav' : '';
+    var icon = l.isGhost ? '👻' : '👤';
+    var avContent = _avImgHtml(_getMeta(l.id), icon);
+    html += '<div class="lpip" data-identity="' + esc(l.id) + '" onclick="openProfilePanel(this)" title="' + esc(l.name) + '">';
+    html += '<div class="lav ' + avClass + '">' + avContent + '</div>';
+    html += '<div class="lname">' + esc(l.name) + '</div>';
+    html += '</div>';
+  });
+  // Self pip — show actual name if signed in
+  var selfName = _spaceMeName || 'You';
+  var selfIcon = _spaceMeName ? '👤' : '👻';
+  var selfCls  = _spaceMeName ? '' : 'ghost-lav';
+  html += '<div class="lpip" data-identity="__self" title="You"><div class="lav ' + selfCls + '">' + selfIcon + '</div><div class="lname">' + esc(selfName.slice(0,8)) + '</div></div>';
+  // Overflow
+  if (listeners.length > _MAX_VISIBLE_LISTENERS) {
+    html += '<div class="overflow-chip">+' + (listeners.length - _MAX_VISIBLE_LISTENERS).toLocaleString() + ' more</div>';
+  }
+  grid.innerHTML = html;
+  _twemoji(grid);
+}
+
+// ── Full UI update ────────────────────────────────────────────────────────────
+function updateUI() {
+  if (!lkRoom) return;
+  var speakers  = [];
+  var listeners = [];
+
+  lkRoom.remoteParticipants.forEach(function(p) {
+    var meta = {};
+    try { meta = JSON.parse(p.metadata || '{}'); } catch(e) {}
+    _metaMap[p.identity] = meta;
+    var isGhost  = p.identity.startsWith('ghost_');
+    var name     = _resolveName(p);
+    var role     = _getRole(p);
+    var isSpeaking = (lkRoom.activeSpeakers || []).some(function(s){ return s.identity === p.identity; });
+    var entry = { id: p.identity, name: name, role: role, isGhost: isGhost, isSpeaking: isSpeaking };
+    if (role === 'host' || role === 'speaker' || role === 'cohost') speakers.push(entry);
+    else listeners.push(entry);
+    // Cache for profile panel
+    _listenerProfiles[p.identity] = { name: name, role: role, isGhost: isGhost, meta: meta };
+  });
+
+  _renderStage(speakers);
+  _renderListeners(listeners, listeners.length + 1);
+}
+
+// ── Transcript feed ───────────────────────────────────────────────────────────
+function addTranscriptLine(speakerIdentity, speakerName, role, text, isPartial) {
+  var empty = document.getElementById('tx-empty');
+  if (empty) empty.remove();
+
+  var feed = document.getElementById('tx-feed');
+  if (!feed) return;
+
+  var badgeClass = (role === 'host' ? 'host' : role === 'cohost' ? 'cohost' : 'speaker');
+
+  // Replace last partial line from same speaker instead of appending
+  if (isPartial) {
+    var existing = feed.querySelector('.tx-line.tx-partial[data-speaker="' + speakerIdentity + '"]');
+    if (existing) {
+      existing.querySelector('.tx-text').textContent = text;
+      feed.scrollTop = feed.scrollHeight;
+      return;
+    }
+  } else {
+    // Final result — remove any pending partial from same speaker
+    var pending = feed.querySelector('.tx-line.tx-partial[data-speaker="' + speakerIdentity + '"]');
+    if (pending) pending.remove();
+    _txLines.push({ id: speakerIdentity, name: speakerName, role: role, text: text, ts: Date.now() });
+    if (_txLines.length > _TX_MAX) _txLines.shift();
+  }
+
+  var line = document.createElement('div');
+  line.className = 'tx-line' + (isPartial ? ' tx-partial' : '');
+  line.dataset.speaker = speakerIdentity;
+  line.innerHTML =
+    '<span class="tx-badge ' + badgeClass + '">' + esc(role.toUpperCase()) + '</span>' +
+    '<span class="tx-name">' + esc(speakerName) + '</span>' +
+    '<span class="tx-text">' + esc(text) + '</span>';
+
+  feed.appendChild(line);
+  _twemoji(line);
+  // Prune DOM to match _TX_MAX so long sessions don't leak nodes
+  while (feed.children.length > _TX_MAX + 10) feed.removeChild(feed.firstChild);
+  feed.scrollTop = feed.scrollHeight;
+}
+
+// ── Profile panel ─────────────────────────────────────────────────────────────
+function openProfilePanel(el) {
+  var identity = el.getAttribute('data-identity');
+  if (identity === '__self') return;
+  var profile = _listenerProfiles[identity];
+  if (!profile) return;
+
+  var meta = profile.meta || {};
+  var nameEl = document.getElementById('pp-name');
+  var roleEl = document.getElementById('pp-role');
+  var avEl   = document.getElementById('pp-av');
+  var galEl  = document.getElementById('pp-gallery');
+
+  if (nameEl) nameEl.textContent = profile.name || 'Ghost';
+  if (roleEl) {
+    var r = profile.role;
+    roleEl.textContent = r.charAt(0).toUpperCase() + r.slice(1);
+    roleEl.className = 'pp-role role-' + r;
+  }
+
+  // Avatar
+  if (avEl) {
+    if (meta.profileImage) {
+      avEl.innerHTML = '<img src="data:image/jpeg;base64,' + esc(meta.profileImage) + '" alt="" style="width:100%;height:100%;object-fit:cover">';
+    } else {
+      avEl.innerHTML = profile.isGhost ? '👻' : '👤';
+      _twemoji(avEl);
+    }
+  }
+
+  // Gallery
+  if (galEl) {
+    var gallery = meta.gallery || [];
+    if (gallery.length === 0) {
+      galEl.innerHTML = '<div class="pp-empty">No public photos</div>';
+    } else {
+      var gHtml = '';
+      gallery.forEach(function(img, i) {
+        gHtml += '<div class="pp-img" onclick="openBigImg(this)" data-src="data:image/jpeg;base64,' + esc(img) + '">';
+        gHtml += '<img src="data:image/jpeg;base64,' + esc(img) + '" alt="">';
+        gHtml += '</div>';
+      });
+      galEl.innerHTML = gHtml;
+    }
+  }
+
+  document.getElementById('profile-panel').classList.add('open');
+}
+
+function openBigImg(el) {
+  var src = el.getAttribute('data-src');
+  var bigWrap = document.getElementById('pp-big');
+  var bigImg  = document.getElementById('pp-big-img');
+  if (bigImg) bigImg.src = src;
+  if (bigWrap) bigWrap.classList.add('open');
+}
+function closeBigImg() {
+  var bigWrap = document.getElementById('pp-big');
+  if (bigWrap) bigWrap.classList.remove('open');
+}
+
+document.getElementById('pp-close-btn').addEventListener('click', function() {
+  document.getElementById('profile-panel').classList.remove('open');
+});
+
+// ── Sign-in gate ──────────────────────────────────────────────────────────────
+var _spaceJwt = localStorage.getItem('exergynet_jwt') || '';
+var _spaceMeName = localStorage.getItem('exergynet_display_name') || '';
+
+// Wire OAuth buttons with callbackUrl = current page so user lands back here after auth
+(function() {
+  var back = encodeURIComponent(window.location.href);
+  var g = document.getElementById('sc-google-btn');
+  var t = document.getElementById('sc-twitter-btn');
+  if (g) g.href = 'https://portal.exergynet.org/api/auth/signin/google?callbackUrl=' + back;
+  if (t) t.href = 'https://portal.exergynet.org/api/auth/signin/twitter?callbackUrl=' + back;
+})();
+
+function showSignInGate() {
+  if (_spaceJwt) { onSignedIn(_spaceMeName); return; }
+  document.getElementById('signin-modal').classList.add('open');
+  setTimeout(function() { document.getElementById('sc-email').focus(); }, 120);
+}
+document.getElementById('signin-close-btn').addEventListener('click', function() {
+  document.getElementById('signin-modal').classList.remove('open');
+});
+
+function doSpaceSignIn() {
+  var email = document.getElementById('sc-email').value.trim();
+  var pw    = document.getElementById('sc-pw').value;
+  var errEl = document.getElementById('sc-err');
+  var btn   = document.getElementById('sc-submit');
+  errEl.style.display = 'none';
+  if (!email || !pw) { errEl.textContent = 'Email and password required.'; errEl.style.display = 'block'; return; }
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  fetch('https://explorer-api.exergynet.org/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email: email, password: pw })
+  })
+  .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, d: d }; }); })
+  .then(function(res) {
+    btn.textContent = 'Sign in →'; btn.disabled = false;
+    if (!res.ok || !res.d.token) {
+      errEl.textContent = res.d.error || 'Invalid email or password.';
+      errEl.style.display = 'block';
+      return;
+    }
+    _spaceJwt = res.d.token;
+    _spaceMeName = res.d.display_name || res.d.username || email.split('@')[0];
+    localStorage.setItem('exergynet_jwt', _spaceJwt);
+    localStorage.setItem('exergynet_display_name', _spaceMeName);
+    document.getElementById('signin-modal').classList.remove('open');
+    onSignedIn(_spaceMeName);
+    // Upgrade LK connection to get canPublishData token (no reload needed)
+    upgradeToDataParticipant();
+  })
+  .catch(function() {
+    btn.textContent = 'Sign in →'; btn.disabled = false;
+    errEl.textContent = 'Network error — try again.'; errEl.style.display = 'block';
+  });
+}
+
+function onSignedIn(name) {
+  var gate = document.getElementById('ghost-gate');
+  if (gate) gate.innerHTML =
+    '<span style="color:var(--teal);font-size:13px;font-weight:700">✓ ' + esc(name) + '</span>' +
+    '<span style="color:var(--muted);font-size:12px;flex:1">Listening live</span>' +
+    '<button onclick="doSpaceSignOut()" style="background:var(--surface2);border:.5px solid var(--border);border-radius:20px;padding:6px 12px;font-size:12px;color:var(--muted);cursor:pointer">Sign out</button>';
+  _renderChatSendArea();
+  _renderVgInputArea();
+}
+
+function doSpaceSignOut() {
+  localStorage.removeItem('exergynet_jwt');
+  localStorage.removeItem('exergynet_display_name');
+  window.location.reload();
+}
+
+// Auto-apply signed-in state on page load if JWT cached
+if (_spaceJwt && _spaceMeName) {
+  document.addEventListener('DOMContentLoaded', function() { onSignedIn(_spaceMeName); });
+}
+
+// Enter key submits sign-in form
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && document.getElementById('signin-modal').classList.contains('open')) {
+    doSpaceSignIn();
+  }
+});
+
+// ── Token upgrade: get canPublishData token for signed-in user ────────────────
+async function upgradeToDataParticipant() {
+  if (!_spaceJwt || !roomId) return;
+  var suffix = (performance.now() * 1000 | 0).toString(16).slice(-6);
+  var safeName = (_spaceMeName || 'user').replace(/[^A-Za-z0-9_\-]/g, '_').slice(0, 20);
+  var identity = 'web_' + safeName + '_' + suffix;
+  try {
+    var resp = await fetch(
+      AUTH_TOKEN_URL + '?room=' + encodeURIComponent(roomId) +
+        '&identity=' + encodeURIComponent(identity)
+    );
+    if (!resp.ok) return;
+    var data = await resp.json();
+    if (!data.token) return;
+    // Reconnect with upgraded token
+    if (lkRoom) {
+      var overlay = document.getElementById('connecting-overlay');
+      var lbl = document.getElementById('conn-label');
+      if (overlay) overlay.classList.add('show');
+      if (lbl) lbl.textContent = 'Upgrading connection…';
+      try {
+        await lkRoom.disconnect();
+        myIdentity = identity;
+        _chatCanSend = true;
+        await lkRoom.connect(LK_URL, data.token, { autoSubscribe: true });
+        _renderChatSendArea();
+        _showSpaceToast('You can now send chat messages', 2500);
+      } catch(e) { console.error('[space] reconnect failed', e); }
+      if (overlay) overlay.classList.remove('show');
+    } else {
+      // Not yet in room — store for startListening
+      window._upgradedToken = data.token;
+      window._upgradedIdentity = identity;
+      _chatCanSend = true;
+    }
+  } catch(e) { console.error('[space] token upgrade error', e); }
+}
+
+// ── Toast notification ────────────────────────────────────────────────────────
+function _showSpaceToast(msg, duration) {
+  var t = document.createElement('div');
+  t.className = 'space-toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(function() { if (t.parentNode) t.parentNode.removeChild(t); }, duration || 2500);
+}
+
+// ── Chat panel ────────────────────────────────────────────────────────────────
+function toggleChatPanel() {
+  _chatOpen = !_chatOpen;
+  _vgOpen = false;
+  var chatEl = document.getElementById('chat-panel');
+  var vgEl   = document.getElementById('vg-panel');
+  var btn    = document.getElementById('chat-toggle-btn');
+  if (chatEl) chatEl.classList.toggle('open', _chatOpen);
+  if (vgEl)   vgEl.classList.remove('open');
+  if (btn)    btn.classList.toggle('active', _chatOpen);
+  var vgBtn = document.getElementById('vg-toggle-btn');
+  if (vgBtn) vgBtn.classList.remove('active');
+  // Clear unread badge when opening
+  if (_chatOpen) {
+    _unreadChat = 0;
+    var badge = document.getElementById('chat-badge');
+    if (badge) badge.classList.remove('has');
+  }
+}
+
+function _renderChatSendArea() {
+  var area = document.getElementById('chat-send-area');
+  if (!area) return;
+  if (_spaceJwt && _chatCanSend) {
+    area.innerHTML =
+      '<div class="chat-input-row">' +
+      '<input class="chat-inp" id="chat-inp" placeholder="Say something…" maxlength="400" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();sendSpaceChat();}" />' +
+      '<button class="chat-send" onclick="sendSpaceChat()">Send</button>' +
+      '</div>';
+  } else if (_spaceJwt && !_chatCanSend) {
+    area.innerHTML =
+      '<div class="chat-signin-bar">Upgrading connection for chat…</div>';
+  } else {
+    area.innerHTML =
+      '<div class="chat-signin-bar">' +
+      'Listening in ghost mode — messages from the room appear here.' +
+      '<br><button onclick="showSignInGate()">Sign in to send</button>' +
+      '</div>';
+  }
+}
+
+function addChatLine(senderName, text, isMe) {
+  var feed = document.getElementById('chat-feed');
+  if (!feed) return;
+  var empty = document.getElementById('chat-empty');
+  if (empty) { empty.style.display = 'none'; }
+  var wrap = document.createElement('div');
+  wrap.className = 'chat-msg' + (isMe ? ' mine-wrap' : '');
+  var meta = document.createElement('div');
+  meta.className = 'chat-msg-meta ' + (isMe ? 'mine' : 'theirs');
+  meta.textContent = isMe ? 'You' : senderName;
+  var bubble = document.createElement('div');
+  bubble.className = 'chat-msg-text';
+  bubble.textContent = text;
+  wrap.appendChild(meta); wrap.appendChild(bubble);
+  feed.appendChild(wrap);
+  feed.scrollTop = feed.scrollHeight;
+  // Unread badge
+  if (!_chatOpen) {
+    _unreadChat++;
+    var badge = document.getElementById('chat-badge');
+    if (badge) { badge.textContent = _unreadChat > 9 ? '9+' : String(_unreadChat); badge.classList.add('has'); }
+  }
+}
+
+async function sendSpaceChat() {
+  if (!lkRoom || !_chatCanSend) return;
+  var inp = document.getElementById('chat-inp');
+  if (!inp) return;
+  var text = inp.value.trim();
+  if (!text) return;
+  inp.value = '';
+  var msg = JSON.stringify({ sender: myIdentity, senderName: _spaceMeName || 'Me', text: text });
+  try {
+    await lkRoom.localParticipant.publishData(
+      new TextEncoder().encode(msg),
+      { reliable: true, topic: 'space.chat' }
+    );
+    addChatLine(_spaceMeName || 'Me', text, true);
+  } catch(e) {
+    console.error('[space] send chat failed', e);
+    _showSpaceToast('Failed to send — check connection', 3000);
+  }
+}
+
+// ── Vanguard panel ────────────────────────────────────────────────────────────
+function toggleVgPanel() {
+  _vgOpen = !_vgOpen;
+  _chatOpen = false;
+  var vgEl   = document.getElementById('vg-panel');
+  var chatEl = document.getElementById('chat-panel');
+  var btn    = document.getElementById('vg-toggle-btn');
+  if (vgEl)   vgEl.classList.toggle('open', _vgOpen);
+  if (chatEl) chatEl.classList.remove('open');
+  if (btn)    btn.classList.toggle('active', _vgOpen);
+  var chatBtn = document.getElementById('chat-toggle-btn');
+  if (chatBtn) chatBtn.classList.remove('active');
+}
+
+function _renderVgInputArea() {
+  var area = document.getElementById('vg-input-area');
+  if (!area) return;
+  if (_spaceJwt) {
+    area.innerHTML =
+      '<div class="vg-input-row">' +
+      '<input class="vg-inp" id="vg-inp" placeholder="Ask Vanguard…" maxlength="500" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();vgSend();}" />' +
+      '<button class="vg-send" onclick="vgSend()">Ask</button>' +
+      '</div>';
+  } else {
+    area.innerHTML =
+      '<div class="vg-signin-bar">' +
+      '<p>Sign in to use the Vanguard AI assistant in this Space.</p>' +
+      '<button onclick="showSignInGate()">Sign in</button>' +
+      '</div>';
+  }
+}
+
+function _addVgBubble(text, role, isThinking) {
+  var feed = document.getElementById('vg-feed');
+  if (!feed) return null;
+  var empty = document.getElementById('vg-empty');
+  if (empty) empty.style.display = 'none';
+  var bubble = document.createElement('div');
+  bubble.className = 'vg-bubble ' + role + (isThinking ? ' thinking' : '');
+  bubble.textContent = text;
+  feed.appendChild(bubble);
+  feed.scrollTop = feed.scrollHeight;
+  return bubble;
+}
+
+async function vgSend() {
+  if (_vgThinking) return;
+  var inp = document.getElementById('vg-inp');
+  if (!inp) return;
+  var text = inp.value.trim();
+  if (!text) return;
+  if (!_spaceJwt) { showSignInGate(); return; }
+  inp.value = '';
+  _vgThinking = true;
+  _addVgBubble(text, 'user', false);
+  var thinkBubble = _addVgBubble('…', 'assistant', true);
+  var sysCtx = 'You are Vanguard, the ExergyNet AI assistant. Keep answers concise and relevant.';
+  if (_spaceTitle) sysCtx += ' The user is attending a live Space titled "' + _spaceTitle + '".';
+  var messages = [{ role: 'system', content: sysCtx }].concat(_vgHistory).concat([{ role: 'user', content: text }]);
+  try {
+    var resp = await fetch('https://explorer-api.exergynet.org/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + _spaceJwt },
+      body: JSON.stringify({ model: 'vanguard-engine', stream: true, messages: messages })
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    _vgHistory.push({ role: 'user', content: text });
+    var reader = resp.body.getReader();
+    var decoder = new TextDecoder();
+    var fullText = '';
+    if (thinkBubble) { thinkBubble.classList.remove('thinking'); thinkBubble.textContent = ''; }
+    var reading = true;
+    while (reading) {
+      var chunk = await reader.read();
+      if (chunk.done) { reading = false; break; }
+      var lines = decoder.decode(chunk.value, { stream: true }).split('\n');
+      lines.forEach(function(line) {
+        if (!line.startsWith('data: ')) return;
+        var d = line.slice(6).trim();
+        if (d === '[DONE]') { reading = false; return; }
+        try {
+          var delta = JSON.parse(d);
+          var token = delta.choices && delta.choices[0] && delta.choices[0].delta && delta.choices[0].delta.content;
+          if (token) {
+            fullText += token;
+            if (thinkBubble) thinkBubble.textContent = fullText;
+            var feed = document.getElementById('vg-feed');
+            if (feed) feed.scrollTop = feed.scrollHeight;
+          }
+        } catch(e) {}
+      });
+    }
+    _vgHistory.push({ role: 'assistant', content: fullText || thinkBubble.textContent });
+  } catch(e) {
+    if (thinkBubble) { thinkBubble.textContent = 'Error: ' + (e.message || 'Could not reach Vanguard.'); thinkBubble.style.color = 'var(--red)'; }
+  }
+  _vgThinking = false;
+}
+
+// ── Render invite card ────────────────────────────────────────────────────────
+function renderInvite() {
+  var inner = document.getElementById('invite-inner');
+  if (!roomId) {
+    inner.innerHTML = [
+      '<div style="text-align:center;padding:10px 0 6px">',
+      '<div style="font-size:48px;margin-bottom:12px">🎙️</div>',
+      '<h1 style="font-size:22px;font-weight:800;margin-bottom:8px">ExergyNet Spaces</h1>',
+      '<p class="sub" style="color:var(--muted);font-size:13px;line-height:1.5">Audio rooms on the ExergyNet mesh.<br>Ask the host to share their invite link.</p>',
+      '</div>',
+      '<div class="divider">Get the app</div>',
+      '<a class="btn btn-green" href="https://explorer-api.exergynet.org/downloads/ExergyNet-latest.apk">⬇ Download for Android</a>',
+    ].join('');
+    _twemoji(inner);
+    return;
+  }
+  var deep = 'exergynet://space/' + encodeURIComponent(roomId) + (hostId ? ('?h=' + encodeURIComponent(hostId)) : '');
+  var shortRoom = roomId.length > 28 ? roomId.slice(0,14)+'…'+roomId.slice(-8) : roomId;
+
+  inner.innerHTML = [
+    '<span class="live-chip"><span class="dot"></span>LIVE SPACE</span>',
+    '<h1 style="font-size:22px;font-weight:800;margin:14px 0 5px">A Space is live right now</h1>',
+    '<p style="color:var(--muted);font-size:13px;line-height:1.5">Hosted on the ExergyNet mesh.</p>',
+    '<div class="room-pill">' + esc(shortRoom) + '</div>',
+    '<button class="btn btn-ghost" id="listen-browser-btn" style="margin-top:16px">👻 Listen in Browser (Ghost Mode)</button>',
+    '<div class="divider">Have the app?</div>',
+    '<a class="btn btn-teal" href="' + esc(deep) + '">🎙️ Open in ExergyNet App</a>',
+    '<div class="divider">Need the app?</div>',
+    '<a class="btn btn-green" href="https://explorer-api.exergynet.org/downloads/ExergyNet-latest.apk">⬇ Download for Android</a>',
+    '<button class="btn btn-outline" id="copy-link-btn" style="margin-top:8px;padding:10px">Copy Invite Link</button>',
+  ].join('');
+
+  _twemoji(inner);
+
+  document.getElementById('listen-browser-btn').addEventListener('click', function() {
+    _unlockAudio();
+    document.getElementById('modal-bg').classList.add('open');
+    document.getElementById('ghost-name').focus();
+  });
+  document.getElementById('copy-link-btn').addEventListener('click', function() {
+    navigator.clipboard && navigator.clipboard.writeText(location.href).then(function() {
+      document.getElementById('copy-link-btn').textContent = '✓ Copied!';
+      setTimeout(function(){ document.getElementById('copy-link-btn').textContent = 'Copy Invite Link'; }, 1600);
+    });
+  });
+  if (/android/i.test(navigator.userAgent||'')) setTimeout(function(){ location.href = deep; }, 800);
+}
+
+// ── Modal handlers ────────────────────────────────────────────────────────────
+document.getElementById('enter-ghost-btn').addEventListener('click', function() {
+  _unlockAudio();
+  var name = document.getElementById('ghost-name').value.trim();
+  document.getElementById('modal-bg').classList.remove('open');
+  startListening(name);
+});
+document.getElementById('modal-cancel-btn').addEventListener('click', function() {
+  document.getElementById('modal-bg').classList.remove('open');
+});
+document.getElementById('ghost-name').addEventListener('keydown', function(e) {
+  if (e.key==='Enter') document.getElementById('enter-ghost-btn').click();
+});
+
+// ── Error ─────────────────────────────────────────────────────────────────────
+function showError(msg) {
+  document.getElementById('invite-wrap').style.display = 'flex';
+  document.getElementById('listen-wrap').classList.remove('active');
+  var errEl = document.getElementById('invite-err');
+  if (errEl) errEl.innerHTML = '<div class="err-box">⚠ ' + esc(msg) + '</div>';
+}
+
+// ── Audio unlock banner ───────────────────────────────────────────────────────
+function _showUnlockBanner() {
+  if (document.getElementById('audio-unlock-btn')) return;
+  var btn = document.createElement('button');
+  btn.id = 'audio-unlock-btn';
+  btn.textContent = '🔊 Tap to Enable Audio';
+  btn.addEventListener('click', function() {
+    _unlockAudio();
+    if (lkRoom && lkRoom.startAudio) lkRoom.startAudio();
+    audioElements.forEach(function(el){ el.play().catch(function(){}); });
+    btn.remove();
+  });
+  document.body.appendChild(btn);
+}
+
+// ── Connect ───────────────────────────────────────────────────────────────────
+async function startListening(displayName) {
+  // Show listen UI immediately
+  document.getElementById('invite-wrap').style.display = 'none';
+  document.getElementById('listen-wrap').classList.add('active');
+  document.getElementById('top-room-label').textContent = roomId.length > 24 ? roomId.slice(0,18)+'…' : roomId;
+
+  var LK = window.LivekitClient;
+  lkRoom = new LK.Room({ adaptiveStream: true, dynacast: false });
+  lkRoom.startAudio(); // must be in gesture handler sync
+
+  lkRoom
+    .on(LK.RoomEvent.Connected, function() { updateUI(); })
+    .on(LK.RoomEvent.AudioPlaybackStatusChanged, function() {
+      if (!lkRoom.canPlaybackAudio) _showUnlockBanner();
+    })
+    .on(LK.RoomEvent.Disconnected, function(reason) {
+      // Clean up audio elements to prevent leaks on reconnect
+      audioElements.forEach(function(el){ try { el.pause(); el.src=''; el.remove(); } catch(e){} });
+      audioElements = [];
+      _bgStop();
+      if (reason && reason !== 'CLIENT_INITIATED' && reason !== 'ROOM_DELETED') {
+        document.getElementById('invite-wrap').style.display = 'flex';
+        document.getElementById('listen-wrap').classList.remove('active');
+        renderInvite();
+        showError('Disconnected: ' + reason);
+      } else if (reason === 'ROOM_DELETED') {
+        document.getElementById('invite-wrap').style.display = 'flex';
+        document.getElementById('listen-wrap').classList.remove('active');
+        renderInvite();
+        _showSpaceToast('This Space has ended', 4000);
+      }
+    })
+    .on(LK.RoomEvent.TrackSubscribed, function(track) {
+      if (track.kind === LK.Track.Kind.Audio) {
+        var el = track.attach();
+        el.autoplay = true; el.setAttribute('playsinline','');
+        document.body.appendChild(el); audioElements.push(el);
+        el.play().catch(function(){ _showUnlockBanner(); });
+      }
+    })
+    .on(LK.RoomEvent.TrackUnsubscribed, function(track) {
+      track.detach().forEach(function(el) {
+        el.remove();
+        audioElements = audioElements.filter(function(a){ return a !== el; });
+      });
+    })
+    .on(LK.RoomEvent.DataReceived, function(payload, participant, kind, topic) {
+      var text = '';
+      try { text = new TextDecoder().decode(payload); } catch(e){ return; }
+      if (topic === 'reaction') {
+        _showReaction(text);
+      } else if (topic === 'space.transcript') {
+        try {
+          var tx = JSON.parse(text);
+          // tx: { speaker, speakerName, role, text }
+          addTranscriptLine(tx.speaker||'', tx.speakerName||'Unknown', tx.role||'speaker', tx.text||'', !!tx.partial);
+        } catch(e) {}
+      } else if (topic === 'space.name') {
+        try {
+          var obj = JSON.parse(text);
+          if (obj.node_id && obj.label) { _nameMap[obj.node_id] = obj.label; updateUI(); }
+        } catch(e) {}
+      } else if (topic === 'space.bgsound') {
+        try {
+          var obj = JSON.parse(text);
+          handleBgSound(obj.sound || 'stop', parseFloat(obj.vol) || 0.35);
+        } catch(e) {}
+      } else if (topic === 'space.profile') {
+        // Participant sends their profile: { identity, displayName, profileImage, gallery: [b64,...] }
+        try {
+          var prof = JSON.parse(text);
+          if (prof.identity) {
+            if (!_metaMap[prof.identity]) _metaMap[prof.identity] = {};
+            if (prof.displayName) _nameMap[prof.identity] = prof.displayName;
+            if (prof.profileImage) _metaMap[prof.identity].profileImage = prof.profileImage;
+            if (prof.gallery)     _metaMap[prof.identity].gallery = prof.gallery;
+            if (_listenerProfiles[prof.identity]) {
+              _listenerProfiles[prof.identity].name = prof.displayName || _listenerProfiles[prof.identity].name;
+              _listenerProfiles[prof.identity].meta = _metaMap[prof.identity];
+            }
+            updateUI();
+          }
+        } catch(e) {}
+      } else if (topic === 'space.chat') {
+        // Format: { sender, senderName, text }
+        try {
+          var cm = JSON.parse(text);
+          if (cm.text) {
+            var isMe = cm.sender === myIdentity;
+            addChatLine(cm.senderName || cm.sender || 'Node', cm.text, isMe);
+          }
+        } catch(e) {}
+      }
+    })
+    .on(LK.RoomEvent.ParticipantConnected,       function() { updateUI(); })
+    .on(LK.RoomEvent.ParticipantDisconnected,    function() { updateUI(); })
+    .on(LK.RoomEvent.ActiveSpeakersChanged,      function() { updateUI(); })
+    .on(LK.RoomEvent.ParticipantMetadataChanged, function(p) {
+      if (p && p.metadata) {
+        try { _metaMap[p.identity] = JSON.parse(p.metadata); } catch(e) {}
+      }
+      updateUI();
+    });
+
+  // Render chat/vanguard send areas based on current auth state
+  _renderChatSendArea();
+  _renderVgInputArea();
+
+  try {
+    var lkToken, lkIdentity;
+    // Use pre-upgraded token if sign-in happened before entering room
+    if (window._upgradedToken && window._upgradedIdentity) {
+      lkToken = window._upgradedToken;
+      lkIdentity = window._upgradedIdentity;
+      window._upgradedToken = null; window._upgradedIdentity = null;
+      _chatCanSend = true;
+    } else if (_spaceJwt) {
+      // Signed-in user: get canPublishData token directly
+      var suffix2 = (performance.now() * 1000 | 0).toString(16).slice(-6);
+      var safeName2 = (_spaceMeName || displayName || 'user').replace(/[^A-Za-z0-9_\-]/g, '_').slice(0, 20);
+      lkIdentity = 'web_' + safeName2 + '_' + suffix2;
+      var authResp = await fetch(
+        AUTH_TOKEN_URL + '?room=' + encodeURIComponent(roomId) +
+          '&identity=' + encodeURIComponent(lkIdentity)
+      );
+      if (authResp.ok) {
+        var authData = await authResp.json();
+        lkToken = authData.token;
+        _chatCanSend = true;
+        _renderChatSendArea();
+      }
+    }
+    // Fallback to guest token if auth token not obtained
+    if (!lkToken) {
+      var url = TOKEN_URL + '?room=' + encodeURIComponent(roomId);
+      if (displayName) url += '&name=' + encodeURIComponent(displayName);
+      var resp = await fetch(url);
+      if (!resp.ok) throw new Error('Token error ' + resp.status);
+      var data = await resp.json();
+      lkToken = data.token;
+      lkIdentity = data.identity;
+      if (data.nameMap) Object.assign(_nameMap, data.nameMap);
+      if (data.title) {
+        _spaceTitle = data.title;
+        document.getElementById('top-room-label').textContent = data.title;
+      }
+    }
+    myIdentity = lkIdentity;
+    await lkRoom.connect(LK_URL, lkToken, { autoSubscribe: true });
+    // Capture room name from LiveKit metadata after connect
+    if (lkRoom.name && !_spaceTitle) {
+      _spaceTitle = lkRoom.name;
+      document.getElementById('top-room-label').textContent = lkRoom.name.length > 30 ? lkRoom.name.slice(0,26)+'…' : lkRoom.name;
+    }
+  } catch(err) {
+    console.error('[space-listen]', err);
+    showError(err.message || 'Could not connect. The Space may have ended.');
+  }
+}
+
+// ── Leave ──────────────────────────────────────────────────────────────────────
+document.getElementById('leave-btn').addEventListener('click', function() {
+  if (lkRoom) lkRoom.disconnect();
+  audioElements.forEach(function(el){ try { el.pause(); el.src=''; el.remove(); } catch(e){} });
+  audioElements = []; lkRoom = null;
+  _txLines = []; _nameMap = {}; _metaMap = {}; _listenerProfiles = {};
+  _chatOpen = false; _vgOpen = false; _unreadChat = 0;
+  _vgHistory = []; _vgThinking = false; _chatCanSend = false; _spaceTitle = '';
+  var chatPanel = document.getElementById('chat-panel');
+  var vgPanel   = document.getElementById('vg-panel');
+  if (chatPanel) chatPanel.classList.remove('open');
+  if (vgPanel)   vgPanel.classList.remove('open');
+  _bgStop();
+  document.getElementById('invite-wrap').style.display = 'flex';
+  document.getElementById('listen-wrap').classList.remove('active');
+  renderInvite();
+});
+
+// ── Boot ───────────────────────────────────────────────────────────────────────
+renderInvite();
+</script>
+</body>
+</html>

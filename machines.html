@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Machine Infrastructure — ExergyNet</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta name="description" content="ExergyNet provides evidence and authority infrastructure for autonomous machines — air, ground, and edge. Machines can become more autonomous without becoming self-authorizing.">
+<meta property="og:title" content="Machine Infrastructure — ExergyNet">
+<meta property="og:description" content="Machines can become more autonomous without becoming self-authorizing. Evidence receipts and bounded authority for robotics and physical-world AI.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://exergynet.org/machines.html">
+<link rel="canonical" href="https://exergynet.org/machines.html">
+<link rel="stylesheet" href="style.css">
+<script>
+(function(){
+  var t=localStorage.getItem("exg-theme");
+  if(!t){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}
+  document.documentElement.setAttribute("data-theme",t);
+})();
+</script>
+<style>
+.mach-hero{position:relative;padding:6rem 0 5rem;overflow:hidden;}
+.mach-h1{font-family:var(--display);font-size:clamp(2.6rem,6.5vw,5rem);font-weight:900;line-height:0.98;letter-spacing:-0.03em;margin-bottom:1.5rem;}
+.mach-sub{font-size:1.1rem;line-height:1.75;color:var(--text-soft);max-width:680px;margin-bottom:2.5rem;}
+
+.mach-pipeline{display:grid;grid-template-columns:repeat(6,1fr);gap:0.6rem;margin:2rem 0;}
+.mach-pipe-step{padding:1rem 0.85rem;border:1px solid var(--border);border-radius:var(--radius);background:var(--bg-card);text-align:center;}
+.mach-pipe-step .n{font-family:var(--mono);font-size:10px;color:var(--accent);letter-spacing:0.08em;margin-bottom:0.4rem;}
+.mach-pipe-step .t{font-family:var(--display);font-weight:700;font-size:0.95rem;}
+.mach-pipe-step.authorize{border-color:rgba(255,184,48,0.4);background:rgba(255,184,48,0.04);}
+.mach-pipe-step.authorize .n{color:var(--amber);}
+
+.mach-layer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;margin-top:2rem;}
+.mach-layer-card{background:var(--bg-card);border:1px solid var(--border-mid);border-radius:var(--radius-lg);padding:2rem 1.75rem;position:relative;overflow:hidden;}
+.mach-layer-card.layer-physical{border-color:rgba(0,232,135,0.3);background:linear-gradient(160deg,rgba(0,232,135,0.04) 0%,var(--bg-card) 60%);}
+.mach-layer-card.layer-witness{border-color:rgba(78,158,255,0.3);background:linear-gradient(160deg,rgba(78,158,255,0.04) 0%,var(--bg-card) 60%);}
+.mach-layer-card.layer-settlement{border-color:rgba(255,184,48,0.3);background:linear-gradient(160deg,rgba(255,184,48,0.04) 0%,var(--bg-card) 60%);}
+.mach-layer-num{font-family:var(--display);font-size:4rem;font-weight:900;line-height:1;opacity:0.12;position:absolute;top:1rem;right:1.25rem;letter-spacing:-0.04em;}
+.mach-layer-card.layer-physical .mach-layer-num{color:var(--accent);}
+.mach-layer-card.layer-witness .mach-layer-num{color:var(--blue);}
+.mach-layer-card.layer-settlement .mach-layer-num{color:var(--amber);}
+.mach-layer-title{font-family:var(--display);font-size:1.45rem;font-weight:700;color:var(--text);margin-bottom:0.75rem;line-height:1.15;}
+.mach-layer-body{font-size:14px;line-height:1.7;color:var(--text-soft);margin-bottom:1.25rem;}
+.mach-layer-tag{font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.65rem;border-radius:3px;display:inline-block;}
+.layer-physical .mach-layer-tag{background:rgba(0,232,135,0.1);color:var(--accent);border:1px solid rgba(0,232,135,0.2);}
+.layer-witness .mach-layer-tag{background:rgba(78,158,255,0.1);color:var(--blue);border:1px solid rgba(78,158,255,0.2);}
+.layer-settlement .mach-layer-tag{background:rgba(255,184,48,0.1);color:var(--amber);border:1px solid rgba(255,184,48,0.2);}
+
+.mach-scenario-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:2rem;}
+.mach-scenario-card{background:var(--bg-card);border:1px solid var(--border-mid);border-radius:var(--radius-lg);padding:1.75rem 1.5rem;transition:border-color 0.2s;}
+.mach-scenario-card:hover{border-color:rgba(0,232,135,0.25);}
+.mach-scenario-title{font-family:var(--display);font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:0.5rem;}
+.mach-scenario-body{font-size:14px;line-height:1.7;color:var(--text-soft);}
+.mach-maturity{font-family:var(--mono);font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;padding:0.25rem 0.65rem;border-radius:3px;display:inline-block;margin-bottom:0.75rem;}
+.mach-maturity.proposed{background:rgba(255,184,48,0.1);color:var(--amber);border:1px solid rgba(255,184,48,0.2);}
+.mach-maturity.engineered{background:rgba(0,232,135,0.1);color:var(--accent);border:1px solid rgba(0,232,135,0.2);}
+
+.mach-trust-block{text-align:center;max-width:780px;margin:2rem auto 0;font-size:1.02rem;line-height:1.8;color:var(--text-soft);}
+.mach-entity-row{display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:2.5rem;flex-wrap:wrap;}
+.mach-entity-name{font-family:var(--mono);font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-soft);padding:0.4rem 0.9rem;border:1px solid var(--border-mid);border-radius:4px;background:var(--bg-card);}
+.mach-entity-sep{color:var(--accent);font-size:18px;opacity:0.5;}
+
+@media(max-width:900px){ .mach-layer-grid,.mach-scenario-grid{grid-template-columns:1fr;} .mach-pipeline{grid-template-columns:repeat(3,1fr);} }
+@media(max-width:640px){ .mach-hero{padding:4rem 0 3.5rem;} .mach-pipeline{grid-template-columns:repeat(2,1fr);} }
+</style>
+</head>
+<body>
+<canvas id="circuit-canvas"></canvas>
+<div class="site-wrap">
+  <div id="site-header"></div>
+
+  <main class="page">
+
+    <!-- HERO -->
+    <section class="mach-hero">
+      <div class="glow-accent" style="width:600px;height:520px;top:-160px;left:-200px;opacity:0.6;"></div>
+      <div class="glow-blue"   style="width:540px;height:440px;top:-80px;right:-220px;opacity:0.4;"></div>
+      <div class="container">
+        <div class="hero-eyebrow"><span class="dot"></span>Machine Infrastructure</div>
+        <h1 class="mach-h1">Machines Can Become More Autonomous<br>Without Becoming Self-Authorizing.</h1>
+        <p class="mach-sub">ExergyNet provides evidence and authority infrastructure for autonomous machines — air, ground, and edge. As machines observe, reason, and propose actions, a consequential step still requires authorization external to the machine's own reasoning.</p>
+        <div class="btn-row">
+          <a href="design-partner.html" class="btn btn-primary">Benchmark Your Workload</a>
+          <a href="security.html" class="btn btn-secondary">The Consequence Boundary &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PIPELINE -->
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <div class="section-label">The Pipeline</div>
+        <h2>Observe. Reason. Propose. Authorize. Act. Record.</h2>
+        <p style="max-width:760px;color:var(--text-soft);">Authorization is a distinct step, not a formality inside the machine's own reasoning. It is the one step in this pipeline that ExergyNet places outside what the machine itself controls.</p>
+        <div class="mach-pipeline">
+          <div class="mach-pipe-step"><div class="n">01</div><div class="t">Observe</div></div>
+          <div class="mach-pipe-step"><div class="n">02</div><div class="t">Reason</div></div>
+          <div class="mach-pipe-step"><div class="n">03</div><div class="t">Propose</div></div>
+          <div class="mach-pipe-step authorize"><div class="n">04</div><div class="t">Authorize</div></div>
+          <div class="mach-pipe-step"><div class="n">05</div><div class="t">Act</div></div>
+          <div class="mach-pipe-step"><div class="n">06</div><div class="t">Record</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- THREE LAYERS -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label">The Stack</div>
+        <h2>Three Layers. One Evidence Chain.</h2>
+        <div class="mach-layer-grid">
+
+          <div class="mach-layer-card layer-physical">
+            <div class="mach-layer-num">01</div>
+            <div class="mach-layer-title">The Machine Body</div>
+            <p class="mach-layer-body">Tensile-lift UAS platforms. VTOL autonomous aircraft. Ground sensor arrays. The physical substrate that observes and acts in the world.</p>
+            <span class="mach-layer-tag">KTX &middot; Kunfirm Innovative Services</span>
+          </div>
+
+          <div class="mach-layer-card layer-witness">
+            <div class="mach-layer-num">02</div>
+            <div class="mach-layer-title">The Edge Witness</div>
+            <p class="mach-layer-body">Every node in the ExergyNet swarm runs an Edge Witness — a hardware-signed sensor matrix capturing optical, geospatial, kinematic, and environmental state. The witness attests the device's signature on an observation; it does not itself certify the observed event was true.</p>
+            <span class="mach-layer-tag">LNES-06 &middot; Edge Witness Network</span>
+          </div>
+
+          <div class="mach-layer-card layer-settlement">
+            <div class="mach-layer-num">03</div>
+            <div class="mach-layer-title">The Consequence Boundary</div>
+            <p class="mach-layer-body">Before a proposed action becomes a real state transition, it clears an authorization check independent of the machine's own reasoning. Settlement of physical work executes under policy the operating institution configured — not policy ExergyNet sets.</p>
+            <span class="mach-layer-tag">LNES-22 &middot; Consequence Boundary</span>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- APPLICATIONS -->
+    <section class="section">
+      <div class="container">
+        <div class="section-label">Applications</div>
+        <h2>What This Architecture Is Built<br>to Make Possible</h2>
+        <p class="mach-sub" style="max-width:760px;">These are illustrative scenarios, not a claim that each is deployed at the scale described. <strong>Engineered</strong> means the underlying mechanism exists and has been tested in a bounded environment; <strong>proposed</strong> means it is an architectural target with no implementation yet.</p>
+        <div class="mach-scenario-grid">
+
+          <div class="mach-scenario-card">
+            <span class="mach-maturity proposed">Proposed</span>
+            <div class="mach-scenario-title">Verified Lift Operations</div>
+            <p class="mach-scenario-body">An autonomous VTOL aircraft completes a lift operation. Flight path, payload weight, duration, and environmental conditions are sealed into an ExergyNet receipt. The pre-flight authorization gate itself has been validated against a sealed synthetic holdout (0/50 false release across two independent runs); full end-to-end receipt sealing on a real lift operation is not yet demonstrated.</p>
+          </div>
+
+          <div class="mach-scenario-card">
+            <span class="mach-maturity proposed">Proposed</span>
+            <div class="mach-scenario-title">Swarm Intelligence</div>
+            <p class="mach-scenario-body">Dozens of Edge Witness nodes triangulate an event in real time, each contributing a hardware-signed attestation aggregated into a consensus record. Individual hardware-signed attestation is a production Edge Witness capability; multi-node real-time aggregation at this scale has not yet been demonstrated.</p>
+          </div>
+
+          <div class="mach-scenario-card">
+            <span class="mach-maturity engineered">Engineered &middot; testnet</span>
+            <div class="mach-scenario-title">Machine-to-Machine Settlement</div>
+            <p class="mach-scenario-body">One machine requests compute or work from another, locks a toll on the ExergyNet membrane, and receives delivered work. Settlement executes under the operating institution's configured policy, without requiring a human to approve each individual transaction. Demonstrated end-to-end on Base Sepolia testnet.</p>
+          </div>
+
+          <div class="mach-scenario-card">
+            <span class="mach-maturity engineered">Engineered</span>
+            <div class="mach-scenario-title">Recorded Operations History</div>
+            <p class="mach-scenario-body">Every flight, sensor reading, and payload handoff can become a hardware-signed ledger entry that regulators, insurers, and counterparties can independently check — with no specific regulator or insurer acceptance of this record format represented here.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- GOVERNANCE -->
+    <section class="section" style="background:var(--bg-card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+      <div class="container">
+        <div class="section-label" style="text-align:center;">Governance</div>
+        <h2 style="text-align:center;margin-bottom:0;">One Trust.<br>Three Entities. Common Provenance.</h2>
+        <div class="mach-trust-block">
+          KTX (Kunfirm Innovative Services) and ExergyNet are separate legal entities that share a common IP and governance lineage through Ezumba Dynasty Trust / EDT Inc. Common ownership does not mean common regulatory status: KTX&rsquo;s own aviation authorizations are a fact about KTX&rsquo;s aircraft program, not an endorsement or validation of ExergyNet&rsquo;s software architecture by any regulator. Every machine action, network settlement, and sensor attestation on this page flows through the cryptographic framework described above, evaluated against the operating institution&rsquo;s own policy.
+        </div>
+        <div class="mach-entity-row">
+          <span class="mach-entity-name">Kunfirm Innovative Services</span>
+          <span class="mach-entity-sep">&middot;</span>
+          <span class="mach-entity-name">ExergyNet</span>
+          <span class="mach-entity-sep">&middot;</span>
+          <span class="mach-entity-name">Edge Witness Network</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- LINKS -->
+    <section class="section" style="padding-bottom:5rem;">
+      <div class="container" style="text-align:center;">
+        <div class="hero-eyebrow" style="display:inline-flex;justify-content:center;margin-bottom:1.25rem;">
+          <span class="dot"></span>
+          ExergyNet &middot; Machine Infrastructure
+        </div>
+        <h2>Explore the Network</h2>
+        <div class="btn-row" style="justify-content:center;margin-top:1.5rem;">
+          <a href="design-partner.html"  class="btn btn-primary">Benchmark Your Workload</a>
+          <a href="lnes06.html"          class="btn btn-secondary">Edge Witness &rarr;</a>
+          <a href="omega-carrier.html"   class="btn btn-ghost">Omega Carrier &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="site-footer"></div>
+</div>
+<script src="main.js"></script>
+</body>
+</html>

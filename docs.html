@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>Local memory quickstart — ExergyNet Documentation</title>
+<meta name="description" content="Get a persistent memory node running locally with your MCP client in minutes. Connect Claude Desktop or any MCP-compatible agent to Vanguard Memory Node.">
+<link rel="icon" href="assets/favicon.png">
+<link rel="stylesheet" href="exgn-web006.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html" aria-label="ExergyNet home">
+      <img src="assets/logo.png" alt="ExergyNet" width="175" height="34">
+    </a>
+    <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+      <a href="index.html#platform">Platform</a>
+      <a href="docs.html" aria-current="page">Developers</a>
+      <a href="whitepaper.html">Research</a>
+      <a href="index.html#company">Company</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" aria-label="Search" id="search-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>
+        <span class="s-label">Search</span>
+        <kbd>⌘K</kbd>
+      </button>
+      <a class="btn btn-primary" href="docs.html">Start building <span aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
+        <span aria-hidden="true">☰</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <div class="docs-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="docs-sidebar" id="docs-sidebar" aria-label="Documentation navigation">
+      <button class="docs-mobile-btn" aria-expanded="false" aria-controls="docs-sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+        On this page
+      </button>
+      <nav class="doc-subnav" aria-label="Section navigation">
+        <span class="sidebar-label">Getting started</span>
+        <a href="#overview">Overview</a>
+        <a href="#prerequisites">Prerequisites</a>
+        <a href="#install">Install</a>
+        <a href="#connect">Connect</a>
+        <a href="#first-memory">Your first memory</a>
+        <a href="#usage-patterns">Usage patterns</a>
+        <span class="sidebar-label" style="margin-top:var(--s-6)">Reference</span>
+        <a href="#tools-reference">Tools reference</a>
+        <a href="#configuration">Configuration</a>
+        <a href="#open-source">Open source</a>
+      </nav>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <div class="docs-main" id="main">
+      <article>
+
+        <!-- HEADER -->
+        <div class="doc-section" id="overview">
+          <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Documentation · Quickstart</div>
+          <h1>Local memory quickstart</h1>
+          <p class="lead">Get a persistent memory node running locally with your MCP client in minutes. The Vanguard Memory Node is free, open source, and stores everything on your own machine — no cloud account required.</p>
+
+          <div class="callout" role="note">
+            <strong>What this sets up:</strong> A local MCP server that gives any compatible agent persistent memory — store, search, and retrieve across sessions. Tested with Claude Desktop and standard MCP stdio transport.
+          </div>
+        </div>
+
+        <!-- PREREQUISITES -->
+        <div class="doc-section" id="prerequisites">
+          <h2>Prerequisites</h2>
+          <p>Before you begin, confirm you have:</p>
+          <div class="prereqs-box">
+            <div class="prereq-row">
+              <div class="prereq-check" aria-hidden="true">✓</div>
+              <div>
+                <strong>Node.js 18 or later</strong>
+                <span class="prereq-note">Required to run the memory node server. <a class="text-link" href="https://nodejs.org">nodejs.org ↗</a></span>
+              </div>
+            </div>
+            <div class="prereq-row">
+              <div class="prereq-check" aria-hidden="true">✓</div>
+              <div>
+                <strong>An MCP-compatible client</strong>
+                <span class="prereq-note">Claude Desktop, or any client implementing the Model Context Protocol stdio transport.</span>
+              </div>
+            </div>
+            <div class="prereq-row">
+              <div class="prereq-check" aria-hidden="true">✓</div>
+              <div>
+                <strong>Write access to your home directory</strong>
+                <span class="prereq-note">The memory node stores its vault in <code>~/.vanguard/local_vault/</code> by default.</span>
+              </div>
+            </div>
+            <div class="prereq-row">
+              <div class="prereq-check" aria-hidden="true">✓</div>
+              <div>
+                <strong>ExergyNet account</strong>
+                <span class="prereq-note">Required for API access and cloud features. <a class="text-link" href="https://portal.exergynet.org" target="_blank" rel="noopener">Create your account at portal.exergynet.org <span aria-hidden="true">↗</span></a></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INSTALL -->
+        <div class="doc-section" id="install">
+          <h2>Install the memory node</h2>
+          <p>Install the Vanguard Memory Node globally using npm:</p>
+          <div class="code-panel">
+            <div class="code-panel-head">
+              <span class="code-lang">Terminal</span>
+              <button class="copy-button" data-copy="npm install -g @lnes/vanguard-memory-node" aria-label="Copy install command">Copy</button>
+            </div>
+            <pre><code>npm install -g @lnes/vanguard-memory-node</code></pre>
+          </div>
+          <p>Verify the installation:</p>
+          <div class="code-panel">
+            <div class="code-panel-head">
+              <span class="code-lang">Terminal</span>
+              <button class="copy-button" data-copy="vmn --version" aria-label="Copy version command">Copy</button>
+            </div>
+            <pre><code>vmn --version</code></pre>
+          </div>
+          <p style="margin-top:var(--s-4)">Source and issue tracking: <a class="text-link" href="https://github.com/ezumba/vanguard-memory-node">github.com/ezumba/vanguard-memory-node ↗</a></p>
+        </div>
+
+        <!-- CONNECT -->
+        <div class="doc-section" id="connect">
+          <h2>Connect to your MCP client</h2>
+          <p>Add the memory node as an MCP server in your client's configuration file. Choose your environment:</p>
+
+          <div class="os-tabs" role="tablist" aria-label="Operating system configuration">
+            <button role="tab" class="os-tab active" data-os="mac" aria-selected="true" aria-controls="tab-mac" id="tab-btn-mac">macOS</button>
+            <button role="tab" class="os-tab" data-os="win" aria-selected="false" aria-controls="tab-win" id="tab-btn-win">Windows</button>
+            <button role="tab" class="os-tab" data-os="wsl" aria-selected="false" aria-controls="tab-wsl" id="tab-btn-wsl">Windows + WSL2</button>
+          </div>
+
+          <div id="tab-mac" role="tabpanel" aria-labelledby="tab-btn-mac" class="tab-pane">
+            <div class="config-path-bar">
+              <span class="config-label">Config file</span>
+              <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>
+            </div>
+            <div class="code-panel">
+              <div class="code-panel-head">
+                <span class="code-lang">JSON</span>
+                <button class="copy-button" data-copy='{
+  "mcpServers": {
+    "vanguard-memory": {
+      "command": "node",
+      "args": ["/usr/local/lib/node_modules/@lnes/vanguard-memory-node/dist/index.js"]
+    }
+  }
+}' aria-label="Copy macOS config">Copy</button>
+              </div>
+              <pre><code>{
+  "mcpServers": {
+    "vanguard-memory": {
+      "command": "node",
+      "args": ["/usr/local/lib/node_modules/@lnes/vanguard-memory-node/dist/index.js"]
+    }
+  }
+}</code></pre>
+            </div>
+            <p class="config-note">If Node.js was installed via nvm or Homebrew, the path to <code>node_modules</code> may differ. Run <code>npm root -g</code> to confirm the global path.</p>
+          </div>
+
+          <div id="tab-win" role="tabpanel" aria-labelledby="tab-btn-win" class="tab-pane" hidden>
+            <div class="config-path-bar">
+              <span class="config-label">Config file</span>
+              <code>%APPDATA%\Claude\claude_desktop_config.json</code>
+            </div>
+            <div class="code-panel">
+              <div class="code-panel-head">
+                <span class="code-lang">JSON</span>
+                <button class="copy-button" data-copy='{
+  "mcpServers": {
+    "vanguard-memory": {
+      "command": "node",
+      "args": ["C:\\Users\\YOUR_USER\\AppData\\Roaming\\npm\\node_modules\\vanguard-memory-node\\dist\\index.js"]
+    }
+  }
+}' aria-label="Copy Windows config">Copy</button>
+              </div>
+              <pre><code>{
+  "mcpServers": {
+    "vanguard-memory": {
+      "command": "node",
+      "args": ["C:\\Users\\YOUR_USER\\AppData\\Roaming\\npm\\node_modules\\vanguard-memory-node\\dist\\index.js"]
+    }
+  }
+}</code></pre>
+            </div>
+            <p class="config-note">Replace <code>YOUR_USER</code> with your Windows username. Run <code>npm root -g</code> in a command prompt to confirm the path.</p>
+          </div>
+
+          <div id="tab-wsl" role="tabpanel" aria-labelledby="tab-btn-wsl" class="tab-pane" hidden>
+            <div class="config-path-bar">
+              <span class="config-label">Config file</span>
+              <code>%APPDATA%\Claude\claude_desktop_config.json</code>
+            </div>
+            <div class="code-panel">
+              <div class="code-panel-head">
+                <span class="code-lang">JSON</span>
+                <button class="copy-button" data-copy='{
+  "mcpServers": {
+    "vanguard-memory": {
+      "command": "node",
+      "args": ["/home/YOUR_USER/node_modules/@lnes/vanguard-memory-node/dist/index.js"]
+    }
+  }
+}' aria-label="Copy Windows WSL2 config">Copy</button>
+              </div>
+              <pre><code>{
+  "mcpServers": {
+    "vanguard-memory": {
+      "command": "node",
+      "args": ["/home/YOUR_USER/node_modules/@lnes/vanguard-memory-node/dist/index.js"]
+    }
+  }
+}</code></pre>
+            </div>
+            <p class="config-note">When running Claude Desktop on Windows with the memory node installed inside WSL2, Claude Desktop's config must point to the WSL2 path. The <code>command</code> key must resolve to the WSL2 Node.js binary.</p>
+          </div>
+        </div>
+
+        <!-- FIRST MEMORY -->
+        <div class="doc-section" id="first-memory">
+          <h2>Store your first memory</h2>
+          <p>Once your MCP client connects to the memory node, you have access to the <code>vmn_ingest</code> tool. Use it to store any text as a persistent memory shard.</p>
+          <p>In Claude Desktop, ask your model to run:</p>
+          <div class="code-panel">
+            <div class="code-panel-head">
+              <span class="code-lang">Natural language prompt</span>
+            </div>
+            <pre><code>Store a memory: "This project uses TypeScript. All API responses follow the shape {data, error, meta}."</code></pre>
+          </div>
+          <p>The model will call <code>vmn_ingest</code> and return the shard's SHA-256 hash:</p>
+          <div class="code-panel">
+            <div class="code-panel-head">
+              <span class="code-lang">Tool output</span>
+            </div>
+            <pre><code>Stored · sha256:4a7f9b2e1c8d3f6a5e0b7c4d1e9f2a3b8c5d0e7f4a1b6c3d8e5f2a9b4c1d6e</code></pre>
+          </div>
+          <p>To verify the memory persists, start a new Claude Desktop session and ask:</p>
+          <div class="code-panel">
+            <div class="code-panel-head">
+              <span class="code-lang">Natural language prompt</span>
+            </div>
+            <pre><code>What do you know about this project's API response shape?</code></pre>
+          </div>
+          <p>The model will call <code>vmn_search</code>, retrieve the stored shard, and answer from it — without that information being in the system prompt or conversation history.</p>
+        </div>
+
+        <!-- USAGE PATTERNS -->
+        <div class="doc-section" id="usage-patterns">
+          <h2>Common usage patterns</h2>
+
+          <h3>Accumulate project context</h3>
+          <p>Store facts as you discover them. The memory node's BM25 index retrieves relevant shards on each query — the model receives only what is relevant, not the entire vault.</p>
+          <div class="code-panel">
+            <div class="code-panel-head">
+              <span class="code-lang">Prompts</span>
+            </div>
+            <pre><code>Remember: the database is PostgreSQL 15, schema is "prod".
+Remember: the deployment target is AWS us-east-1, service: exn-api.
+Remember: authentication uses JWT RS256, public key rotates every 30 days.</code></pre>
+          </div>
+
+          <h3>Retrieve on demand</h3>
+          <p>At the start of a new session, ask the model to load context before beginning work:</p>
+          <div class="code-panel">
+            <div class="code-panel-head">
+              <span class="code-lang">Prompts</span>
+            </div>
+            <pre><code>Search your memory for anything relevant to the authentication system.
+Recall everything you know about the deployment setup.</code></pre>
+          </div>
+
+          <h3>Cross-session continuity</h3>
+          <p>At the end of a session, ask the model to store a summary of what changed:</p>
+          <div class="code-panel">
+            <div class="code-panel-head">
+              <span class="code-lang">Prompt</span>
+            </div>
+            <pre><code>Store a session summary: what we changed today, what's blocked, and what's next.</code></pre>
+          </div>
+        </div>
+
+        <!-- TOOLS REFERENCE -->
+        <div class="doc-section" id="tools-reference">
+          <h2>Tools reference</h2>
+          <p>The Vanguard Memory Node exposes the following MCP tools:</p>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Tool</th>
+                  <th>Purpose</th>
+                  <th>Key parameters</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>vmn_ingest</code></td>
+                  <td>Store text as a persistent memory shard</td>
+                  <td><code>content</code> (string)</td>
+                </tr>
+                <tr>
+                  <td><code>vmn_search</code></td>
+                  <td>BM25 keyword search over all shards</td>
+                  <td><code>query</code> (string), <code>limit</code></td>
+                </tr>
+                <tr>
+                  <td><code>vmn_recall</code></td>
+                  <td>Retrieve a shard by SHA-256 hash</td>
+                  <td><code>shard_id</code> (string)</td>
+                </tr>
+                <tr>
+                  <td><code>vmn_inspect</code></td>
+                  <td>Show metadata for a specific shard</td>
+                  <td><code>shard_id</code> (string)</td>
+                </tr>
+                <tr>
+                  <td><code>vmn_list</code></td>
+                  <td>List stored shards (most recent first)</td>
+                  <td><code>limit</code></td>
+                </tr>
+                <tr>
+                  <td><code>vmn_stats</code></td>
+                  <td>Vault statistics (count, index status)</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><code>vmn_delete</code></td>
+                  <td>Delete a shard by hash</td>
+                  <td><code>shard_id</code> (string)</td>
+                </tr>
+                <tr>
+                  <td><code>vmn_rebuild_index</code></td>
+                  <td>Rebuild the BM25 search index</td>
+                  <td>—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CONFIGURATION -->
+        <div class="doc-section" id="configuration">
+          <h2>Configuration</h2>
+          <p>The memory node reads from environment variables passed through the MCP server configuration:</p>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>VMN_VAULT_DIR</code></td>
+                  <td><code>~/.vanguard/local_vault</code></td>
+                  <td>Directory where shards and index are stored</td>
+                </tr>
+                <tr>
+                  <td><code>VMN_MAX_RESULTS</code></td>
+                  <td><code>10</code></td>
+                  <td>Maximum results returned by <code>vmn_search</code></td>
+                </tr>
+                <tr>
+                  <td><code>VMN_INDEX_AUTO_REBUILD</code></td>
+                  <td><code>true</code></td>
+                  <td>Rebuild index automatically after ingest</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>To set a custom vault path in Claude Desktop config:</p>
+          <div class="code-panel">
+            <div class="code-panel-head">
+              <span class="code-lang">JSON</span>
+              <button class="copy-button" data-copy='{
+  "mcpServers": {
+    "vanguard-memory": {
+      "command": "node",
+      "args": ["/usr/local/lib/node_modules/@lnes/vanguard-memory-node/dist/index.js"],
+      "env": {
+        "VMN_VAULT_DIR": "/Users/YOUR_USER/my-project-vault"
+      }
+    }
+  }
+}' aria-label="Copy custom vault path config">Copy</button>
+            </div>
+            <pre><code>{
+  "mcpServers": {
+    "vanguard-memory": {
+      "command": "node",
+      "args": ["/usr/local/lib/node_modules/@lnes/vanguard-memory-node/dist/index.js"],
+      "env": {
+        "VMN_VAULT_DIR": "/Users/YOUR_USER/my-project-vault"
+      }
+    }
+  }
+}</code></pre>
+          </div>
+        </div>
+
+        <!-- OPEN SOURCE -->
+        <div class="doc-section" id="open-source">
+          <h2>Open source</h2>
+          <p>The Vanguard Memory Node is open source under the MIT license. Source, issues, and release notes are on GitHub.</p>
+          <div style="display:flex;gap:var(--s-3);flex-wrap:wrap;margin-top:var(--s-6)">
+            <a class="btn btn-primary" href="https://github.com/ezumba/vanguard-memory-node">GitHub repository <span aria-hidden="true">↗</span></a>
+            <a class="btn btn-outline" href="https://exergynet.org/api-integration.html">API integration guide <span aria-hidden="true">↗</span></a>
+          </div>
+
+          <div class="callout" role="note" style="margin-top:var(--s-8)">
+            <strong>Building something with ExergyNet?</strong> The local memory node is the entry point. The full ExergyNet platform — persistent state at scale, xLMP retrieval, authority control — is described in the <a class="text-link" href="whitepaper.html">V5 research paper</a>.
+          </div>
+        </div>
+
+      </article>
+    </div><!-- /docs-main -->
+  </div><!-- /docs-layout -->
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html" aria-label="ExergyNet home">
+          <img src="assets/logo.png" alt="ExergyNet" width="175" height="34">
+        </a>
+        <p>Persistent state. Bounded context.<br>Independent authority for machine intelligence.</p>
+      </div>
+      <div class="foot-col">
+        <strong>Explore</strong>
+        <a href="index.html#platform">Platform overview</a>
+        <a href="index.html#workflow">Architecture</a>
+        <a href="index.html#capabilities">Capabilities</a>
+        <a href="https://exergynet.org/security.html">Security ↗</a>
+      </div>
+      <div class="foot-col">
+        <strong>Build</strong>
+        <a href="docs.html">Documentation</a>
+        <a href="https://github.com/ezumba/vanguard-memory-node">Open source ↗</a>
+        <a href="https://exergynet.org/api-integration.html">API reference ↗</a>
+        <a href="https://exergynet.org/proof.html">Verification status ↗</a>
+      </div>
+      <div class="foot-col">
+        <strong>Research</strong>
+        <a href="whitepaper.html">White paper V5</a>
+        <a href="https://exergynet.org/benchmarks.html">Benchmarks ↗</a>
+        <a href="https://exergynet.org/vanguard.html">Vanguard ↗</a>
+        <a href="https://x.com/ExergyNet">Follow ExergyNet ↗</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 ExergyNet · Infrastructure for machine intelligence.</span>
+      <span><a href="https://exergynet.org/legal.html">Legal ↗</a></span>
+    </div>
+  </div>
+</footer>
+
+<dialog class="search-dialog" id="search-dialog" aria-label="Search">
+  <div class="search-top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>
+    <label class="sr-only" for="site-search">Search pages and guides</label>
+    <input id="site-search" type="search" placeholder="Search pages and guides…" autocomplete="off">
+    <button class="search-esc" aria-label="Close search">Esc</button>
+  </div>
+  <div class="search-results" role="listbox"></div>
+  <div class="search-footer-bar">Tab to navigate · Enter to open · Esc to close</div>
+</dialog>
+
+<div class="toast" role="status" aria-live="polite" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>

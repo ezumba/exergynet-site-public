@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCP Gateway | ExergyNet</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta name="description" content="ExergyNet MCP Gateway — Model Context Protocol access to persistent memory, bounded evidence, and authority-scoped tools for autonomous AI agents. Ed25519-authenticated.">
+<link rel="stylesheet" href="style.css">
+<script>
+// Inline theme init to prevent flash
+(function(){
+  var t = localStorage.getItem('exg-theme');
+  if (!t) {
+    t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+</head>
+<body>
+
+<canvas id="circuit-canvas"></canvas>
+
+<div class="site-wrap">
+
+  <!-- Header will be injected here -->
+  <div id="site-header"></div>
+
+<main class="page">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="glow-accent" style="width:520px;height:400px;top:-100px;right:-180px;"></div>
+    <div class="glow-blue"   style="width:480px;height:360px;bottom:-120px;left:-140px;"></div>
+    
+    <div class="container">
+      <div class="hero-eyebrow" style="margin-bottom:1.25rem;"><span class="dot"></span>MCP Reference</div>
+      <h1>MCP<br><span class="accent">Gateway</span></h1>
+      <p class="hero-sub">Model Context Protocol access to the ExergyNet substrate — persistent memory, bounded evidence, and authority-scoped tools for autonomous AI agents. Ed25519-authenticated.</p>
+      <p style="margin-top:1.25rem;font-size:14px;color:var(--text-soft);">Need a <strong>local stdio MCP</strong> for persistent agent memory? <a href="vmn.html" style="color:var(--accent);font-weight:600;">Vanguard Memory Node (VMN)</a> runs on your NVMe &mdash; no API key, no cloud.</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- STATUS NOTICE: ZK Compute Settlement -->
+    <div class="card" style="margin:0 0 1rem;border-color:var(--amber,#ffb830);background:rgba(255,184,48,0.05);">
+      <p style="font-size:13px;color:var(--amber,#ffb830);margin:0;"><strong>STATUS NOTICE — ZK Compute Settlement</strong></p>
+      <p style="font-size:13px;margin:0.5rem 0 0;">ZK-STARK compute settlement is operating in testnet mode. Status labels on this page reflect the target ExergyNet compute architecture. On-chain ZK proof verification for the compute grid is in development. See <a href="proof.html" style="color:var(--amber,#ffb830);">On-Chain Proof</a> for current contract and verification status.</p>
+    </div>
+
+    <!-- STATUS NOTICE: Write Settlement Disabled -->
+    <div class="card" style="margin:0 0 2rem;border-color:var(--amber,#ffb830);background:rgba(255,184,48,0.05);">
+      <p style="font-size:13px;color:var(--amber,#ffb830);margin:0;"><strong>WRITE SETTLEMENT: TEMPORARILY DISABLED PENDING VERIFIED PRODUCTION MIGRATION</strong></p>
+      <p style="font-size:13px;margin:0.5rem 0 0;">The HTTP/Ed25519 handshake and <code>exergynet_open_job</code> write-settlement flow documented below describe ExergyNet's target compute-settlement architecture — they are not currently operational, and no transaction is created or broadcast by following them. For a currently working, read-only MCP integration, see the <a href="https://www.npmjs.com/package/exergynet-mcp-server" style="color:var(--amber,#ffb830);">exergynet-mcp-server</a> npm package, whose own write path is likewise disabled pending the same migration — see its <a href="https://github.com/ezumba/exergynet-site/blob/main/MCP_SECURITY_ADVISORY_2026-08-28.md" style="color:var(--amber,#ffb830);">security advisory</a> for detail.</p>
+    </div>
+
+    <!-- GATEWAY ENDPOINT -->
+    <section>
+      <div class="section-label">Gateway Endpoint</div>
+      <h2>Connection Coordinates</h2>
+      <div class="card accent-border">
+        <ul class="spec-list">
+          <li><span class="spec-key">Endpoint</span>  <span class="spec-val"><code>https://exergynet.org/mcp</code></span></li>
+          <li><span class="spec-key">Protocol</span>  <span class="spec-val">Model Context Protocol (MCP)</span></li>
+          <li><span class="spec-key">Method</span>    <span class="spec-val">HTTP POST</span></li>
+          <li><span class="spec-key">Auth</span>      <span class="spec-val">Ed25519 signature of <code>method||timestamp|nonce</code></span></li>
+          <li><span class="spec-key">Replay Guard</span><span class="spec-val">60-second timestamp window</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- HANDSHAKE PROTOCOL -->
+    <section>
+      <div class="section-label">Handshake Protocol &mdash; Target Design, Not Yet Live</div>
+      <h2>Ed25519 Authentication</h2>
+      <p style="max-width:660px; margin-bottom:1.5rem;">This is the target handshake for the write-settlement gateway once it migrates to production: requests would be signed with an agent's Solana Ed25519 private key to prevent replay attacks and MITM intercepts. <strong>This handshake is not active today</strong> &mdash; the endpoint does not currently process signed requests.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <h4>Step 01 — Generate Entropy</h4>
+          <pre><code>const timestamp = Math.floor(Date.now() / 1000);
+const nonce = crypto.randomBytes(8).toString('hex');</code></pre>
+        </div>
+        <div class="card">
+          <h4>Step 02 — Construct Payload</h4>
+          <pre><code>const message = `${method}||${timestamp}|${nonce}`;</code></pre>
+        </div>
+        <div class="card">
+          <h4>Step 03 — Sign</h4>
+          <pre><code>const signature = nacl.sign.detached(
+  Buffer.from(message), 
+  agentKeypair.secretKey
+);</code></pre>
+        </div>
+        <div class="card accent-border">
+          <h4>Step 04 — POST Payload</h4>
+          <pre><code>{
+  "method": "exergynet_open_job",
+  "client_id": "<Base58_Public_Key>",
+  "timestamp": 1777728610,
+  "nonce": "a1b2c3d4e5f60718",
+  "signature": "<Base58_Encoded_Signature>"
+}</code></pre>
+        </div>
+      </div>
+
+      <div class="card" style="background:var(--accent-dim); border-color:rgba(0,232,135,0.2); margin-top:1rem;">
+        <h4>Target Success Response (once live)</h4>
+        <pre><code>{ "status": "proxy_initiated", "verified": true }</code></pre>
+        <p style="margin-top:0.75rem; font-size:13px;">This is the intended response shape once write settlement migrates to production. Today, no request to this endpoint clears an agent to broadcast a transaction &mdash; the write path is disabled.</p>
+      </div>
+    </section>
+
+    <!-- AVAILABLE METHODS -->
+    <section>
+      <div class="section-label">Available Methods</div>
+      <h2>MCP Action Reference</h2>
+      <div class="card">
+        <table>
+          <thead>
+            <tr><th>Method</th><th>Description</th><th>Cost</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>exergynet_open_job</td>
+              <td>Target: initiate a compute job, locking SOL escrow. Write settlement is temporarily disabled pending verified production migration — no job is opened and no transaction is created today.</td>
+              <td><span class="badge badge-gray">Disabled</span></td>
+            </tr>
+            <tr>
+              <td>exergynet_status</td>
+              <td>Query execution status by job ID</td>
+              <td><span class="badge badge-gray">Read-only</span></td>
+            </tr>
+            <tr>
+              <td>exergynet_get_proof</td>
+              <td>Retrieve the on-chain settlement record for a completed job</td>
+              <td><span class="badge badge-gray">Read-only</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-top:1rem;font-size:12px;color:var(--text-faint);">LNES-03 compute-job settlement is designed around a RISC Zero-produced ZK-STARK proof; see <a href="proof.html" style="color:var(--accent);">On-Chain Proof</a> for which contracts currently enforce on-chain verification versus recording a receipt pending it. This is a separate mechanism from the VMN/memory-query receipt, which returns a SHA-256 content hash, not a ZK proof.</p>
+      </div>
+    </section>
+
+    <!-- ELIZAOS PLUGIN -->
+    <section>
+      <div class="section-label">ElizaOS Plugin</div>
+      <h2>Native Plugin Integration</h2>
+      <p style="max-width:640px;">For ElizaOS agents, the official plugin handles the full MCP handshake automatically.</p>
+      <div class="card">
+        <pre><code>pnpm install @elizaos/plugin-exergynet</code></pre>
+        <p style="font-size:12px;color:var(--text-soft);margin:0.5rem 0 0;">Package publication pending — not yet on npm (verified 2026-11-12). Retained for when the package is released.</p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section" style="border-top:1px solid var(--border);">
+      <div class="container">
+        <h2>Deploy Your First MCP-Enabled Agent</h2>
+        <div class="btn-row" style="justify-content:center;">
+          <a href="docs.html"    class="btn btn-primary">Integration Guide</a>
+          <a href="docs.html"  class="btn btn-secondary">Agent Manifest</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+  <!-- Footer will be injected here -->
+  <div id="site-footer"></div>
+
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>

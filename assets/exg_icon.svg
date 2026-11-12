@@ -1,0 +1,33 @@
+<svg width="1024" height="1024" viewBox="0 0 680 680" role="img" xmlns="http://www.w3.org/2000/svg">
+  <title>ExergyNet logo</title>
+  <desc>Dark green square background with a white rounded square card and a dark green circle, with subtle arc details</desc>
+
+  <style>
+    .logo-bg { fill: #0a3d0a; }
+    .logo-card { fill: #ffffff; }
+    .logo-dot { fill: #0a3d0a; }
+    .logo-arc { fill: none; stroke: #0a3d0a; stroke-width: 2.5; opacity: 0.15; }
+    .logo-tick { fill: none; stroke: #0a3d0a; stroke-width: 2.5; stroke-linecap: round; opacity: 0.18; }
+  </style>
+
+  <rect class="logo-bg" width="680" height="680" rx="0"/>
+  <rect class="logo-card" x="90" y="90" width="500" height="500" rx="48"/>
+
+  <circle class="logo-arc" cx="340" cy="355" r="180"/>
+  <circle class="logo-arc" cx="340" cy="355" r="215"/>
+  <circle class="logo-arc" cx="340" cy="355" r="250"/>
+
+  <line class="logo-tick" x1="136" y1="136" x2="156" y2="136"/>
+  <line class="logo-tick" x1="136" y1="136" x2="136" y2="156"/>
+  <line class="logo-tick" x1="544" y1="136" x2="524" y2="136"/>
+  <line class="logo-tick" x1="544" y1="136" x2="544" y2="156"/>
+  <line class="logo-tick" x1="136" y1="544" x2="156" y2="544"/>
+  <line class="logo-tick" x1="136" y1="544" x2="136" y2="524"/>
+  <line class="logo-tick" x1="544" y1="544" x2="524" y2="544"/>
+  <line class="logo-tick" x1="544" y1="544" x2="544" y2="524"/>
+
+  <circle class="logo-dot" cx="340" cy="116" r="5" opacity="0.18"/>
+  <circle class="logo-dot" cx="340" cy="355" r="140"/>
+
+  <path d="M 255 295 A 140 140 0 0 1 340 215" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.12" stroke-linecap="round"/>
+</svg>

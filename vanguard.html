@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vanguard — Cognitive Execution, Bounded Authority | ExergyNet</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta name="description" content="Vanguard is ExergyNet's OpenAI-compatible inference execution mode. It can run alongside your existing model provider or serve specific calls directly — it does not require replacing your current stack.">
+<meta property="og:title" content="Vanguard — Optional Inference Execution | ExergyNet">
+<meta property="og:description" content="An OpenAI-compatible inference endpoint that can run alongside your existing provider. One optional execution mode, not a required replacement.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://exergynet.org/vanguard.html">
+<link rel="canonical" href="https://exergynet.org/vanguard.html">
+<link rel="stylesheet" href="style.css">
+<script>
+(function(){
+  var t = localStorage.getItem('exg-theme');
+  if (!t) { t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+</head>
+<body>
+<canvas id="circuit-canvas"></canvas>
+<div class="site-wrap">
+  <div id="site-header"></div>
+
+<main class="page">
+
+  <!-- HERO -->
+  <div class="page-header">
+    <div class="container">
+      <div class="hero-eyebrow"><span class="dot"></span>Vanguard</div>
+      <h1>An Optional Inference Mode.<br><span class="accent">Not a Required Replacement.</span></h1>
+      <p class="hero-sub" style="max-width:700px;">Vanguard is ExergyNet's OpenAI-compatible execution endpoint. It can run alongside your existing model provider, serving specific calls, without requiring you to remove anything you already use.</p>
+      <div class="btn-row">
+        <a href="https://portal.exergynet.org/auth/register" class="btn btn-primary">Get started &mdash; $10 free credit</a>
+        <a href="/developers.html" class="btn btn-secondary">Read the docs</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- ROLE IN THE ARCHITECTURE -->
+    <section style="margin:3rem 0;">
+      <div class="section-label">Role in the Architecture</div>
+      <h2>Cognitive execution &mdash; operating under bounded authority.</h2>
+      <p style="max-width:820px; color:var(--text-soft); line-height:1.7;">Vanguard is not another frontier model and not a generic autonomous agent. It is the <strong>cognitive execution</strong> component of ExergyNet: it performs reasoning and tool execution <em>inside</em> the architecture that preserves state, applies authority, enforces policy, and produces evidence. The important characteristic is bounded machine authority, not maximum autonomy. <a href="architecture.html" style="color:var(--accent);">See where it sits &rarr;</a></p>
+      <div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); margin-top:1.25rem;">
+        <div class="card"><h4>What it is</h4><p>An execution engine that reasons and calls tools over bounded evidence &mdash; reachable as an OpenAI-compatible endpoint.</p></div>
+        <div class="card"><h4>What it does here</h4><p>Consumes bounded evidence from the state plane (xLMP), selects model/tool/path, and proposes actions &mdash; distinct from authorizing them.</p></div>
+        <div class="card"><h4>Contribution to verified action</h4><p>Produces the reasoning step whose proposed action is then checked by authority and policy (xISA / LNES-22) before execution, with evidence retained.</p></div>
+        <div class="card"><h4>Claim status</h4><p><span style="font-family:var(--mono);font-size:10px;color:var(--accent);">VERIFIED</span> OpenAI-compatible execution shipped. <span style="font-family:var(--mono);font-size:10px;color:var(--blue,#4e9eff);">ARCHITECTURAL</span> bounded-authority integration with the policy layer (LNES-22 policy gate is shadow-mode).</p></div>
+      </div>
+    </section>
+
+    <!-- THE SIX QUESTIONS -->
+    <section style="margin:3rem 0;">
+      <div class="section-label">What Vanguard Actually Is</div>
+      <h2>Six direct answers, before anything else.</h2>
+      <div class="card-grid">
+        <div class="card accent-border">
+          <h4>What does it do?</h4>
+          <p>Executes inference calls against ExergyNet-hosted models through an OpenAI-compatible API — point your existing client at a different base URL and model name.</p>
+        </div>
+        <div class="card">
+          <h4>When would I use it?</h4>
+          <p>When you want a stateless-session inference path with a disclosed data-retention policy, for calls where you choose to route to it — not as a default for your whole pipeline.</p>
+        </div>
+        <div class="card">
+          <h4>Does it change my model?</h4>
+          <p>For the calls you route to it, yes — those calls are served by Vanguard's own models, not your existing provider. Calls you don't route to it are unaffected.</p>
+        </div>
+        <div class="card blue-border">
+          <h4>Does it route my model?</h4>
+          <p>No. Vanguard does not sit in front of your existing provider and forward calls to it. It is a separate, optional endpoint you choose to call directly.</p>
+        </div>
+        <div class="card blue-border">
+          <h4>Does it own my state?</h4>
+          <p>No. Vanguard's session policy is stateless by design — inputs are not retained after the connection closes and are not used for training. Your organization's authoritative state lives in xLMP/Exergy Vault, a separate layer.</p>
+        </div>
+        <div class="card">
+          <h4>What's production vs. proposed?</h4>
+          <p>The OpenAI-compatible API and the stateless-session policy are live. See the maturity table below for every specific capability.</p>
+        </div>
+
+        <div class="card" style="border-left:3px solid var(--amber,#d4a017); margin-top:1.25rem; padding:1rem 1.25rem;">
+          <strong style="display:block; margin-bottom:0.35rem;">STATUS NOTICE &mdash; Endpoint availability (verified 2026-11-11)</strong>
+          <p style="margin:0; font-size:13px; color:var(--text-soft);"><code>https://api.exergynet.org/v1</code> did not resolve at verification time (DNS failure on <code>/v1/models</code> and the root path). Treat the hosted endpoint as <strong>UNAVAILABLE</strong> until this notice is updated. The capability descriptions on this page describe the target service, not a currently reachable endpoint.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- COEXISTENCE -->
+    <section style="margin-bottom:3rem;">
+      <div class="section-label">Integration</div>
+      <h2>Runs Alongside What You Already Have</h2>
+      <p style="max-width:760px; color:var(--text-soft); line-height:1.7;">No new SDKs to learn. Vanguard speaks the OpenAI-compatible API, so it can run alongside your existing model provider — route specific calls to Vanguard without removing what you already use, by changing the base URL and model name for those calls only.</p>
+      <div class="code-terminal-block" style="margin:1.5rem 0;">
+        <div class="code-terminal-header">
+          <div class="code-dots"><span class="t-dot t-red"></span><span class="t-dot t-amber"></span><span class="t-dot t-green"></span></div>
+        </div>
+        <pre style="padding:1.25rem; overflow-x:auto; font-size:13px; line-height:1.6;"><code>client = OpenAI(
+    base_url="https://api.exergynet.org/v1",
+    api_key=EXERGYNET_API_KEY
+)
+
+# This specific call now routes to Vanguard.
+# Calls you don't change keep using your existing provider.
+response = client.chat.completions.create(
+    model="vanguard-engine",
+    messages=[...]
+)</code></pre>
+      </div>
+    </section>
+
+    <!-- STATELESS POLICY -->
+    <section style="margin-bottom:3rem;">
+      <div class="section-label">Data Policy</div>
+      <h2>Stateless by Design</h2>
+      <p style="max-width:760px; color:var(--text-soft); line-height:1.7;">Inputs to Vanguard are not retained after the connection closes, by policy, and are not used for training. This is a policy assertion, not an independently audited compliance certification — if your evaluation requires a formal audit reference (e.g. SOC 2), request current documentation directly rather than assuming certification from this page.</p>
+    </section>
+
+    <!-- MATURITY TABLE -->
+    <section style="margin-bottom:3rem;">
+      <div class="section-label">Validation Status</div>
+      <h2>What's Actually Shipped</h2>
+      <div class="card" style="overflow-x:auto;">
+        <table class="trust-table" style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border);">
+              <th style="text-align:left;padding:0.85rem;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);">Capability</th>
+              <th style="text-align:left;padding:0.85rem;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);">Status</th>
+              <th style="text-align:left;padding:0.85rem;font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-faint);">Boundary</th>
+            </tr>
+          </thead>
+          <tbody style="font-size:13px;color:var(--text-soft);">
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.85rem;color:var(--text);font-weight:600;">OpenAI-compatible API</td><td style="padding:0.85rem;">Production</td><td style="padding:0.85rem;">Live endpoint, two-line client integration</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.85rem;color:var(--text);font-weight:600;">Stateless session policy</td><td style="padding:0.85rem;">Production</td><td style="padding:0.85rem;">Policy assertion; no third-party audit certificate published on this page</td></tr>
+            <tr style="border-bottom:1px solid var(--border);"><td style="padding:0.85rem;color:var(--text);font-weight:600;">Model routing / orchestration</td><td style="padding:0.85rem;">Production</td><td style="padding:0.85rem;">Proposes actions; does not self-authorize consequential steps</td></tr>
+            <tr><td style="padding:0.85rem;color:var(--text);font-weight:600;">Coexistence with external providers</td><td style="padding:0.85rem;">Architectural</td><td style="padding:0.85rem;">Technically supported per-call; not a managed multi-provider router today</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section" style="border-top:1px solid var(--border); padding-top:2.5rem;">
+      <h2>Try it on the calls you choose.</h2>
+      <p>Pair the trial with a real, dated benchmark rather than taking latency or cost claims on faith.</p>
+      <div class="btn-row" style="justify-content:center;">
+        <a href="https://portal.exergynet.org/auth/register" class="btn btn-primary">Start with Vanguard</a>
+        <a href="benchmarks.html" class="btn btn-secondary">Review the Evidence</a>
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+  <div id="site-footer"></div>
+</div>
+<script src="main.js"></script>
+</body>
+</html>

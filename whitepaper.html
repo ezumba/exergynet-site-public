@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="index,follow">
+<title>Memory Grows. Context Does Not Have To. — ExergyNet V5</title>
+<meta name="description" content="V5 research: ExergyNet at the 100M-token development operating point. Persistent state, bounded context delivery, retrieval performance, accelerator findings, and a live authority-layer result.">
+<link rel="icon" href="assets/favicon.png">
+<link rel="stylesheet" href="exgn-web006.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="brand" href="index.html" aria-label="ExergyNet home">
+      <img src="assets/logo.png" alt="ExergyNet" width="175" height="34">
+    </a>
+    <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+      <a href="index.html#platform">Platform</a>
+      <a href="docs.html">Developers</a>
+      <a href="whitepaper.html" aria-current="page">Research</a>
+      <a href="index.html#company">Company</a>
+    </nav>
+    <div class="header-actions">
+      <button class="search-trigger" aria-label="Search" id="search-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>
+        <span class="s-label">Search</span>
+        <kbd>⌘K</kbd>
+      </button>
+      <a class="btn btn-primary" href="docs.html">Start building <span aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
+        <span aria-hidden="true">☰</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- RESEARCH HERO -->
+  <section class="research-hero" aria-labelledby="paper-title">
+    <div class="wrap">
+      <div class="research-hero-inner">
+        <div>
+          <div class="eyebrow"><span class="dot" aria-hidden="true"></span>V5 · ExergyNet White Paper · October 2026</div>
+          <h1 id="paper-title">Memory grows.<br>Context does not<br>have to.</h1>
+          <p class="lead">V5 examines ExergyNet at the 100M-token development operating point. Persistent state storage, bounded context delivery, retrieval performance at scale, accelerator infrastructure findings, and a live authority-layer result.</p>
+          <div style="display:flex;gap:var(--s-3);flex-wrap:wrap;margin-top:var(--s-7)">
+            <a class="btn btn-primary" href="downloads/EXERGYNET_WHITEPAPER_PUBLIC_V5.pdf" download>Download PDF <span aria-hidden="true">↓</span></a>
+            <a class="btn btn-outline" href="#overview">Read online <span aria-hidden="true">↓</span></a>
+          </div>
+          <p class="fine-note" style="margin-top:var(--s-6)">Authors: Seven Ezumba · Veena Bontu · ExergyNet Research, October 2026</p>
+        </div>
+        <div class="paper-cover-lg" aria-label="V5 white paper cover illustration" aria-hidden="true">
+          <div class="cover-brand">EXERGYNET <span style="font:10px var(--mono)">V5</span></div>
+          <div class="cover-title">Memory Grows.<br>Context Does<br>Not Have To.</div>
+          <div class="cover-bottom">
+            <span>Persistent machine<br>infrastructure</span>
+            <span>October<br>2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KEY RESULTS STRIP -->
+  <div class="result-strip" aria-label="Key quantitative results">
+    <div class="wrap">
+      <div class="result-strip-inner">
+        <div class="rm">
+          <strong>≈101M</strong>
+          <span>Estimated persistent-state tokens · 100M development operating point</span>
+        </div>
+        <div class="rm">
+          <strong>800</strong>
+          <span>Median active-context tokens delivered per query</span>
+        </div>
+        <div class="rm">
+          <strong>220.5×</strong>
+          <span>Median paired retrieval speedup over comparative baseline</span>
+        </div>
+        <div class="rm">
+          <strong>11.3×</strong>
+          <span>H200 correct-task throughput vs. A100 baseline</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ARTICLE BODY -->
+  <div class="wrap">
+    <div class="research-layout">
+
+      <!-- TABLE OF CONTENTS -->
+      <nav class="on-this-page" aria-label="Table of contents">
+        <strong>On this page</strong>
+        <a href="#overview">Overview</a>
+        <a href="#results">V5 results</a>
+        <a href="#authority">Authority layer</a>
+        <a href="#boundaries">Scope and boundaries</a>
+        <a href="#citation">Citation and verification</a>
+      </nav>
+
+      <!-- ARTICLE -->
+      <article class="research-article">
+
+        <!-- ABSTRACT -->
+        <div class="article-abstract" role="note">
+          <strong>Abstract</strong>
+          ExergyNet decouples persistent memory from active context delivery. As stored state scales toward and beyond 100 million tokens, the delivered context per query remains bounded — by design, not by limitation. V5 characterizes this relationship at a development operating point, presents retrieval performance data from a live environment, examines accelerator infrastructure behavior at that operating point, and reports a live authority-layer result from a production-adjacent environment.
+        </div>
+
+        <!-- SECTION 1: OVERVIEW -->
+        <section class="article-section" id="overview" aria-labelledby="s1-heading">
+          <h2 id="s1-heading">1 · Overview</h2>
+
+          <h3>1.1 The N→K relationship</h3>
+          <p>Standard language model deployment treats context as a resource that grows with what the model is expected to know. ExergyNet treats context and memory as separate concerns: N (what is stored) and K (what is delivered to the model at any point in time).</p>
+
+          <div class="r-figure" aria-label="N to K relationship diagram">
+            <div class="nk-figure">
+              <div class="nk-box">
+                <strong>N</strong>
+                <span>Persistent State</span>
+                <span class="nk-val">≈ 101M tokens</span>
+              </div>
+              <div class="nk-arrow" aria-hidden="true">→</div>
+              <div class="nk-box accent-box">
+                <strong>K</strong>
+                <span>Active Context</span>
+                <span class="nk-val">800 median tokens</span>
+              </div>
+            </div>
+            <p class="r-caption">At the 100M development operating point, the ratio N/K ≈ 126,440. The model reasons over K, not N.</p>
+          </div>
+
+          <p>As N grows, K stays bounded. The ExergyNet retrieval layer selects relevant content from the persistent store before inference, delivering a bounded context window regardless of total storage size. This is not a performance optimization — it is an architectural property.</p>
+
+          <h3>1.2 Development operating point</h3>
+          <p>V5 characterizes behavior at approximately 101 million estimated state tokens, the 100M development operating point. This represents a single continuous run. The separately sealed holdout reaches 10.1 million tokens. All quantitative results in this paper refer to the development cohort unless noted otherwise.</p>
+        </section>
+
+        <!-- SECTION 2: RESULTS -->
+        <section class="article-section" id="results" aria-labelledby="s2-heading">
+          <h2 id="s2-heading">2 · V5 results</h2>
+
+          <h3>2.1 Persistent state at development scale</h3>
+          <p>At the 100M development operating point, the ExergyNet persistent store contains approximately 101,152,694 estimated state tokens. This includes structured state, identity records, evidence shards, and query history from 190 matched query executions.</p>
+
+          <div class="table-scroll">
+            <table>
+              <caption>Table 1 — Persistent state metrics at 100M development operating point</caption>
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Value</th>
+                  <th>Scope</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Estimated state tokens (N)</td>
+                  <td>≈ 101,152,694</td>
+                  <td>Development cohort · single run</td>
+                </tr>
+                <tr>
+                  <td>Holdout state tokens</td>
+                  <td>≈ 10,100,000</td>
+                  <td>Sealed holdout · separate run</td>
+                </tr>
+                <tr>
+                  <td>Total matched query executions</td>
+                  <td>190</td>
+                  <td>Development cohort</td>
+                </tr>
+                <tr>
+                  <td>Median active context tokens (K)</td>
+                  <td>800</td>
+                  <td>190 matched executions</td>
+                </tr>
+                <tr>
+                  <td>N/K ratio</td>
+                  <td>≈ 126,440</td>
+                  <td>Computed from median K</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>2.2 Retrieval performance</h3>
+          <p>Retrieval speedup is measured as the ratio of time to locate and deliver relevant context via the ExergyNet retrieval layer versus a paired naive scan baseline. The median speedup across 190 matched executions is 220.5×.</p>
+
+          <div class="callout" role="note">
+            <strong>Measurement scope:</strong> These results represent a live tested environment. The retrieval speedup measures time-to-relevant-context, not total inference time. The baseline is a paired naive full-state scan on the same hardware.
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <caption>Table 2 — Retrieval performance, 190 matched executions</caption>
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Median paired retrieval speedup</td>
+                  <td>220.5×</td>
+                </tr>
+                <tr>
+                  <td>Mean paired retrieval speedup</td>
+                  <td>415.9×</td>
+                </tr>
+                <tr>
+                  <td>Total matched query executions</td>
+                  <td>190</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>The 415.9× figure is the <strong>P95</strong> of the paired retrieval-speedup distribution and substantially exceeds the median (220.5×), indicating a long right tail: some queries exhibit very high speedup due to query specificity. The median provides a more conservative and representative estimate. This matches the aggregation stated in the published V5 white paper (DOI 10.5281/zenodo.24021817).</p>
+
+          <h3>2.3 Accelerator infrastructure — H200 findings</h3>
+          <p>At the 100M development operating point, ExergyNet was characterized on NVIDIA H200 infrastructure alongside an NVIDIA A100 baseline. The H200 environment demonstrated 11.3× correct-task throughput relative to the A100 baseline.</p>
+
+          <div class="table-scroll">
+            <table>
+              <caption>Table 3 — H200 vs. A100 at 100M development operating point</caption>
+              <thead>
+                <tr>
+                  <th>Metric</th>
+                  <th>H200</th>
+                  <th>A100 (baseline)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Correct-task throughput</td>
+                  <td>11.3× (vs. A100)</td>
+                  <td>1.0× (baseline)</td>
+                </tr>
+                <tr>
+                  <td>Baseline answer accuracy (development cohort)</td>
+                  <td colspan="2">45.3% (adversarial synthetic benchmark)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="callout" role="note">
+            <strong>Accuracy scope:</strong> 45.3% baseline answer accuracy is measured on an adversarial synthetic benchmark designed to probe persistent-state recall failures. It does not represent general model accuracy. The benchmark is intentionally hostile to systems without reliable persistent context delivery.
+          </div>
+        </section>
+
+        <!-- SECTION 3: AUTHORITY -->
+        <section class="article-section" id="authority" aria-labelledby="s3-heading">
+          <h2 id="s3-heading">3 · Authority layer</h2>
+
+          <h3>3.1 Architecture</h3>
+          <p>The ExergyNet authority layer operates independently of model inference. A model's proposal is evaluated by a separate deterministic system before execution. The authority layer does not reason — it enforces policy.</p>
+
+          <div class="r-figure" aria-label="Authority layer architecture">
+            <div class="boundary-list">
+              <div class="boundary-row">
+                <div class="boundary-num">01</div>
+                <div>
+                  <strong>Model reasoning</strong>
+                  <p>Receives bounded context K from the persistent store. Produces a proposal: a recommended action or response.</p>
+                </div>
+              </div>
+              <div class="boundary-sep" aria-hidden="true">↓ Proposal (not permission)</div>
+              <div class="boundary-row">
+                <div class="boundary-num">02</div>
+                <div>
+                  <strong>Authority gate</strong>
+                  <p>Receives the proposal. Evaluates against policy. Issues allow or deny — independent of the reasoning that produced the proposal.</p>
+                </div>
+              </div>
+              <div class="boundary-sep" aria-hidden="true">↓ Allow / Deny</div>
+              <div class="boundary-row">
+                <div class="boundary-num">03</div>
+                <div>
+                  <strong>Execution</strong>
+                  <p>Only authorized proposals reach the execution layer. A denied proposal is never executed, regardless of model confidence.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3>3.2 Live environment result</h3>
+          <p>In a reported live authority-review environment, an adversarial instruction was submitted to the system. The model's reasoning layer accepted the instruction and produced a proposal to execute it. The ExergyNet authority gate evaluated the proposal and issued a denial — the action was not executed.</p>
+          <p>This result demonstrates the authority layer's operational independence from inference. A model that accepts an adversarial instruction does not constitute a compromised system when execution requires separate authorization.</p>
+
+          <div class="callout" role="note">
+            <strong>Scope of this claim:</strong> This result was observed in a specific live production-adjacent environment under conditions described in the full paper. It is not a general security guarantee. The authority layer must be correctly configured and enforced for the property to hold.
+          </div>
+        </section>
+
+        <!-- SECTION 4: BOUNDARIES -->
+        <section class="article-section" id="boundaries" aria-labelledby="s4-heading">
+          <h2 id="s4-heading">4 · Scope and boundaries</h2>
+
+          <p>V5 is characterized under specific conditions. The following boundaries apply to all quantitative claims:</p>
+
+          <div class="table-scroll">
+            <table>
+              <caption>Table 4 — Scope and boundary conditions</caption>
+              <thead>
+                <tr>
+                  <th>Claim</th>
+                  <th>Scope</th>
+                  <th>Boundary</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>≈101M state tokens</td>
+                  <td>Development cohort · single run</td>
+                  <td>Estimated; not independently counted token-by-token</td>
+                </tr>
+                <tr>
+                  <td>800 median context tokens</td>
+                  <td>190 matched query executions</td>
+                  <td>Median across the development cohort; individual queries vary</td>
+                </tr>
+                <tr>
+                  <td>220.5× retrieval speedup</td>
+                  <td>190 matched executions · paired measurement</td>
+                  <td>Measured vs. paired naive scan baseline; not vs. production system</td>
+                </tr>
+                <tr>
+                  <td>11.3× H200 throughput</td>
+                  <td>Development operating point · correct-task metric</td>
+                  <td>H200 vs. A100; correct-task throughput, not raw token throughput</td>
+                </tr>
+                <tr>
+                  <td>45.3% baseline accuracy</td>
+                  <td>Adversarial synthetic benchmark</td>
+                  <td>Designed to test persistent-state recall; not general accuracy</td>
+                </tr>
+                <tr>
+                  <td>Authority gate live result</td>
+                  <td>Specific live production-adjacent environment</td>
+                  <td>Single observed event; not a statistical claim</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>4.1 What V5 does not claim</h3>
+          <div class="callout warning" role="note">
+            V5 does not claim that the results generalize to arbitrary workloads, models, or infrastructure configurations. The 100M token operating point is a development characterization, not a production specification. ExergyNet is infrastructure — its properties depend on correct configuration and integration.
+          </div>
+        </section>
+
+        <!-- SECTION 5: CITATION -->
+        <section class="article-section" id="citation" aria-labelledby="s5-heading">
+          <h2 id="s5-heading">5 · Citation and verification</h2>
+
+          <h3>5.1 Citation</h3>
+          <div class="citation-wrap">
+            <div class="code-panel">
+              <div class="code-panel-head">
+                <span class="code-lang">BibTeX</span>
+                <button class="copy-button" data-copy='@techreport{exergynet2026v5,
+  title        = {Memory Grows. Context Does Not Have To.},
+  subtitle     = {ExergyNet White Paper V5},
+  author       = {Ezumba, Seven and Bontu, Veena},
+  institution  = {ExergyNet},
+  year         = {2026},
+  month        = {October},
+  doi          = {10.5281/zenodo.24021817},
+  note         = {Development characterization at the 100M-token operating point.}
+}' aria-label="Copy BibTeX citation">Copy</button>
+              </div>
+              <pre><code>@techreport{exergynet2026v5,
+  title        = {Memory Grows. Context Does Not Have To.},
+  subtitle     = {ExergyNet White Paper V5},
+  author       = {Ezumba, Seven and Bontu, Veena},
+  institution  = {ExergyNet},
+  year         = {2026},
+  month        = {October},
+  doi          = {10.5281/zenodo.24021817},
+  note         = {Development characterization at the 100M-token operating point.}
+}</code></pre>
+            </div>
+          </div>
+          <div class="doi-ref">
+            <span class="doi-label">DOI</span>
+            <a href="https://doi.org/10.5281/zenodo.24021817" target="_blank" rel="noopener">https://doi.org/10.5281/zenodo.24021817</a>
+          </div>
+
+          <h3>5.2 Document verification</h3>
+          <p>The V5 PDF is provided with a SHA-256 checksum for independent verification:</p>
+          <div class="hash-block">
+            <div class="hash-label">SHA-256 · EXERGYNET_WHITEPAPER_PUBLIC_V5.pdf</div>
+            <div class="hash-value">416974f1d7c1f4d569866027e2ff7a58d7480ed80b87738d8203feb6e518b0eb</div>
+          </div>
+          <p>Verify on macOS or Linux:</p>
+          <div class="code-panel">
+            <div class="code-panel-head">
+              <span class="code-lang">Terminal</span>
+              <button class="copy-button" data-copy="shasum -a 256 EXERGYNET_WHITEPAPER_PUBLIC_V5.pdf" aria-label="Copy verify command">Copy</button>
+            </div>
+            <pre><code>shasum -a 256 EXERGYNET_WHITEPAPER_PUBLIC_V5.pdf</code></pre>
+          </div>
+          <p>Verify on Windows (PowerShell):</p>
+          <div class="code-panel">
+            <div class="code-panel-head">
+              <span class="code-lang">PowerShell</span>
+              <button class="copy-button" data-copy="Get-FileHash EXERGYNET_WHITEPAPER_PUBLIC_V5.pdf -Algorithm SHA256 | Select-Object Hash" aria-label="Copy Windows verify command">Copy</button>
+            </div>
+            <pre><code>Get-FileHash EXERGYNET_WHITEPAPER_PUBLIC_V5.pdf -Algorithm SHA256 | Select-Object Hash</code></pre>
+          </div>
+          <div style="display:flex;gap:var(--s-3);flex-wrap:wrap;margin-top:var(--s-6)">
+            <a class="btn btn-primary" href="downloads/EXERGYNET_WHITEPAPER_PUBLIC_V5.pdf" download>Download V5 PDF <span aria-hidden="true">↓</span></a>
+            <a class="btn btn-outline" href="downloads/EXERGYNET_WHITEPAPER_PUBLIC_V5.sha256" download>Download checksum <span aria-hidden="true">↓</span></a>
+            <a class="btn btn-outline" href="https://doi.org/10.5281/zenodo.24021817" target="_blank" rel="noopener">Cite via DOI <span aria-hidden="true">↗</span></a>
+            <a class="btn btn-outline" href="https://github.com/ezumba/exergynet-whitepaper" target="_blank" rel="noopener">View on GitHub <span aria-hidden="true">↗</span></a>
+          </div>
+        </section>
+
+      </article>
+    </div><!-- /research-layout -->
+  </div><!-- /wrap -->
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html" aria-label="ExergyNet home">
+          <img src="assets/logo.png" alt="ExergyNet" width="175" height="34">
+        </a>
+        <p>Persistent state. Bounded context.<br>Independent authority for machine intelligence.</p>
+      </div>
+      <div class="foot-col">
+        <strong>Explore</strong>
+        <a href="index.html#platform">Platform overview</a>
+        <a href="index.html#workflow">Architecture</a>
+        <a href="index.html#capabilities">Capabilities</a>
+        <a href="https://exergynet.org/security.html">Security ↗</a>
+      </div>
+      <div class="foot-col">
+        <strong>Build</strong>
+        <a href="docs.html">Documentation</a>
+        <a href="https://github.com/ezumba/vanguard-memory-node">Open source ↗</a>
+        <a href="https://exergynet.org/api-integration.html">API reference ↗</a>
+        <a href="https://exergynet.org/proof.html">Verification status ↗</a>
+      </div>
+      <div class="foot-col">
+        <strong>Research</strong>
+        <a href="whitepaper.html">White paper V5</a>
+        <a href="https://exergynet.org/benchmarks.html">Benchmarks ↗</a>
+        <a href="https://exergynet.org/vanguard.html">Vanguard ↗</a>
+        <a href="https://x.com/ExergyNet">Follow ExergyNet ↗</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 ExergyNet · Infrastructure for machine intelligence.</span>
+      <span><a href="https://exergynet.org/legal.html">Legal ↗</a></span>
+    </div>
+  </div>
+</footer>
+
+<dialog class="search-dialog" id="search-dialog" aria-label="Search">
+  <div class="search-top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>
+    <label class="sr-only" for="site-search">Search pages and guides</label>
+    <input id="site-search" type="search" placeholder="Search pages and guides…" autocomplete="off">
+    <button class="search-esc" aria-label="Close search">Esc</button>
+  </div>
+  <div class="search-results" role="listbox"></div>
+  <div class="search-footer-bar">Tab to navigate · Enter to open · Esc to close</div>
+</dialog>
+
+<div class="toast" role="status" aria-live="polite" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>

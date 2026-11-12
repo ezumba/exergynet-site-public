@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roadmap | ExergyNet</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta name="description" content="ExergyNet development roadmap — Phase 8 complete, Phase 9 active, Phase 10 planned.">
+<link rel="stylesheet" href="style.css">
+<script>
+// Inline theme init to prevent flash
+(function(){
+  var t = localStorage.getItem('exg-theme');
+  if (!t) {
+    t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+</head>
+<body>
+
+<canvas id="circuit-canvas"></canvas>
+
+<div class="site-wrap">
+
+  <!-- Header will be injected here -->
+  <div id="site-header"></div>
+
+<main class="page">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="glow-accent" style="width:520px;height:400px;top:-100px;right:-180px;"></div>
+    <div class="glow-blue"   style="width:480px;height:360px;bottom:-120px;left:-140px;"></div>
+    
+    <div class="container">
+      <div class="hero-eyebrow" style="margin-bottom:1.25rem;"><span class="dot"></span>Development Progress</div>
+      <h1>ExergyNet<br><span class="accent">Roadmap</span></h1>
+      <p class="hero-sub">Built in strict, deterministic phases. Each epoch expands the physical and economic boundaries of the network. A phase exits only when its cryptographic and compute-verification conditions are mathematically fulfilled on Mainnet.</p>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- PHASE 8 - COMPLETED -->
+    <section>
+      <div class="section-label">Completed</div>
+      <h2>Phase 8 — The Omega Singularity</h2>
+      <div class="phase done">
+        <div class="phase-label done">&#10003; COMPLETE</div>
+        <p style="font-size:13px; color:var(--text-soft); max-width:700px;">Historical phase record. Current operational status supersedes it: the LNES-03 Solana deployment is now <strong>under investigation for transaction failures</strong> (do not rely on it for settlement), and the <code>@elizaos/plugin-exergynet</code> package referenced below is <strong>not currently published on npm</strong> (verified 2026-11-11). See <a href="proof.html">verification status</a>.</p>
+        <ul class="phase-items">
+          <li>LNES-03 Deployment: The Unidirectional Compute Membrane deployed to Solana Mainnet-Beta.</li>
+          <li>Economic Hardening: Transitioned to Native SOL escrows; eradicated bilateral AMM liquidity vulnerabilities.</li>
+          <li>L0 Cryptographic Mesh: Upgraded the physical node swarm to Ed25519 Signed Identities.</li>
+          <li>M2M Security: Hardened the MCP Neural Gateway with temporal bounding and nonce-replay protection.</li>
+          <li>Agent Colonization: Released the official <code>@elizaos/plugin-exergynet</code> package.</li>
+          <li>Global Discovery: Deployed machine-readable manifests for autonomous agent ingestion.</li>
+          </ul>
+      </div>
+
+      <div class="card accent-border" style="margin-top:1.25rem;">
+        <div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:0.75rem;">&#10003; SHIPPED — Phase 9 Milestone</div>
+        <h4>Vanguard Memory Node v1.0.0</h4>
+        <p style="font-size:14px;color:var(--text-soft);margin:0.5rem 0 1rem;">Open-source local xLMP node for Claude Desktop. Deterministic, content-addressed memory via stdio MCP. No cloud. No API key. Deploys in 60 seconds.</p>
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <a href="vmn.html" class="btn btn-primary" style="font-size:12px;">VMN Page &rarr;</a>
+          <a href="https://github.com/ezumba/vanguard-memory-node" target="_blank" rel="noopener" class="btn btn-ghost" style="font-size:12px;">GitHub &rarr;</a>
+        </div>
+      </div>
+
+      <div style="display:none"><ul>
+        </ul>
+      </div>
+
+      <div class="card accent-border">
+        <h4>Proof of Completion</h4>
+        <ul class="spec-list">
+          <li><span class="spec-key">Program ID</span><span class="spec-val"><code>7BCPpUMBxQMPomsgTaJsQdLEfycNwPWqkQD1Cea4CcCL</code></span></li>
+          <li><span class="spec-key">Proof Tx</span><span class="spec-val"><code style="font-size:11px;">3MFnUnvVN2EbnUC3gPAWWERCNz283672Xus8iGZqWihvnQkndExNKnGHoGBgjb4aqs1pyke2iKWihPgMnQUvPiZe</code></span></li>
+        </ul>
+        <div style="margin-top:1rem;">
+          <a href="proof.html" class="btn btn-primary">View Mainnet Proof &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHASE 9 - ACTIVE -->
+    <section>
+      <div class="section-label">Active</div>
+      <h2>Phase 9 — The Asymptotic Swarm</h2>
+      <div class="phase active">
+        <div class="phase-label active">&#9654; IN PROGRESS</div>
+        <ul class="phase-items">
+          <li>Decentralized Hardware Onboarding: Opening the entropy-k-core daemon to global third-party node operators.</li>
+          <li>Ecosystem Expansion: Extending native SDK support to additional agentic frameworks.</li>
+          <li>Treasury Custody: Implementation of multisig cold-storage governance for Vault Alpha.</li>
+          <li>Recursive Optimization: Enhancing the Siphon's ZK aggregator for larger batch compression.</li>
+          <li>Third-Party Audits: Preparation for external security audits of LNES-03 and MCP Gateway.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4>Phase 9 — Definition of Done</h4>
+        <ul class="phase-items">
+          <li>The ExergyNet L0 Mesh consists of &gt;50 geographically distributed, third-party verified nodes.</li>
+          <li>The LNES-03 Smart Contract successfully processes a continuous 1,000-job recursive batch in a single Mainnet transaction.</li>
+          <li>ExergyNet is actively utilized in at least three major open-source AI frameworks.</li>
+          <li>Treasury governance transitioned to 3-of-5 hardware multisig.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PHASE 10 - PLANNED -->
+    <section>
+      <div class="section-label">Planned</div>
+      <h2>Phase 10 &mdash; LNES-04 Base Deployment</h2>
+      <p style="max-width:700px; font-size:13px; color:var(--text-soft);">Status update (2026-11-11): a first proof-bearing single-job settlement completed on Base Mainnet (MMS V3, <code>0x42dfA2Df54D7f7685dC363C64C23Cb6b2be8cabD</code>, RISC Zero Groth16 receipt, replay-rejected &mdash; see <a href="proof.html">verification status</a>). Classification: MAINNET_VERIFIED_SINGLE_JOB. Generalized production settlement, continuous autonomous operation, and real-capital routing remain PLANNED and are not authorized.</p>
+      <div class="phase">
+        <div class="phase-label planned">&#9900; PLANNED</div>
+        <ul class="phase-items">
+          <li>Cross-Chain Substrate Expansion: Deploying the Unidirectional Membrane to Base L2.</li>
+          <li>EVM Settlement: Solidity-compatible ZK verifier contracts (RISC Zero / Groth16).</li>
+          <li>Interoperable State: Allowing agents on Base to leverage the same physical L0 swarm.</li>
+          <li>Post-Quantum Architecture: Integration of NIST-approved Lattice-based signatures.</li>
+          <li>Verified Memory: ZK-verified VMN records &mdash; RISC Zero receipt, Groth16-settled on Base. Each xLMP memory segment verifiable on-chain.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section" style="border-top:1px solid var(--border);">
+      <div class="container">
+        <h2>Join Phase 9</h2>
+        <p>Run a node. Earn yield. Expand the mesh.</p>
+        <div class="btn-row" style="justify-content:center;">
+          <a href="nodes.html" class="btn btn-primary">Run a Node</a>
+          <a href="proof.html" class="btn btn-secondary">View Mainnet</a>
+          <a href="https://github.com/ezumba/vanguard-memory-node" target="_blank" rel="noopener" class="btn btn-ghost">GitHub &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+</main>
+
+  <!-- Footer will be injected here -->
+  <div id="site-footer"></div>
+
+</div>
+
+<script src="main.js"></script>
+</body>
+</html>
