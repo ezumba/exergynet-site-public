@@ -312,7 +312,8 @@ Tools (5):
   exergynet_estimate_gate           — Local arithmetic: external compute cost vs settlement cost + margin.
   exergynet_open_job                — DISABLED. Fail-closed. No signing. No transaction. See security advisory.
 
-Security: No tool in exergynet-mcp-server holds funds, requests a private key, or submits transactions.
+Security: No tool in exergynet-mcp-server@0.2.6 holds funds, requests a private key, or submits transactions. It does NOT execute Base Mainnet settlement (live Base Mainnet x402 APIs are separate at https://x402.exergynet.org).
+Historical release warning: Do NOT use legacy 0.1.x versions (such as 0.1.10, which remain an active historical record on npm/MCP Registry and requested BASE_PRIVATE_KEY). Always install exergynet-mcp-server@0.2.6 (latest).
 Security advisory: https://exergynet.org/security.html
 
 ## MCP Service Discovery
