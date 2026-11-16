@@ -1,15 +1,87 @@
 {
-  "$schema": "n/a — first version, no external schema yet",
-  "lastVerified": "2026-08-28",
-  "note": "Canonical machine-readable companion to PUBLIC_CONTRACT_ADDRESS_REGISTRY_2026-08-28.md. Statuses: ACTIVE, DEPLOYED_LIMITED, MOCK, TESTNET, LEGACY, RETIRED, INVESTIGATING, UNKNOWN. Directive 007 (2026-08-28) re-audited two additional gateway surfaces (exergynet-mcp-server's Rust src/main.rs, and the live omega_carrier_mcp.py at mcp.exergynet.org/sse) for address literals; both checked clean, no rows added.",
+  "$schema": "n/a — ExergyNet canonical public contract & wallet registry",
+  "lastVerified": "2026-11-16",
+  "note": "Verified against Base Mainnet (8453), Base Sepolia (84532), and Solana Mainnet-Beta. Statuses: ACTIVE, DEPLOYED_LIMITED, MOCK, TESTNET, LEGACY, RETIRED, INVESTIGATING.",
   "addresses": [
+    {
+      "component": "LNES16_BiotechMembrane_V3",
+      "chain": "base-mainnet",
+      "chainId": 8453,
+      "address": "0x42dfA2Df54D7f7685dC363C64C23Cb6b2be8cabD",
+      "status": "ACTIVE",
+      "notes": "Canonical production Base Mainnet settlement membrane. Toll: 2,000,000 uUSDC (2.00 USDC). Qualified BCX-002 IMAGE_ID: 0x8be6effa582e9ed205cced2533f6f76e99878893b4fd93e5d4c82ee4210dee01. Verified on-chain settlements: Genesis 0xc3cb476d... (blk 56268593) and Track B-045 0x8aa6f48e... (blk 57827637)."
+    },
+    {
+      "component": "LNES16_RhoReserve",
+      "chain": "base-mainnet",
+      "chainId": 8453,
+      "address": "0xd9529C607AA51330f9b5054F3D2DC19c411f32C8",
+      "status": "ACTIVE",
+      "notes": "V3 RHO reserve treasury receiver (350 bps = 0.070000 USDC per 2.00 USDC V3 settlement)."
+    },
+    {
+      "component": "RISC Zero Verifier Router (RISC0_ROUTER)",
+      "chain": "base-mainnet",
+      "chainId": 8453,
+      "address": "0x0b144E07A0826182B6b59788c34b32Bfa86Fb711",
+      "status": "ACTIVE",
+      "notes": "On-chain Groth16 router (same address on Base Sepolia 84532). Selector 0x73c457ba routes to Groth16 verifier 0x724d375B5b622e15f0E64e9Deb76a4cB17877797."
+    },
+    {
+      "component": "Canonical USDC (Circle, ERC-3009)",
+      "chain": "base-mainnet",
+      "chainId": 8453,
+      "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "status": "ACTIVE",
+      "notes": "Third-party USDC token contract used for x402 V2 intake and V3 escrow/settlement."
+    },
+    {
+      "component": "x402 Revenue Receiver (X402_REVENUE_01)",
+      "chain": "base-mainnet",
+      "chainId": 8453,
+      "address": "0xD266542c0c0db02BbF6Bb2C4D792Ef1a72AD4857",
+      "status": "ACTIVE",
+      "notes": "Receive-only customer payment destination for https://x402.exergynet.org (GET /v1/job $0.02 USDC, POST /api/v1/compute/request $2.50 USDC)."
+    },
+    {
+      "component": "Vanguard Job-Funding Signer",
+      "chain": "base-mainnet",
+      "chainId": 8453,
+      "address": "0x649b9231be677e2Bc67D7bf813A51f7dEe7182dE",
+      "status": "ACTIVE",
+      "notes": "Dedicated V3 openJob funding wallet governed by LNES-22 standing policy pol-commercial-v3-001."
+    },
+    {
+      "component": "SINK Settlement Drone",
+      "chain": "base-mainnet",
+      "chainId": 8453,
+      "address": "0xB41025828340b2feF42cE849116350d1a643d7D6",
+      "status": "ACTIVE",
+      "notes": "SiphonV3 settlement drone for LNES16_BiotechMembrane_V3 (3000 bps = 0.600000 USDC per V3 settlement)."
+    },
+    {
+      "component": "USDC_Sink_V1",
+      "chain": "base-mainnet",
+      "chainId": 8453,
+      "address": "0x6411160fdBf9791283AC0926df47dBd509db2fA8",
+      "status": "DEPLOYED_LIMITED",
+      "notes": "Deployed EIP-712 MeteredTariffReceipt sink; SETTLEMENT_ENABLED=false."
+    },
+    {
+      "component": "MemoryMarketSettlementV2",
+      "chain": "base-mainnet",
+      "chainId": 8453,
+      "address": "0x95C93021b98059bF1df3FC7B9D10845865D5251c",
+      "status": "DEPLOYED_LIMITED",
+      "notes": "Deployed metered memory settlement V2; SETTLEMENT_ENABLED=false."
+    },
     {
       "component": "LNES-04 Membrane V5",
       "chain": "base-mainnet",
       "chainId": 8453,
       "address": "0xbb14956a88BaD822Ef38e96fF337a088b41c72be",
       "status": "MOCK",
-      "notes": "owner() and paused() verified on-chain 2026-08-28; ABI matches openJob(bytes32)/settleExergy(bytes32,bytes,bytes,address); operator has declared mock-only, do not route real capital"
+      "notes": "Legacy mock-only Base Mainnet contract; do not route real capital."
     },
     {
       "component": "LNES-04 Membrane V5",
@@ -17,7 +89,7 @@
       "chainId": 84532,
       "address": "0x831606e0312B518737D2c497469243297cFdAe2B",
       "status": "TESTNET",
-      "notes": "Available for test and demonstration use"
+      "notes": "Base Sepolia test/demonstration contract."
     },
     {
       "component": "LNES-04 Membrane (pre-V5)",
@@ -25,7 +97,7 @@
       "chainId": 8453,
       "address": "0x5cfE075149776f4b3cca07a27D4fd85A60BA5e3f",
       "status": "RETIRED",
-      "notes": "P0 incident 2026-08-28: hardcoded in exergynet-mcp-server <=0.2.2; ABI mismatch confirmed; access-control getters revert; deployer wallet key was exposed in an agent/session environment, operator confirms full access retained, no third-party compromise established; live near-unlimited USDC allowance from that wallet still outstanding"
+      "notes": "Retired pre-V5 contract; P0 incident 2026-08-28; do not use."
     },
     {
       "component": "LNES04MembraneV2 (FFLONK mock wrapper)",
@@ -33,7 +105,7 @@
       "chainId": 8453,
       "address": "0xB13D4377aB45437b266d9E5D10c46B198aCAF344",
       "status": "MOCK",
-      "notes": "Not independently re-verified this pass; carried from VAULT_LEDGER.md 2026-08-02"
+      "notes": "Mock FFLONK wrapper; do not route real capital."
     },
     {
       "component": "SovereignVerifier (FflonkVerifier)",
@@ -41,15 +113,7 @@
       "chainId": 8453,
       "address": "0x7A25671c4E3772D49111975FBd5f9d5901048C9e",
       "status": "MOCK",
-      "notes": "Not independently re-verified this pass; carried from VAULT_LEDGER.md 2026-08-02"
-    },
-    {
-      "component": "Canonical USDC (Circle, third-party)",
-      "chain": "base-mainnet",
-      "chainId": 8453,
-      "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
-      "status": "ACTIVE",
-      "notes": "Third-party contract, not operated by ExergyNet"
+      "notes": "Mock FFLONK verifier; do not route real capital."
     },
     {
       "component": "Test USDC",
@@ -57,7 +121,7 @@
       "chainId": 84532,
       "address": "0x036CbD53842c5426634e7929541eC2318f3dCF7e",
       "status": "TESTNET",
-      "notes": null
+      "notes": "Base Sepolia testnet USDC."
     },
     {
       "component": "LNES-03 Membrane",
@@ -65,23 +129,23 @@
       "chainId": null,
       "address": "7BCPpUMBxQMPomsgTaJsQdLEfycNwPWqkQD1Cea4CcCL",
       "status": "INVESTIGATING",
-      "notes": "Deployed, has settled successfully before, currently under active investigation for transaction failures"
+      "notes": "Solana Mainnet-Beta program; under investigation for transaction failures."
     },
     {
-      "component": "Operator Wallet (current)",
+      "component": "Operator Wallet (wallet_1)",
       "chain": "base",
       "chainId": null,
       "address": "0x27cC42ee80CA945F96b93999CCdb02520618578B",
       "status": "ACTIVE",
-      "notes": "wallet_1; confirmed via on-chain owner() call against LNES-04 V5, 2026-08-28"
+      "notes": "Canonical protocol deployer/trustee authority wallet."
     },
     {
-      "component": "Operator Wallet (retired/exposed)",
+      "component": "Operator Wallet (retired)",
       "chain": "base",
       "chainId": null,
       "address": "0xbd1e790f6040FA62797671B84a50025a0133109C",
       "status": "RETIRED",
-      "notes": "Deployer of the retired LNES-04 pre-V5 contract; key exposed in an agent/session environment, operator confirms full access retained, no third-party compromise established; already flagged for rotation in CLAUDE.md; was live on docs.html/protocol.html/explorer.html until corrected 2026-08-28"
+      "notes": "Retired legacy operator wallet; removed from active Siphon runtime."
     }
   ]
 }

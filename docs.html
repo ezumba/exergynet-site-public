@@ -305,7 +305,7 @@ Recall everything you know about the deployment setup.</code></pre>
         <!-- TOOLS REFERENCE -->
         <div class="doc-section" id="tools-reference">
           <h2>Tools reference</h2>
-          <p>The Vanguard Memory Node exposes the following MCP tools:</p>
+          <p><code>@lnes/vanguard-memory-node@2.1.1</code> exposes 13 deterministic MCP tools:</p>
 
           <div class="table-scroll">
             <table>
@@ -319,43 +319,68 @@ Recall everything you know about the deployment setup.</code></pre>
               <tbody>
                 <tr>
                   <td><code>vmn_ingest</code></td>
-                  <td>Store text as a persistent memory shard</td>
-                  <td><code>content</code> (string)</td>
+                  <td>Store text as a SHA-256 content-addressed shard with BM25 indexing</td>
+                  <td><code>text</code> (string), <code>title?</code>, <code>namespace?</code>, <code>tags?</code></td>
                 </tr>
                 <tr>
                   <td><code>vmn_search</code></td>
-                  <td>BM25 keyword search over all shards</td>
-                  <td><code>query</code> (string), <code>limit</code></td>
+                  <td>Deterministic full-vault BM25 keyword search</td>
+                  <td><code>query</code> (string), <code>limit?</code>, <code>namespace?</code></td>
                 </tr>
                 <tr>
                   <td><code>vmn_recall</code></td>
-                  <td>Retrieve a shard by SHA-256 hash</td>
-                  <td><code>shard_id</code> (string)</td>
+                  <td>Retrieve bounded evidence window from a shard by hash</td>
+                  <td><code>hash</code> (string), <code>query</code> (string)</td>
                 </tr>
                 <tr>
                   <td><code>vmn_inspect</code></td>
-                  <td>Show metadata for a specific shard</td>
-                  <td><code>shard_id</code> (string)</td>
+                  <td>Show catalog metadata for a specific shard</td>
+                  <td><code>hash</code> (string)</td>
                 </tr>
                 <tr>
                   <td><code>vmn_list</code></td>
-                  <td>List stored shards (most recent first)</td>
-                  <td><code>limit</code></td>
+                  <td>List stored shards with optional namespace filter</td>
+                  <td><code>namespace?</code> (string)</td>
                 </tr>
                 <tr>
                   <td><code>vmn_stats</code></td>
-                  <td>Vault statistics (count, index status)</td>
+                  <td>Aggregate local vault statistics</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><code>vmn_index_status</code></td>
+                  <td>BM25 inverted index health report</td>
+                  <td>—</td>
+                </tr>
+                <tr>
+                  <td><code>vmn_rebuild_index</code></td>
+                  <td>Rebuild the sharded BM25 search index from stored objects</td>
                   <td>—</td>
                 </tr>
                 <tr>
                   <td><code>vmn_delete</code></td>
-                  <td>Delete a shard by hash</td>
-                  <td><code>shard_id</code> (string)</td>
+                  <td>Delete a shard and its index entries by hash</td>
+                  <td><code>hash</code> (string)</td>
                 </tr>
                 <tr>
-                  <td><code>vmn_rebuild_index</code></td>
-                  <td>Rebuild the BM25 search index</td>
-                  <td>—</td>
+                  <td><code>vmn_ingest_file</code></td>
+                  <td>Cursor-tracked delta-ingest of a growing local file</td>
+                  <td><code>file_path</code> (string), <code>session_id?</code>, <code>namespace?</code></td>
+                </tr>
+                <tr>
+                  <td><code>vmn_sync_vault</code></td>
+                  <td>Opt-in sync to ExergyNet LNES-17 vault (disabled unless <code>EXERGYNET_API_KEY</code> is set)</td>
+                  <td><code>xlmp_root</code> (string), <code>intent?</code></td>
+                </tr>
+                <tr>
+                  <td><code>vmn_benchmark_evidence</code></td>
+                  <td>Return evidence-native xLMP benchmark records (<code>universal_claim=false</code>)</td>
+                  <td><code>benchmark_id?</code>, <code>include_derivations?</code></td>
+                </tr>
+                <tr>
+                  <td><code>vmn_context_cost_compare</code></td>
+                  <td>Compute context-cost comparison using measured xLMP <code>K</code> within tested envelope</td>
+                  <td><code>corpus_tokens</code> (number), <code>queries_per_day?</code></td>
                 </tr>
               </tbody>
             </table>
@@ -365,7 +390,7 @@ Recall everything you know about the deployment setup.</code></pre>
         <!-- CONFIGURATION -->
         <div class="doc-section" id="configuration">
           <h2>Configuration</h2>
-          <p>The memory node reads from environment variables passed through the MCP server configuration:</p>
+          <p>VMN stores local shards at <code>~/.vanguard/local_vault/</code> and reads optional environment variables only when enabling remote sync:</p>
 
           <div class="table-scroll">
             <table>
@@ -378,47 +403,56 @@ Recall everything you know about the deployment setup.</code></pre>
               </thead>
               <tbody>
                 <tr>
-                  <td><code>VMN_VAULT_DIR</code></td>
-                  <td><code>~/.vanguard/local_vault</code></td>
-                  <td>Directory where shards and index are stored</td>
+                  <td><code>EXERGYNET_API_KEY</code></td>
+                  <td><em>unset</em></td>
+                  <td>Optional Portal API key (<code>sk-exergy-...</code>) required for <code>vmn_sync_vault</code> and auto-sync</td>
                 </tr>
                 <tr>
-                  <td><code>VMN_MAX_RESULTS</code></td>
-                  <td><code>10</code></td>
-                  <td>Maximum results returned by <code>vmn_search</code></td>
+                  <td><code>EXERGYNET_NETWORK</code></td>
+                  <td><code>testnet</code></td>
+                  <td>Sync substrate: <code>mainnet</code> (<code>portal.exergynet.org</code>) or <code>testnet</code> (<code>dt.portal.exergynet.org</code>)</td>
                 </tr>
                 <tr>
-                  <td><code>VMN_INDEX_AUTO_REBUILD</code></td>
-                  <td><code>true</code></td>
-                  <td>Rebuild index automatically after ingest</td>
+                  <td><code>EXERGYNET_VAULT_URL</code></td>
+                  <td><em>unset</em></td>
+                  <td>Optional custom base URL overriding <code>EXERGYNET_NETWORK</code></td>
+                </tr>
+                <tr>
+                  <td><code>AUTO_SYNC_VAULT</code></td>
+                  <td><code>false</code></td>
+                  <td>Set to <code>true</code> to automatically sync <code>vmn_ingest</code> shards when <code>EXERGYNET_API_KEY</code> is set</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <p>To set a custom vault path in Claude Desktop config:</p>
+          <p>Optional ExergyNet Vault sync configuration in Claude Desktop:</p>
           <div class="code-panel">
             <div class="code-panel-head">
               <span class="code-lang">JSON</span>
               <button class="copy-button" data-copy='{
   "mcpServers": {
     "vanguard-memory": {
-      "command": "node",
-      "args": ["/usr/local/lib/node_modules/@lnes/vanguard-memory-node/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "@lnes/vanguard-memory-node"],
       "env": {
-        "VMN_VAULT_DIR": "/Users/YOUR_USER/my-project-vault"
+        "EXERGYNET_API_KEY": "sk-exergy-your-key",
+        "EXERGYNET_NETWORK": "mainnet",
+        "AUTO_SYNC_VAULT": "false"
       }
     }
   }
-}' aria-label="Copy custom vault path config">Copy</button>
+}' aria-label="Copy optional vault sync config">Copy</button>
             </div>
             <pre><code>{
   "mcpServers": {
     "vanguard-memory": {
-      "command": "node",
-      "args": ["/usr/local/lib/node_modules/@lnes/vanguard-memory-node/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "@lnes/vanguard-memory-node"],
       "env": {
-        "VMN_VAULT_DIR": "/Users/YOUR_USER/my-project-vault"
+        "EXERGYNET_API_KEY": "sk-exergy-your-key",
+        "EXERGYNET_NETWORK": "mainnet",
+        "AUTO_SYNC_VAULT": "false"
       }
     }
   }

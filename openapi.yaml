@@ -8,6 +8,16 @@ info:
     - x402 V2 Commerce Gateway (https://x402.exergynet.org): Base Mainnet (eip155:8453) USDC pay-per-call job verification and LNE16BX2 compute intake.
     - Explorer L0 State (https://explorer-api.exergynet.org): Read-only network state and L0 telemetry.
 
+    Verified Base Mainnet (eip155:8453) Contracts & Infrastructure:
+    - LNES16_BiotechMembrane_V3: 0x42dfA2Df54D7f7685dC363C64C23Cb6b2be8cabD
+    - LNES16_RhoReserve: 0xd9529C607AA51330f9b5054F3D2DC19c411f32C8
+    - RISC0_ROUTER (Groth16 0x73c457ba): 0x0b144E07A0826182B6b59788c34b32Bfa86Fb711
+    - Base USDC (ERC-3009): 0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+    - X402_REVENUE_01 (receive-only): 0xD266542c0c0db02BbF6Bb2C4D792Ef1a72AD4857
+    - Vanguard Funding Signer: 0x649b9231be677e2Bc67D7bf813A51f7dEe7182dE
+    - SINK Settlement Drone: 0xB41025828340b2feF42cE849116350d1a643d7D6
+    - BCX-002 Qualified Image ID: 0x8be6effa582e9ed205cced2533f6f76e99878893b4fd93e5d4c82ee4210dee01
+
     Internal administration, OTET build control, internal treasury settlement, and non-public billing capture routes are excluded from this specification.
   contact:
     name: ExergyNet Developer Portal

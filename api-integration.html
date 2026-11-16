@@ -276,9 +276,14 @@ curl https://portal.exergynet.org/developer/me \
       </div>
 
       <div id="contracts">
-        <div class="docs-h3">Verified Base Mainnet Contracts (Chain ID 8453)</div>
+        <div class="docs-h3">Verified Base Mainnet Contracts &amp; Infrastructure (Chain ID 8453)</div>
         <div class="auth-row"><span class="auth-key">LNES16_BiotechMembrane_V3</span><span class="auth-val">0x42dfA2Df54D7f7685dC363C64C23Cb6b2be8cabD</span></div>
+        <div class="auth-row"><span class="auth-key">LNES16_RhoReserve</span><span class="auth-val">0xd9529C607AA51330f9b5054F3D2DC19c411f32C8</span></div>
+        <div class="auth-row"><span class="auth-key">RISC0_ROUTER (Groth16)</span><span class="auth-val">0x0b144E07A0826182B6b59788c34b32Bfa86Fb711</span></div>
         <div class="auth-row"><span class="auth-key">Base USDC (ERC-3009)</span><span class="auth-val">0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913</span></div>
+        <div class="auth-row"><span class="auth-key">x402 Revenue Receiver</span><span class="auth-val">0xD266542c0c0db02BbF6Bb2C4D792Ef1a72AD4857</span></div>
+        <div class="auth-row"><span class="auth-key">Vanguard Funding Signer</span><span class="auth-val">0x649b9231be677e2Bc67D7bf813A51f7dEe7182dE</span></div>
+        <div class="auth-row"><span class="auth-key">SINK Settlement Drone</span><span class="auth-val">0xB41025828340b2feF42cE849116350d1a643d7D6</span></div>
         <div class="auth-row"><span class="auth-key">Qualified Image ID (BCX-002)</span><span class="auth-val">0x8be6effa582e9ed205cced2533f6f76e99878893b4fd93e5d4c82ee4210dee01</span></div>
       </div>
     </section>
@@ -297,7 +302,7 @@ curl "https://explorer-api.exergynet.org/api/v1/state"</pre></div>
         <div class="docs-h3">Reconciled MCP Servers</div>
         <div class="auth-row"><span class="auth-key">Omega Carrier SSE</span><span class="auth-val">https://mcp.exergynet.org/sse (Bearer auth; 12 public tools + 1 quarantined; 2 admin gated)</span></div>
         <div class="auth-row"><span class="auth-key">AGORA LNES-91 HTTP</span><span class="auth-val">https://agora.exergynet.org/mcp (Streamable HTTP; 10 unauthenticated read-only tools)</span></div>
-        <div class="auth-row"><span class="auth-key">VMN Local Stdio</span><span class="auth-val">npx -y @lnes/vanguard-memory-node (v2.1.0; 13 deterministic tools)</span></div>
+        <div class="auth-row"><span class="auth-key">VMN Local Stdio</span><span class="auth-val">npx -y @lnes/vanguard-memory-node (v2.1.1; 13 deterministic tools)</span></div>
         <div class="auth-row"><span class="auth-key">LNES-03 Local Stdio</span><span class="auth-val">npx -y exergynet-mcp-server (v0.2.6; 4 active read-only Solana tools + disabled open_job)</span></div>
       </div>
     </section>

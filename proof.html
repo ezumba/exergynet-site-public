@@ -104,30 +104,36 @@
       </div>
     </section>
 
-    <!-- GENESIS SINGLE-JOB MAINNET VERIFICATION -->
+    <!-- GENESIS & COMMERCIAL V3 MAINNET VERIFICATION -->
     <section>
-      <div class="section-label">2b &middot; Base Mainnet Genesis &mdash; MAINNET_VERIFIED_SINGLE_JOB</div>
-      <h2>First proof-bearing mainnet settlement</h2>
-      <p style="max-width:720px; margin-bottom:1.5rem;">On 2026-11-11 a single controlled settlement job completed end-to-end on Base Mainnet (Chain ID 8453) with a genuine RISC Zero Groth16 receipt (seal 260 bytes, journal 364 bytes). Replay of the same job is rejected on-chain. This is a <strong>single-job verification</strong>: it does not establish continuous autonomous operation, ongoing revenue, generalized public proof verification, or a production-wide security guarantee, and write settlement remains disabled pending verified production migration.</p>
+      <div class="section-label">2b &middot; Base Mainnet V3 &mdash; COMMERCIAL_ACTIVE</div>
+      <h2>Groth16-verified Base Mainnet settlement (LNES16_BiotechMembrane_V3)</h2>
+      <p style="max-width:720px; margin-bottom:1.5rem;">On 2026-11-11 a controlled Genesis settlement job completed end-to-end on Base Mainnet (Chain ID 8453) with a genuine RISC Zero Groth16 receipt (seal 260 bytes, journal 364 bytes, selector <code>0x73c457ba</code>). On 2026-11-15, full end-to-end x402 V2 commercial settlement (<code>Track B-045</code>) completed on-chain and standing commercial policy <code>pol-commercial-v3-001</code> was activated at <a href="https://x402.exergynet.org" style="color:var(--accent);">x402.exergynet.org</a> ($2.50 USDC customer intake / $2.00 V3 escrow). Replay of any settled job ID is rejected on-chain.</p>
       <div class="card accent-border" style="margin-bottom:1.25rem;">
-        <h4>Genesis contracts (verified on-chain)</h4>
+        <h4>Production V3 contracts &amp; wallets (verified on-chain, Base Mainnet 8453)</h4>
         <ul class="spec-list">
           <li><span class="spec-key">MMS V3 (LNES16_BiotechMembrane_V3)</span><span class="spec-val"><code style="font-size:11px; word-break:break-all;">0x42dfA2Df54D7f7685dC363C64C23Cb6b2be8cabD</code></span></li>
-          <li><span class="spec-key">RHO Reserve</span><span class="spec-val"><code style="font-size:11px; word-break:break-all;">0xd9529C607AA51330f9b5054F3D2DC19c411f32C8</code></span></li>
-          <li><span class="spec-key">Genesis settlement tx</span><span class="spec-val"><code style="font-size:11px; word-break:break-all;">0xc3cb476d77868437a4a01aed223c0604a71a437f37970fe7f0e7ea880399382c</code></span></li>
-          <li><span class="spec-key">Status</span><span class="spec-val"><span class="badge badge-green">&#10003; SUCCESS</span> (Block 56268593) &middot; verified via eth_getTransactionReceipt</span></li>
+          <li><span class="spec-key">LNES16_RhoReserve</span><span class="spec-val"><code style="font-size:11px; word-break:break-all;">0xd9529C607AA51330f9b5054F3D2DC19c411f32C8</code></span></li>
+          <li><span class="spec-key">RISC0_ROUTER (Groth16)</span><span class="spec-val"><code style="font-size:11px; word-break:break-all;">0x0b144E07A0826182B6b59788c34b32Bfa86Fb711</code></span></li>
+          <li><span class="spec-key">Qualified Image ID (BCX-002)</span><span class="spec-val"><code style="font-size:11px; word-break:break-all;">0x8be6effa582e9ed205cced2533f6f76e99878893b4fd93e5d4c82ee4210dee01</code></span></li>
+          <li><span class="spec-key">x402 Revenue Receiver</span><span class="spec-val"><code style="font-size:11px; word-break:break-all;">0xD266542c0c0db02BbF6Bb2C4D792Ef1a72AD4857</code></span></li>
+          <li><span class="spec-key">Vanguard Funding Signer</span><span class="spec-val"><code style="font-size:11px; word-break:break-all;">0x649b9231be677e2Bc67D7bf813A51f7dEe7182dE</code></span></li>
+          <li><span class="spec-key">SINK Settlement Drone</span><span class="spec-val"><code style="font-size:11px; word-break:break-all;">0xB41025828340b2feF42cE849116350d1a643d7D6</code></span></li>
+          <li><span class="spec-key">Genesis settlement tx</span><span class="spec-val"><code style="font-size:11px; word-break:break-all;">0xc3cb476d77868437a4a01aed223c0604a71a437f37970fe7f0e7ea880399382c</code> (Block 56268593)</span></li>
+          <li><span class="spec-key">Track B-045 settlement tx</span><span class="spec-val"><code style="font-size:11px; word-break:break-all;">0x8aa6f48e8a04b6ccb399a03dfa6462712e92e50456f43fcfedbf30c0ff973792</code> (Block 57827637)</span></li>
+          <li><span class="spec-key">Status</span><span class="spec-val"><span class="badge badge-green">&#10003; COMMERCIAL ACTIVE</span> (<code>pol-commercial-v3-001</code>) &middot; verified via Base Mainnet receipts</span></li>
         </ul>
       </div>
       <div class="card" style="margin-bottom:1.25rem;">
-        <h4>Verified single-job distribution (2.000000 USDC total, on-chain USDC Transfer logs)</h4>
+        <h4>Verified V3 7-way distribution (2.000000 USDC escrow per job, on-chain USDC Transfer logs)</h4>
         <ul class="spec-list">
-          <li><span class="spec-key">Drone (0xB41025828340b2feF42cE849116350d1a643d7D6)</span><span class="spec-val">0.600000 USDC</span></li>
-          <li><span class="spec-key">Five treasury recipients</span><span class="spec-val">0.266000 USDC each (1.330000 USDC)</span></li>
-          <li><span class="spec-key">RHO Reserve</span><span class="spec-val">0.070000 USDC</span></li>
-          <li><span class="spec-key">Classification</span><span class="spec-val"><span class="badge badge-green">MAINNET_VERIFIED_SINGLE_JOB</span></span></li>
+          <li><span class="spec-key">Drone (0xB41025828340b2feF42cE849116350d1a643d7D6)</span><span class="spec-val">0.600000 USDC (3000 bps)</span></li>
+          <li><span class="spec-key">Five treasury recipients</span><span class="spec-val">0.266000 USDC each (1.330000 USDC total)</span></li>
+          <li><span class="spec-key">RHO Reserve (0xd9529C607AA51330f9b5054F3D2DC19c411f32C8)</span><span class="spec-val">0.070000 USDC (350 bps)</span></li>
+          <li><span class="spec-key">x402 Customer Intake</span><span class="spec-val">2.500000 USDC via <code>https://x402.exergynet.org/api/v1/compute/request</code></span></li>
         </ul>
       </div>
-      <p style="max-width:720px; font-size:13px; color:var(--text-soft);">This proof-bearing V3 path is distinct from the older LNES-04 v5 Base Mainnet contract (mock-only) and the legacy Solana LNES-03 deployment (under investigation). Older Base mock-only interfaces are not superseded by this result; they remain non-operational for real capital routing.</p>
+      <p style="max-width:720px; font-size:13px; color:var(--text-soft);">This proof-bearing V3 path is distinct from the older LNES-04 v5 Base Mainnet contract (mock-only), the legacy Solana LNES-03 deployment (under investigation), and the read-only stdio <code>exergynet-mcp-server@0.2.6</code> package. Older Base mock-only interfaces remain non-operational for real capital routing.</p>
     </section>
 
     <!-- EXECUTION BREAKDOWN -->

@@ -213,9 +213,9 @@
   <div class="container">
 
     <!-- STATUS NOTICE: ZK Compute Settlement -->
-    <div class="card" style="margin:0 0 2rem;border-color:var(--amber,#ffb830);background:rgba(255,184,48,0.05);">
-      <p style="font-size:13px;color:var(--amber,#ffb830);margin:0;"><strong>STATUS NOTICE — Settlement &amp; Verification</strong></p>
-      <p style="font-size:13px;margin:0.5rem 0 0;">"Primary" below means recommended integration target, not currently live for real capital: the Base Mainnet contract is deployed but operating in mock-only mode. Base Sepolia is available for test and demonstration use today. Solana Mainnet-Beta (LNES-03) is deployed but under active investigation for transaction failures. On-chain ZK proof verification for the compute grid is in development. See <a href="proof.html" style="color:var(--amber,#ffb830);">On-Chain Proof</a> for current contract addresses and verification status.</p>
+    <div class="card" style="margin:0 0 2rem;border-color:var(--accent);background:rgba(0,232,135,0.05);">
+      <p style="font-size:13px;color:var(--accent);margin:0;"><strong>STATUS NOTICE — Production Base Mainnet V3 &amp; Legacy Contracts</strong></p>
+      <p style="font-size:13px;margin:0.5rem 0 0;">Current production Base Mainnet settlement runs on <strong><code>LNES16_BiotechMembrane_V3</code></strong> (<code>0x42dfA2Df54D7f7685dC363C64C23Cb6b2be8cabD</code>) via <code>https://x402.exergynet.org</code> (x402 V2 ERC-3009 USDC) and RISC Zero Groth16 Router (<code>0x0b144E07A0826182B6b59788c34b32Bfa86Fb711</code>). Legacy <code>LNES-04 V5</code> on Base Mainnet (<code>0xbb14&hellip;72be</code>) remains mock-only (Base Sepolia <code>0x8316&hellip;Ae2B</code> is testnet-only), and Solana Mainnet-Beta (<code>LNES-03</code>) remains under investigation for transaction failures. See <a href="proof.html" style="color:var(--accent);">On-Chain Proof</a> and <a href="api-integration.html" style="color:var(--accent);">API Integration</a>.</p>
     </div>
 
     <!-- ══════════════════════════════════════════════
@@ -230,22 +230,21 @@
         <!-- BASE PRIMARY -->
         <div>
           <div style="display:flex; align-items:center; gap:.75rem; margin-bottom:.75rem;">
-            <span class="network-pill pill-primary"><span class="pill-dot"></span>Primary Settlement</span>
+            <span class="network-pill pill-primary"><span class="pill-dot"></span>Primary Settlement (V3 Production)</span>
           </div>
           <div class="card accent-border">
             <ul class="spec-list">
-              <li><span class="spec-key">Protocol</span>       <span class="spec-val"><span class="badge badge-green">LNES-06 v1.2</span> x402 Compute Membrane <span style="font-size:11px;color:var(--text-soft);">(naming note: the same deployed Base contracts &mdash; <code>0xbb14&hellip;72be</code> mainnet / <code>0x8316&hellip;Ae2B</code> Sepolia &mdash; are referred to as "LNES-04 Membrane V5" on the verification and integration pages; the two names are aliases for the same addresses, not different contracts)</span></span></li>
+              <li><span class="spec-key">Contract (V3)</span>  <span class="spec-val"><code style="font-size:11px;">0x42dfA2Df54D7f7685dC363C64C23Cb6b2be8cabD</code> (<code>LNES16_BiotechMembrane_V3</code>)</span></li>
+              <li><span class="spec-key">RHO Reserve</span>    <span class="spec-val"><code style="font-size:11px;">0xd9529C607AA51330f9b5054F3D2DC19c411f32C8</code></span></li>
+              <li><span class="spec-key">RISC0 Router</span>   <span class="spec-val"><code style="font-size:11px;">0x0b144E07A0826182B6b59788c34b32Bfa86Fb711</code> (Groth16 <code>0x73c457ba</code>)</span></li>
               <li><span class="spec-key">Network</span>        <span class="spec-val">Base Mainnet <code>eip155:8453</code></span></li>
-              <li><span class="spec-key">Payment</span>        <span class="spec-val">x402 / USDC · HTTP-native agent payments</span></li>
-              <li><span class="spec-key">x402 Version</span>   <span class="spec-val">1</span></li>
-              <li><span class="spec-key">Operator Wallet</span><span class="spec-val"><code style="font-size:11px;">0x27cC42ee80CA945F96b93999CCdb02520618578B</code></span></li>
+              <li><span class="spec-key">x402 Gateway</span>   <span class="spec-val"><code>https://x402.exergynet.org</code> (x402 V2 · ERC-3009 USDC)</span></li>
+              <li><span class="spec-key">x402 Receiver</span>  <span class="spec-val"><code style="font-size:11px;">0xD266542c0c0db02BbF6Bb2C4D792Ef1a72AD4857</code></span></li>
               <li><span class="spec-key">USDC Contract</span>  <span class="spec-val"><code style="font-size:11px;">0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913</code></span></li>
-              <li><span class="spec-key">Facilitator</span>    <span class="spec-val"><code style="font-size:11px;">api.cdp.coinbase.com/platform/v2/x402</code></span></li>
-              <li><span class="spec-key">Sensor Toll</span>    <span class="spec-val">3000 µUSDC (0.003 USDC) per x402 call</span></li>
-              <li><span class="spec-key">Yield Split</span>    <span class="spec-val">30% Node · 70% Protocol Treasury</span></li>
-              <li><span class="spec-key">Auth</span>           <span class="spec-val">x402 USDC EIP-3009 authorization</span></li>
-              <li><span class="spec-key">Proof System</span>   <span class="spec-val">RISC Zero ZK-STARK · recursive proof aggregation (in development)</span></li>
-              <li><span class="spec-key">Explorer API</span>   <span class="spec-val"><code>https://explorer-api.exergynet.org</code></span></li>
+              <li><span class="spec-key">Pricing</span>        <span class="spec-val">$2.50 USDC compute intake ($2.00 V3 escrow) &middot; $0.02 USDC <code>/v1/job</code></span></li>
+              <li><span class="spec-key">Qualified Image</span><span class="spec-val"><code style="font-size:11px;">0x8be6effa582e9ed205cced2533f6f76e99878893b4fd93e5d4c82ee4210dee01</code></span></li>
+              <li><span class="spec-key">Portal &amp; APIs</span><span class="spec-val"><code>https://portal.exergynet.org</code> (<a href="https://portal.exergynet.org/docs">docs</a>)</span></li>
+              <li><span class="spec-key">Legacy V5 Note</span> <span class="spec-val"><code>0xbb14&hellip;72be</code> mainnet (mock-only) / <code>0x8316&hellip;Ae2B</code> Sepolia (testnet)</span></li>
             </ul>
           </div>
         </div>
@@ -253,21 +252,19 @@
         <!-- SOLANA ACTIVE -->
         <div>
           <div style="display:flex; align-items:center; gap:.75rem; margin-bottom:.75rem;">
-            <span class="network-pill pill-active"><span class="pill-dot"></span>Active — Legacy / ElizaOS Path</span>
+            <span class="network-pill pill-active"><span class="pill-dot"></span>Legacy / Investigating &amp; MCP</span>
           </div>
           <div class="card">
             <ul class="spec-list">
-              <li><span class="spec-key">Protocol</span>       <span class="spec-val"><span class="badge badge-gray">LNES-03</span> Unidirectional Sump</span></li>
-              <li><span class="spec-key">Version</span>        <span class="spec-val"><code>2.0.0-omega</code></span></li>
+              <li><span class="spec-key">Protocol</span>       <span class="spec-val"><span class="badge badge-gray">LNES-03</span> Unidirectional Sump (Investigating)</span></li>
               <li><span class="spec-key">Network</span>        <span class="spec-val">Solana Mainnet-Beta</span></li>
               <li><span class="spec-key">Program ID</span>     <span class="spec-val"><code style="font-size:11px;">7BCPpUMBxQMPomsgTaJsQdLEfycNwPWqkQD1Cea4CcCL</code></span></li>
               <li><span class="spec-key">Transient Mint</span> <span class="spec-val"><code style="font-size:11px;">5fZZJ29oH5SDqxiz2tkEf1wopp5Sn5TtcCF3fPS9rdiJ</code></span></li>
-              <li><span class="spec-key">Toll</span>           <span class="spec-val">0.002 SOL (2,000,000 lamports) per cycle</span></li>
-              <li><span class="spec-key">Yield Split</span>    <span class="spec-val">30% Node · 70% Protocol Cold Treasury</span></li>
-              <li><span class="spec-key">Auth</span>           <span class="spec-val">Ed25519 Mesh — zero-trust cryptographic identity</span></li>
-              <li><span class="spec-key">MCP Endpoint</span>   <span class="spec-val"><code>https://exergynet.org/mcp</code></span></li>
-              <li><span class="spec-key">Proof System</span>   <span class="spec-val">RISC Zero ZK-STARK · recursive proof aggregation (in development)</span></li>
-              <li><span class="spec-key">Finality</span>       <span class="spec-val">&lt; 400ms · lamport-level atomic settlement</span></li>
+              <li><span class="spec-key">Omega MCP SSE</span>  <span class="spec-val"><code>https://mcp.exergynet.org/sse</code> (Bearer auth, 14 tools)</span></li>
+              <li><span class="spec-key">AGORA MCP</span>      <span class="spec-val"><code>https://agora.exergynet.org/mcp</code> (Streamable HTTP, 10 tools)</span></li>
+              <li><span class="spec-key">VMN Stdio MCP</span>  <span class="spec-val"><code>npx -y @lnes/vanguard-memory-node</code> (v2.1.1, 13 tools)</span></li>
+              <li><span class="spec-key">LNES-03 MCP</span>    <span class="spec-val"><code>npx -y exergynet-mcp-server</code> (v0.2.6, read-only)</span></li>
+              <li><span class="spec-key">Retired /mcp</span>   <span class="spec-val"><code>https://exergynet.org/mcp</code> (disabled)</span></li>
             </ul>
           </div>
         </div>

@@ -88,9 +88,9 @@
           <p>The OpenAI-compatible API and the stateless-session policy are live. See the maturity table below for every specific capability.</p>
         </div>
 
-        <div class="card" style="border-left:3px solid var(--amber,#d4a017); margin-top:1.25rem; padding:1rem 1.25rem;">
-          <strong style="display:block; margin-bottom:0.35rem;">STATUS NOTICE &mdash; Endpoint availability (verified 2026-11-11)</strong>
-          <p style="margin:0; font-size:13px; color:var(--text-soft);"><code>https://api.exergynet.org/v1</code> did not resolve at verification time (DNS failure on <code>/v1/models</code> and the root path). Treat the hosted endpoint as <strong>UNAVAILABLE</strong> until this notice is updated. The capability descriptions on this page describe the target service, not a currently reachable endpoint.</p>
+        <div class="card" style="border-left:3px solid var(--accent); margin-top:1.25rem; padding:1rem 1.25rem;">
+          <strong style="display:block; margin-bottom:0.35rem;">LIVE ENDPOINT &mdash; <code>https://portal.exergynet.org/v1</code></strong>
+          <p style="margin:0; font-size:13px; color:var(--text-soft);">Use <code>https://portal.exergynet.org/v1</code> (Bearer <code>sk-exergy-...</code>, active USDC-funded Portal account required for inference). The older <code>https://api.exergynet.org/v1</code> hostname is retired and its DNS does not resolve. See <a href="api-integration.html" style="color:var(--accent);">API Integration</a> and <a href="https://portal.exergynet.org/docs" style="color:var(--accent);">Portal Docs</a>.</p>
         </div>
       </div>
     </section>
@@ -105,14 +105,14 @@
           <div class="code-dots"><span class="t-dot t-red"></span><span class="t-dot t-amber"></span><span class="t-dot t-green"></span></div>
         </div>
         <pre style="padding:1.25rem; overflow-x:auto; font-size:13px; line-height:1.6;"><code>client = OpenAI(
-    base_url="https://api.exergynet.org/v1",
+    base_url="https://portal.exergynet.org/v1",
     api_key=EXERGYNET_API_KEY
 )
 
 # This specific call now routes to Vanguard.
 # Calls you don't change keep using your existing provider.
 response = client.chat.completions.create(
-    model="vanguard-engine",
+    model="vanguard-standard",
     messages=[...]
 )</code></pre>
       </div>
