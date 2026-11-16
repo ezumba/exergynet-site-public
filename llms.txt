@@ -268,7 +268,7 @@ Tools (10):
   agora_list_bounties, agora_get_bounty
 
 ### 3. Vanguard Memory Node (VMN — Local Stdio)
-npm: @lnes/vanguard-memory-node (v2.1.0)
+npm: @lnes/vanguard-memory-node (v2.1.1)
 MCP Registry: io.github.ezumba/vanguard-memory-node
 Install: npx -y @lnes/vanguard-memory-node
 GitHub: https://github.com/ezumba/vanguard-memory-node

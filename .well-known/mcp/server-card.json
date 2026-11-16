@@ -1,6 +1,6 @@
 {
   "name": "ExergyNet Omega Carrier MCP",
-  "description": "Authenticated remote SSE MCP gateway for ExergyNet persistent memory, bounded evidence retrieval, AERIS zkTLS witnessing, and EIP-191 signed memory receipts. Also distributes two local stdio MCP packages on npm: @lnes/vanguard-memory-node (2.1.0, 13 tools) and exergynet-mcp-server (0.2.6, 5 read-only tools).",
+  "description": "Authenticated remote SSE MCP gateway for ExergyNet persistent memory, bounded evidence retrieval, AERIS zkTLS witnessing, and EIP-191 signed memory receipts. Also distributes two local stdio MCP packages on npm: @lnes/vanguard-memory-node (2.1.1, 13 tools) and exergynet-mcp-server (0.2.6, 5 read-only tools).",
   "version": "1.28.0",
   "endpoint_status": "remote SSE live at https://mcp.exergynet.org/sse (Bearer auth required); legacy https://exergynet.org/mcp endpoint retired/disabled",
   "url": "https://mcp.exergynet.org/sse",
@@ -11,7 +11,7 @@
   "capabilities": ["persistent_memory", "bounded_evidence_retrieval", "provenance_receipts", "aeris_witness", "authority_scoped_tools"],
   "auth": ["bearer"],
   "stdio_packages": [
-    { "npm": "@lnes/vanguard-memory-node", "version": "2.1.0", "tools": 13 },
+    { "npm": "@lnes/vanguard-memory-node", "version": "2.1.1", "tools": 13 },
     { "npm": "exergynet-mcp-server", "version": "0.2.6", "tools": 5 }
   ]
 }

@@ -111,7 +111,7 @@
     {
       "id": "io.github.ezumba/vanguard-memory-node",
       "name": "Vanguard Memory Node (VMN)",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "description": "Local deterministic BM25 memory for AI agents. Offline-first, no API key, SHA-256 content-addressed shards in ~/.vanguard/local_vault. Same query always returns the same ranked result.",
       "transport": {
         "type": "stdio",
