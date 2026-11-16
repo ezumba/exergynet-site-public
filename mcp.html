@@ -65,11 +65,11 @@
       <h2>Connection Coordinates</h2>
       <div class="card accent-border">
         <ul class="spec-list">
-          <li><span class="spec-key">Endpoint</span>  <span class="spec-val"><code>https://exergynet.org/mcp</code></span></li>
-          <li><span class="spec-key">Protocol</span>  <span class="spec-val">Model Context Protocol (MCP)</span></li>
-          <li><span class="spec-key">Method</span>    <span class="spec-val">HTTP POST</span></li>
-          <li><span class="spec-key">Auth</span>      <span class="spec-val">Ed25519 signature of <code>method||timestamp|nonce</code></span></li>
-          <li><span class="spec-key">Replay Guard</span><span class="spec-val">60-second timestamp window</span></li>
+          <li><span class="spec-key">Live Remote SSE</span>  <span class="spec-val"><code>https://mcp.exergynet.org/sse</code> (Bearer auth, 14 tools &mdash; see <a href="omega-carrier.html">Omega Carrier</a>)</span></li>
+          <li><span class="spec-key">Local Stdio (VMN)</span> <span class="spec-val"><code>npx -y @lnes/vanguard-memory-node</code> (v2.1.0, 13 tools &mdash; see <a href="vmn.html">VMN</a>)</span></li>
+          <li><span class="spec-key">Local Stdio (LNES-03)</span> <span class="spec-val"><code>npx -y exergynet-mcp-server</code> (v0.2.6, 5 read-only tools)</span></li>
+          <li><span class="spec-key">Discovery Manifest</span> <span class="spec-val"><code>https://exergynet.org/.well-known/mcp.json</code></span></li>
+          <li><span class="spec-key">Legacy Target (Disabled)</span>  <span class="spec-val"><code>https://exergynet.org/mcp</code> (HTTP POST / Ed25519 write-settlement design &mdash; disabled)</span></li>
         </ul>
       </div>
     </section>

@@ -363,9 +363,9 @@ pre.qs-code .st { color: #7ec8e3; }
     <!-- ── MCP TOOLS ── -->
     <section id="tools">
       <div class="section-label">MCP Tool Surface</div>
-      <h2>Five MCP tools plus one live capital endpoint</h2>
+      <h2>14 deployed MCP tools (11 developer-callable, 3 admin/quarantined)</h2>
       <p style="max-width:620px;color:var(--text-soft);">
-        Connect any MCP-compatible AI to Omega Carrier. All five tools are live, plus the Chapter XIX capital route. All calls require bearer-token authorization.
+        Connect any MCP-compatible AI to Omega Carrier at <code>https://mcp.exergynet.org/sse</code>. All SSE calls require <code>Authorization: Bearer &lt;EXERGYNET_API_KEY&gt;</code>. Eleven tools are available to authenticated developer keys; three RHO capital tools are admin HITL-gated or fail-closed HTTP 503 while RHO sump minting is quarantined.
       </p>
 
       <div class="tool-grid">
@@ -381,28 +381,77 @@ pre.qs-code .st { color: #7ec8e3; }
           <div class="tool-label">Memory</div>
           <code>vault_commit_state</code>
           <h4>Agent Journal</h4>
-          <p>Archives agent state into Exergy Vault (up to 512 KB). Returns a durable <code>xlmp_root</code> handle. Memory persists across sessions, models, and agent restarts.</p>
+          <p>Archives agent JSON state into Exergy Vault (up to 512 KB via <code>/api/xlmp/ingest</code>). Returns a durable <code>xlmp_root</code> handle.</p>
         </div>
 
         <div class="tool-card">
           <div class="tool-label">Recall</div>
           <code>vault_recall_state</code>
           <h4>Agent Memory</h4>
-          <p>Retrieves prior state by <code>xlmp_root</code>. Returns sealed content with SHA-256 content-addressed provenance metadata. The agent can resume exactly where it left off.</p>
+          <p>Retrieves prior state by <code>xlmp_root</code> via <code>/api/xlmp/query</code> with SHA-256 content-addressed provenance metadata.</p>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-label">Evidence Recall</div>
+          <code>recall_vault_memory</code>
+          <h4>Bounded Recall</h4>
+          <p>Retrieves bounded evidence windows via <code>/api/xlmp/zk-query</code> (or local loopback), reporting honest SHA-256 vs async Groth16 verification status.</p>
         </div>
 
         <div class="tool-card">
           <div class="tool-label">Proof</div>
           <code>witness_external_site</code>
           <h4>Agent Eye</h4>
-          <p>Uses AERIS to witness a third-party URL and return proof metadata. The agent can prove what it saw — not just assert it. No screenshots. No assumptions.</p>
+          <p>Uses AERIS (<code>/api/aeris/witness</code>) to witness a third-party URL and return proof metadata.</p>
         </div>
 
         <div class="tool-card">
           <div class="tool-label">Reserve</div>
           <code>check_exergy_reserve</code>
           <h4>Agent Battery</h4>
-          <p>Checks available Exergy reserve or miner balance before acting. Foundation for agent budgets, task thresholds, compute tolls, and autonomous permission gates.</p>
+          <p>Checks available Exergy reserve or Portal account micro-USDC balance before acting.</p>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-label">OSINT Fetch</div>
+          <code>fetch_global_feed</code>
+          <h4>Public Feed Fetch</h4>
+          <p>SSRF-protected public URL fetch (RSS/Atom/JSON/HTML, public IPs only, streamed size cap).</p>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-label">OSINT Ingest</div>
+          <code>ingest_to_vault</code>
+          <h4>Untruncated Ingest</h4>
+          <p>Commits untruncated external content to Exergy Vault via <code>/api/xlmp/ingest</code> with source URL provenance.</p>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-label">Receipts</div>
+          <code>issue_memory_receipt</code>
+          <h4>Signed VMN Receipt</h4>
+          <p>Performs a metered VMN operation and returns an EIP-191 Omega-signed delivery receipt.</p>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-label">Benchmark</div>
+          <code>measure_vault_efficiency</code>
+          <h4>Context Economics</h4>
+          <p>Deterministic comparison between raw LLM context cost and flat Vault toll.</p>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-label">Meet</div>
+          <code>join_meeting</code>
+          <h4>AI Listener</h4>
+          <p>Requests a subscribe-only LiveKit token (<code>role=ai_listener</code>) for an Omega-Meet room.</p>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-label">Quarantined / Admin</div>
+          <code>strike_rho_recursion</code> · <code>request_rho_strike_confirmation</code> · <code>execute_rho_strike</code>
+          <h4>RHO Capital Controls</h4>
+          <p><code>strike_rho_recursion</code> fails closed (HTTP 503 while <code>/api/billing/rho-sump</code> and Apex topup are quarantined); strike confirmation and execution require <code>admin_key</code> + Trustee HITL code.</p>
         </div>
 
       </div>
@@ -657,11 +706,14 @@ pre.qs-code .st { color: #7ec8e3; }
 
       <div class="qs-block">
         <div class="qs-label">Step 1 — Connect to Omega Carrier (SSE)</div>
-        <pre class="qs-code"><span class="cm"># MCP SSE endpoint — for custom agents and swarms</span>
-<span class="kw">endpoint:</span> <span class="st">https://mcp.exergynet.org/sse</span> <span style="font-size:11px;color:var(--text-soft);">&lt;!-- availability caveat: this SSE gateway returned HTTP 503 at 2026-11-11 and 2026-11-12 verification; use the exergynet-mcp-server npm package for read-only lookups --&gt;</span>
+        <pre class="qs-code"><span class="cm"># MCP SSE endpoint — authenticated remote SSE (14 tools)</span>
+<span class="kw">endpoint:</span> <span class="st">https://mcp.exergynet.org/sse</span>
+<span class="kw">health:</span>   <span class="st">https://mcp.exergynet.org/health</span>
+<span class="kw">manifest:</span> <span class="st">https://mcp.exergynet.org/.well-known/mcp.json</span>
 
-<span class="cm"># stdio — for Claude Desktop and local MCP clients</span>
-<span class="cm"># See mcp_config.json in the Omega Carrier repo</span></pre>
+<span class="cm"># Local stdio MCP packages (npm):</span>
+<span class="cm">#   npx -y @lnes/vanguard-memory-node   (VMN 2.1.0, 13 tools)</span>
+<span class="cm">#   npx -y exergynet-mcp-server         (LNES-03 read-only 0.2.6, 5 tools)</span></pre>
       </div>
 
       <div class="qs-block">

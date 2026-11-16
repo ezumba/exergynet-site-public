@@ -51,7 +51,7 @@
       <strong style="display:block; margin-bottom:0.35rem;">STATUS NOTICE &mdash; Surface availability (verified 2026-11-11)</strong>
       <ul style="margin:0; padding-left:1.25rem; font-size:13px; color:var(--text-soft);">
         <li><strong>VMN:</strong> current package is <code>@lnes/vanguard-memory-node</code> (npm). The unscoped <code>vanguard-memory-node</code> is an older 1.5.0 line and no longer the documented install target.</li>
-        <li><strong>MCP Gateway:</strong> the <code>https://exergynet.org/mcp</code> write-settlement path is <strong>disabled</strong>. For read-only lookups use the <code>exergynet-mcp-server</code> npm package; see <a href="mcp.html">MCP status</a>.</li>
+        <li><strong>MCP Gateway:</strong> remote SSE gateway is live at <code>https://mcp.exergynet.org/sse</code> (Bearer auth, 14 tools; see <a href="omega-carrier.html">Omega Carrier</a>). The legacy <code>https://exergynet.org/mcp</code> path is <strong>retired/disabled</strong>. Local stdio npm packages: <code>@lnes/vanguard-memory-node@2.1.0</code> (13 tools) and <code>exergynet-mcp-server@0.2.6</code> (5 read-only Solana tools).</li>
         <li><strong>Vanguard API:</strong> <code>https://api.exergynet.org/v1</code> was <strong>not resolving</strong> at verification time (DNS). Treat as UNAVAILABLE until this notice is updated.</li>
         <li><strong>ElizaOS plugin:</strong> <code>@elizaos/plugin-exergynet</code> is not currently published on npm. Installation instructions below are retained for when the package is released.</li>
         <li><strong>Solana legacy SDK:</strong> <code>exergynet-agent-sdk</code> targets LNES-03 (under investigation for transaction failures). The npm-published version line is 0.1.x; Solana settlement is not operational.</li>
@@ -71,10 +71,10 @@
           <div style="margin-top:0.75rem;"><a href="vmn.html" class="btn btn-ghost" style="font-size:12px;">VMN &rarr;</a></div>
         </div>
         <div class="card blue-border">
-          <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;"><h3 style="margin:0;">Tooling &mdash; MCP Gateway</h3><span class="badge badge-green">Live</span></div>
-          <p>Connect compatible agents to ExergyNet memory, evidence, and authority-scoped tools via Model Context Protocol.</p>
-          <pre style="margin-top:0.75rem;"><code>https://exergynet.org/mcp</code></pre>
-          <div style="margin-top:0.75rem;"><a href="mcp.html" class="btn btn-ghost" style="font-size:12px;">MCP &rarr;</a></div>
+          <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;"><h3 style="margin:0;">Tooling &mdash; Omega Carrier MCP</h3><span class="badge badge-green">Live</span></div>
+          <p>Connect compatible agents via Bearer-authenticated SSE to ExergyNet identity, Vault memory, AERIS witness, and signed receipts.</p>
+          <pre style="margin-top:0.75rem;"><code>https://mcp.exergynet.org/sse</code></pre>
+          <div style="margin-top:0.75rem;"><a href="omega-carrier.html" class="btn btn-ghost" style="font-size:12px;">Omega Carrier &rarr;</a></div>
         </div>
         <div class="card accent-border">
           <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;"><h3 style="margin:0;">Orchestration &mdash; Vanguard</h3><span class="badge badge-green">Live</span></div>
