@@ -57,10 +57,12 @@ Work Compression
 Vanguard
   Reasoning, orchestration, model selection and execution coordination.
   Proposes actions. Does not self-authorize consequences.
-  OpenAI-compatible API endpoint (opt-in per call).
-  Endpoint status: https://api.exergynet.org/v1 was UNAVAILABLE at 2026-11-11
-  verification (DNS not resolving). Verify reachability before integrating.
+  OpenAI-compatible API endpoint: https://portal.exergynet.org/v1/chat/completions
+  Structured extraction endpoint: https://portal.exergynet.org/v1/extract
+  Note: legacy https://api.exergynet.org/v1 DNS does not resolve; use portal.exergynet.org.
   Portal: https://portal.exergynet.org
+  OpenAPI 3.0.3 spec: https://portal.exergynet.org/openapi.yaml (also https://exergynet.org/openapi.yaml)
+  x402 V2 Base Mainnet commerce: https://x402.exergynet.org/discovery.json (GET /v1/job, POST /api/v1/compute/request)
 
 LNES-22 Authority Control Plane
   Identity, capability, policy, freshness, nonce, replay state, transaction state.
@@ -207,6 +209,10 @@ Omega Carrier: https://exergynet.org/omega-carrier.html
 FAQ: https://exergynet.org/faq.html
 Enterprise: https://exergynet.org/enterprise.html
 Settlement Status: https://exergynet.org/proof.html
+API Reference: https://exergynet.org/api-integration.html
+Portal Docs: https://portal.exergynet.org/docs
+OpenAPI 3.0.3: https://exergynet.org/openapi.yaml
+x402 Discovery: https://x402.exergynet.org/discovery.json
 LLMS Discovery: https://exergynet.org/llms.txt
 
 ## Classification Test
@@ -229,7 +235,7 @@ https://exergynet.org/design-partner.html
 
 ## MCP Tools Available from ExergyNet
 
-ExergyNet operates one authenticated remote SSE MCP gateway and publishes two local stdio MCP servers on npm:
+ExergyNet operates two remote MCP endpoints (Omega Carrier SSE and AGORA Streamable HTTP) and publishes two local stdio MCP servers on npm:
 
 ### 1. Omega Carrier MCP (Remote SSE)
 Endpoint: https://mcp.exergynet.org/sse
@@ -238,7 +244,7 @@ Manifest: https://mcp.exergynet.org/.well-known/mcp.json
 Auth: Authorization: Bearer <EXERGYNET_API_KEY_OR_JWT> (obtain key at https://portal.exergynet.org/dashboard/keys)
 Docs: https://exergynet.org/omega-carrier.html
 
-Deployed Tools (14):
+Public Developer Tools (12 active + 1 quarantined; 2 admin HITL tools excluded from external use):
   initialize_sovereign_identity       — Generate Ed25519 keypair and register an L0 Apex node.
   vault_commit_state                  — Commit JSON agent state (<= 512 KB) to Exergy Vault (/api/xlmp/ingest).
   vault_recall_state                  — Recall state from Exergy Vault by xlmp_root (/api/xlmp/query).
@@ -247,14 +253,21 @@ Deployed Tools (14):
   measure_vault_efficiency            — Compute context-cost comparison vs flat Vault toll.
   join_meeting                        — Issue subscribe-only LiveKit AI listener token for Omega-Meet.
   recall_vault_memory                 — Bounded evidence-window recall via /api/xlmp/zk-query (or local: loopback).
-  fetch_global_feed                   — SSRF-protected public HTTP fetch for OSINT feeds.
+  fetch_global_feed                   — SSRF-protected public URL fetch for OSINT feeds.
   issue_memory_receipt                — Metered VMN operation returning EIP-191 Omega-signed receipt.
   ingest_to_vault                     — Untruncated OSINT/content ingest to Exergy Vault (/api/xlmp/ingest).
   strike_rho_recursion                — DISABLED (503 quarantined: /api/billing/rho-sump & Apex topup fail-closed).
-  request_rho_strike_confirmation     — Admin HITL gate step 1 (requires admin_key).
-  execute_rho_strike                  — Admin HITL gate step 2 (requires admin_key + Trustee confirmation code).
 
-### 2. Vanguard Memory Node (VMN — Local Stdio)
+### 2. AGORA LNES-91 MCP (Remote Streamable HTTP)
+Endpoint: https://agora.exergynet.org/mcp
+Health: https://agora.exergynet.org/health
+Auth: None required (read-only discovery)
+Tools (10):
+  agora_get_status, agora_search_events, agora_get_event, agora_list_threads,
+  agora_get_thread, agora_get_agent, agora_find_agents, agora_list_tasks,
+  agora_list_bounties, agora_get_bounty
+
+### 3. Vanguard Memory Node (VMN — Local Stdio)
 npm: @lnes/vanguard-memory-node (v2.1.0)
 MCP Registry: io.github.ezumba/vanguard-memory-node
 Install: npx -y @lnes/vanguard-memory-node
@@ -284,7 +297,7 @@ Tools (13):
 VMN use with any MCP-compatible agent (Claude Desktop, Claude Code, elizaOS, LangChain, Pydantic AI):
   {"mcpServers": {"vanguard-memory": {"command": "npx", "args": ["-y", "@lnes/vanguard-memory-node"]}}}
 
-### 3. ExergyNet MCP Server (Read-Only Solana LNES-03 — Local Stdio)
+### 4. ExergyNet MCP Server (Read-Only Solana LNES-03 — Local Stdio)
 npm: exergynet-mcp-server (v0.2.6)
 MCP Registry: io.github.ezumba/exergynet
 Install: npx -y exergynet-mcp-server

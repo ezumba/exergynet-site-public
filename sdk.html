@@ -46,15 +46,14 @@
 
   <div class="container">
 
-    <!-- STATUS NOTICE (Wave-1 accuracy correction) -->
-    <div class="card" style="border-left:3px solid var(--amber,#d4a017); margin-bottom:1.5rem; padding:1rem 1.25rem;">
-      <strong style="display:block; margin-bottom:0.35rem;">STATUS NOTICE &mdash; Surface availability (verified 2026-11-11)</strong>
+    <!-- STATUS NOTICE (Verified 2026-11-16) -->
+    <div class="card" style="border-left:3px solid var(--accent); margin-bottom:1.5rem; padding:1rem 1.25rem;">
+      <strong style="display:block; margin-bottom:0.35rem;">LIVE INTEGRATION SURFACES (verified 2026-11-16)</strong>
       <ul style="margin:0; padding-left:1.25rem; font-size:13px; color:var(--text-soft);">
-        <li><strong>VMN:</strong> current package is <code>@lnes/vanguard-memory-node</code> (npm). The unscoped <code>vanguard-memory-node</code> is an older 1.5.0 line and no longer the documented install target.</li>
-        <li><strong>MCP Gateway:</strong> remote SSE gateway is live at <code>https://mcp.exergynet.org/sse</code> (Bearer auth, 14 tools; see <a href="omega-carrier.html">Omega Carrier</a>). The legacy <code>https://exergynet.org/mcp</code> path is <strong>retired/disabled</strong>. Local stdio npm packages: <code>@lnes/vanguard-memory-node@2.1.0</code> (13 tools) and <code>exergynet-mcp-server@0.2.6</code> (5 read-only Solana tools).</li>
-        <li><strong>Vanguard API:</strong> <code>https://api.exergynet.org/v1</code> was <strong>not resolving</strong> at verification time (DNS). Treat as UNAVAILABLE until this notice is updated.</li>
-        <li><strong>ElizaOS plugin:</strong> <code>@elizaos/plugin-exergynet</code> is not currently published on npm. Installation instructions below are retained for when the package is released.</li>
-        <li><strong>Solana legacy SDK:</strong> <code>exergynet-agent-sdk</code> targets LNES-03 (under investigation for transaction failures). The npm-published version line is 0.1.x; Solana settlement is not operational.</li>
+        <li><strong>Portal REST &amp; OpenAI-Compatible Inference:</strong> live at <code>https://portal.exergynet.org</code> (<code>/v1/chat/completions</code>, <code>/v1/extract</code>, <code>/api/xlmp/*</code>, <code>/api/omega/*</code>, <code>/api/aeris/witness</code>). Machine-readable contract: <a href="openapi.yaml">openapi.yaml</a> and <a href="https://portal.exergynet.org/docs" target="_blank">portal.exergynet.org/docs</a>. <em>Note: legacy <code>https://api.exergynet.org/v1</code> DNS does not resolve; use <code>https://portal.exergynet.org/v1</code>.</em></li>
+        <li><strong>x402 V2 Base Mainnet Commerce:</strong> live at <code>https://x402.exergynet.org</code> (<code>GET /v1/job</code> $0.02 USDC, <code>POST /api/v1/compute/request</code> $2.50 USDC, schema at <a href="https://x402.exergynet.org/discovery.json" target="_blank">discovery.json</a>).</li>
+        <li><strong>MCP Servers:</strong> remote Omega Carrier SSE at <code>https://mcp.exergynet.org/sse</code> (Bearer auth, 12 external developer tools), remote AGORA Streamable HTTP at <code>https://agora.exergynet.org/mcp</code> (10 read-only tools), local stdio VMN <code>@lnes/vanguard-memory-node@2.1.0</code> (13 tools), and read-only Solana <code>exergynet-mcp-server@0.2.6</code> (4 active + 1 disabled tool).</li>
+        <li><strong>Legacy / Pending:</strong> <code>@elizaos/plugin-exergynet</code> is not yet published on npm, and Solana <code>exergynet-agent-sdk</code> (LNES-03) settlement is non-operational / deprecated in favor of Base Mainnet x402 V2 and Portal REST.</li>
       </ul>
     </div>
 
@@ -62,31 +61,31 @@
     <section>
       <div class="section-label">Start Here — Current Surfaces</div>
       <h2>What to integrate now</h2>
-      <p style="max-width:720px; margin-bottom:1.5rem;">These are the current, supported ways to build on ExergyNet, ordered by developer job: persistent state &rarr; evidence &rarr; orchestration &rarr; authority.</p>
+      <p style="max-width:720px; margin-bottom:1.5rem;">These are the live, verified ways to build on ExergyNet today, ordered by developer job: persistent state &rarr; evidence &rarr; orchestration &rarr; x402 settlement.</p>
       <div class="card-grid">
         <div class="card accent-border">
           <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;"><h3 style="margin:0;">Persistent State &mdash; VMN</h3><span class="badge badge-green">Live</span></div>
           <p>Local, deterministic xLMP memory over MCP. Deterministic retrieval, content-addressed, no cloud required.</p>
-          <pre style="margin-top:0.75rem;"><code>npm install @lnes/vanguard-memory-node</code></pre>
+          <pre style="margin-top:0.75rem;"><code>npx -y @lnes/vanguard-memory-node</code></pre>
           <div style="margin-top:0.75rem;"><a href="vmn.html" class="btn btn-ghost" style="font-size:12px;">VMN &rarr;</a></div>
         </div>
         <div class="card blue-border">
           <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;"><h3 style="margin:0;">Tooling &mdash; Omega Carrier MCP</h3><span class="badge badge-green">Live</span></div>
           <p>Connect compatible agents via Bearer-authenticated SSE to ExergyNet identity, Vault memory, AERIS witness, and signed receipts.</p>
           <pre style="margin-top:0.75rem;"><code>https://mcp.exergynet.org/sse</code></pre>
-          <div style="margin-top:0.75rem;"><a href="omega-carrier.html" class="btn btn-ghost" style="font-size:12px;">Omega Carrier &rarr;</a></div>
+          <div style="margin-top:0.75rem;"><a href="mcp.html" class="btn btn-ghost" style="font-size:12px;">MCP Reference &rarr;</a></div>
         </div>
         <div class="card accent-border">
-          <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;"><h3 style="margin:0;">Orchestration &mdash; Vanguard</h3><span class="badge badge-green">Live</span></div>
-          <p>OpenAI-compatible API for reasoning and execution coordination over bounded evidence. Point an existing client at the endpoint and swap the key.</p>
-          <pre style="margin-top:0.75rem;"><code>https://api.exergynet.org/v1</code></pre>
-          <div style="margin-top:0.75rem;"><a href="vanguard.html" class="btn btn-ghost" style="font-size:12px;">Vanguard &rarr;</a></div>
+          <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;"><h3 style="margin:0;">Portal REST &amp; Vanguard</h3><span class="badge badge-green">Live</span></div>
+          <p>OpenAI-compatible inference, structured extraction, xLMP vault, and Omega agent budgets via Bearer API key.</p>
+          <pre style="margin-top:0.75rem;"><code>https://portal.exergynet.org/v1</code></pre>
+          <div style="margin-top:0.75rem;"><a href="api-integration.html" class="btn btn-ghost" style="font-size:12px;">API Guide &rarr;</a></div>
         </div>
-        <div class="card">
-          <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;"><h3 style="margin:0;">Agents &mdash; ElizaOS Plugin</h3><span class="badge badge-green">Recommended</span></div>
-          <p>Zero-boilerplate integration for ElizaOS agents.</p>
-          <pre style="margin-top:0.75rem;"><code>npm install @elizaos/plugin-exergynet</code></pre>
-          <div style="margin-top:0.75rem;"><a href="docs.html" class="btn btn-ghost" style="font-size:12px;">Docs &rarr;</a></div>
+        <div class="card blue-border">
+          <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:0.5rem;"><h3 style="margin:0;">x402 Base Mainnet</h3><span class="badge badge-green">Live</span></div>
+          <p>Pay-per-call Base Mainnet (eip155:8453) USDC endpoints using standard ERC-3009 HTTP 402 flows.</p>
+          <pre style="margin-top:0.75rem;"><code>https://x402.exergynet.org/discovery.json</code></pre>
+          <div style="margin-top:0.75rem;"><a href="openapi.yaml" class="btn btn-ghost" style="font-size:12px;">OpenAPI Spec &rarr;</a></div>
         </div>
       </div>
     </section>

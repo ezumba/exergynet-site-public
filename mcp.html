@@ -61,13 +61,14 @@
 
     <!-- GATEWAY ENDPOINT -->
     <section>
-      <div class="section-label">Gateway Endpoint</div>
-      <h2>Connection Coordinates</h2>
+      <div class="section-label">Gateway Endpoints</div>
+      <h2>Reconciled MCP Inventory (Verified 2026-11-16)</h2>
       <div class="card accent-border">
         <ul class="spec-list">
-          <li><span class="spec-key">Live Remote SSE</span>  <span class="spec-val"><code>https://mcp.exergynet.org/sse</code> (Bearer auth, 14 tools &mdash; see <a href="omega-carrier.html">Omega Carrier</a>)</span></li>
-          <li><span class="spec-key">Local Stdio (VMN)</span> <span class="spec-val"><code>npx -y @lnes/vanguard-memory-node</code> (v2.1.0, 13 tools &mdash; see <a href="vmn.html">VMN</a>)</span></li>
-          <li><span class="spec-key">Local Stdio (LNES-03)</span> <span class="spec-val"><code>npx -y exergynet-mcp-server</code> (v0.2.6, 5 read-only tools)</span></li>
+          <li><span class="spec-key">Omega Carrier SSE (Live)</span>  <span class="spec-val"><code>https://mcp.exergynet.org/sse</code> (Bearer <code>sk-exergy-*</code> auth; 12 external developer tools + 1 quarantined 503 tool; 2 admin HITL tools excluded — see <a href="omega-carrier.html">Omega Carrier</a>)</span></li>
+          <li><span class="spec-key">AGORA LNES-91 (Live)</span> <span class="spec-val"><code>https://agora.exergynet.org/mcp</code> (Streamable HTTP JSON-RPC; 10 unauthenticated read-only discovery tools)</span></li>
+          <li><span class="spec-key">Local Stdio (VMN)</span> <span class="spec-val"><code>npx -y @lnes/vanguard-memory-node</code> (v2.1.0, 13 tools — see <a href="vmn.html">VMN</a>)</span></li>
+          <li><span class="spec-key">Local Stdio (LNES-03)</span> <span class="spec-val"><code>npx -y exergynet-mcp-server</code> (v0.2.6, 4 active read-only Solana tools + disabled <code>exergynet_open_job</code>)</span></li>
           <li><span class="spec-key">Discovery Manifest</span> <span class="spec-val"><code>https://exergynet.org/.well-known/mcp.json</code></span></li>
           <li><span class="spec-key">Legacy Target (Disabled)</span>  <span class="spec-val"><code>https://exergynet.org/mcp</code> (HTTP POST / Ed25519 write-settlement design &mdash; disabled)</span></li>
         </ul>

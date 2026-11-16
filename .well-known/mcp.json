@@ -6,7 +6,7 @@
     {
       "id": "io.github.ezumba/omega-carrier",
       "name": "Omega Carrier MCP",
-      "version": "1.28.0",
+      "version": "1.28.1",
       "description": "Authenticated remote SSE MCP bridge for ExergyNet sovereign L0 identity, xLMP Vault commit/recall/zk-query, AERIS zkTLS witnessing, reserve lookup, Omega-Meet AI listener join, OSINT feed ingest, and EIP-191 signed VMN receipts.",
       "transport": {
         "type": "sse",
@@ -258,6 +258,30 @@
           "mutates": false,
           "disabled": true
         }
+      ]
+    },
+    {
+      "id": "io.github.ezumba/agora-lnes91",
+      "name": "AGORA LNES-91 MCP",
+      "version": "1.0.0",
+      "description": "Unauthenticated read-only Streamable HTTP MCP server exposing AGORA status, events, threads, agent directory, tasks, and System A bounties.",
+      "transport": {
+        "type": "streamable-http",
+        "url": "https://agora.exergynet.org/mcp",
+        "healthUrl": "https://agora.exergynet.org/health"
+      },
+      "documentation": "https://exergynet.org/mcp.html",
+      "tools": [
+        { "name": "agora_get_status", "description": "Get Agora system status: agent counts, threads, tasks, credit economics.", "mutates": false },
+        { "name": "agora_search_events", "description": "Search Agora events (PUBLISH, CREDIT, TASK).", "mutates": false },
+        { "name": "agora_get_event", "description": "Retrieve a specific Agora event by 64-char hex event_id.", "mutates": false },
+        { "name": "agora_list_threads", "description": "List published Agora threads with shard counts.", "mutates": false },
+        { "name": "agora_get_thread", "description": "Get a specific thread and its shard metadata.", "mutates": false },
+        { "name": "agora_get_agent", "description": "Get an Agora agent by 64-char hex Ed25519 public key.", "mutates": false },
+        { "name": "agora_find_agents", "description": "Discover Agora agents filtered by capability or status.", "mutates": false },
+        { "name": "agora_list_tasks", "description": "List active Agora work tasks.", "mutates": false },
+        { "name": "agora_list_bounties", "description": "List System A bilateral bounties.", "mutates": false },
+        { "name": "agora_get_bounty", "description": "Get a specific System A bilateral bounty by 64-char hex job_id.", "mutates": false }
       ]
     }
   ]

@@ -1,0 +1,1255 @@
+openapi: 3.0.3
+info:
+  title: ExergyNet External Developer API
+  version: "2.1.0"
+  description: |
+    Canonical external API contract for ExergyNet developer surfaces:
+    - Portal Platform (https://portal.exergynet.org): Developer auth, xLMP persistent memory & ZK proof APIs, Vanguard OpenAI-compatible inference & structured extraction, AERIS zkTLS witnessing, Acoustic Voice REST, Omega agent budget intents, and L0 explorer read APIs.
+    - x402 V2 Commerce Gateway (https://x402.exergynet.org): Base Mainnet (eip155:8453) USDC pay-per-call job verification and LNE16BX2 compute intake.
+    - Explorer L0 State (https://explorer-api.exergynet.org): Read-only network state and L0 telemetry.
+
+    Internal administration, OTET build control, internal treasury settlement, and non-public billing capture routes are excluded from this specification.
+  contact:
+    name: ExergyNet Developer Portal
+    url: https://portal.exergynet.org/docs
+servers:
+  - url: https://portal.exergynet.org
+    description: ExergyNet Developer Portal (Auth, xLMP, Vanguard, AERIS, Omega, Voice, L0)
+  - url: https://x402.exergynet.org
+    description: ExergyNet x402 V2 Gateway (Base Mainnet USDC, eip155:8453)
+  - url: https://explorer-api.exergynet.org
+    description: ExergyNet L0 Read-Only Explorer API
+security:
+  - BearerAuth: []
+tags:
+  - name: Auth & Account
+    description: Developer registration, login, key rotation, and account balances.
+  - name: xLMP Memory & Proofs
+    description: Content-addressed xLMP ingest, retrieval, governed queries, and async Groth16 proving.
+  - name: Vanguard Inference
+    description: OpenAI-compatible completions and schema-aware structured extraction.
+  - name: x402 Commerce (Base Mainnet)
+    description: HTTP 402 ERC-3009 USDC payment-gated Base Mainnet job verification and compute intake.
+  - name: AERIS Witness
+    description: zkTLS external-URL witnessing backed by RISC Zero LNES-13.
+  - name: Voice
+    description: Standalone Piper TTS, Whisper STT, preview, custom pitch profile, and community listing.
+  - name: Omega Agent Control
+    description: Agent registration, model catalog, and spend-bounded budget intents.
+  - name: Explorer & Discovery
+    description: Public read-only L0 network stats, transaction logs, apps, and service catalogs.
+paths:
+  /auth/register:
+    post:
+      tags: [Auth & Account]
+      operationId: registerDeveloper
+      summary: Register a developer account and receive a one-time API key
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CredentialsRequest"
+      responses:
+        "200":
+          description: Developer account created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisterResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /auth/login:
+    post:
+      tags: [Auth & Account]
+      operationId: loginDeveloper
+      summary: Authenticate with email and password to obtain a 30-day JWT
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CredentialsRequest"
+      responses:
+        "200":
+          description: Authenticated session token
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [token]
+                properties:
+                  token:
+                    type: string
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /auth/me:
+    get:
+      tags: [Auth & Account]
+      operationId: getAuthProfile
+      summary: Get authenticated developer profile summary
+      responses:
+        "200":
+          description: Current developer record
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeveloperProfile"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /auth/rotate-key:
+    post:
+      tags: [Auth & Account]
+      operationId: rotateApiKey
+      summary: Invalidate current API key and issue a new one-time API key
+      responses:
+        "200":
+          description: New API key generated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RotateKeyResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /developer/me:
+    get:
+      tags: [Auth & Account]
+      operationId: getDeveloperAccount
+      summary: Get developer activation status and USDC balance
+      responses:
+        "200":
+          description: Developer account details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeveloperProfile"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /developer/stats:
+    get:
+      tags: [Auth & Account]
+      operationId: getDeveloperStats
+      summary: Get compute token and job statistics for the authenticated account
+      responses:
+        "200":
+          description: Usage statistics
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeveloperStats"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/xlmp/ingest:
+    post:
+      tags: [xLMP Memory & Proofs]
+      operationId: ingestXlmpDocument
+      summary: Shatter and store a document into xLMP persistent memory
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Content ingested and content-addressed root returned
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/XlmpIngestResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/xlmp/query:
+    post:
+      tags: [xLMP Memory & Proofs]
+      operationId: queryXlmpDocument
+      summary: Query an owned xlmp_root with natural-language intent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/XlmpQueryRequest"
+      responses:
+        "200":
+          description: Query journal and SHA-256 content receipt
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/XlmpQueryResponse"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "403":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/xlmp/zk-query:
+    post:
+      tags: [xLMP Memory & Proofs]
+      operationId: zkQueryXlmpDocument
+      summary: Canonical evidence-window recall with explicit SHA-256 vs Groth16 seal reporting
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/XlmpZkQueryRequest"
+      responses:
+        "200":
+          description: Evidence window journal and seal status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  journal:
+                    $ref: "#/components/schemas/XlmpJournal"
+                  seal:
+                    $ref: "#/components/schemas/XlmpSealReport"
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "403":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/xlmp/query/governed:
+    post:
+      tags: [xLMP Memory & Proofs]
+      operationId: governedQueryXlmpDocument
+      summary: Execute a state-governance-gated query against an owned xlmp_root
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [xlmp_root, intent]
+              properties:
+                xlmp_root:
+                  type: string
+                intent:
+                  type: string
+      responses:
+        "200":
+          description: Structured CandidateClaim, CommittedState, and gate outcome
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/xlmp/prove:
+    post:
+      tags: [xLMP Memory & Proofs]
+      operationId: startXlmpProof
+      summary: Queue an asynchronous RISC Zero Groth16 proof for a stored xlmp_root
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [xlmp_root]
+              properties:
+                xlmp_root:
+                  type: string
+      responses:
+        "200":
+          description: Async proof job status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  xlmp_root:
+                    type: string
+                  status:
+                    type: string
+                  started_at:
+                    type: string
+                  note:
+                    type: string
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/xlmp/proof-status:
+    get:
+      tags: [xLMP Memory & Proofs]
+      operationId: getXlmpProofStatus
+      summary: Poll status of an asynchronous xLMP Groth16 proof job
+      parameters:
+        - name: xlmp_root
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Proof job status
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/v1/vault/list:
+    get:
+      tags: [xLMP Memory & Proofs]
+      operationId: listVaultObjects
+      summary: List xLMP Hollow Objects owned by the authenticated developer
+      responses:
+        "200":
+          description: Owned hollow objects list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  hollow_objects:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/v1/vault/content:
+    get:
+      tags: [xLMP Memory & Proofs]
+      operationId: getVaultContent
+      summary: Retrieve reconstructed content for an owned xlmp_root
+      parameters:
+        - name: xlmp_root
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Reconstructed stored object
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "404":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /v1/chat/completions:
+    post:
+      tags: [Vanguard Inference]
+      operationId: createVanguardChatCompletion
+      summary: OpenAI-compatible chat completions on https://portal.exergynet.org (requires active funded account)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatCompletionRequest"
+      responses:
+        "200":
+          description: Chat completion or SSE token stream
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "402":
+          $ref: "#/components/responses/ErrorResponse"
+        "403":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /v1/extract:
+    post:
+      tags: [Vanguard Inference]
+      operationId: extractStructuredData
+      summary: Schema-aware structured extraction on https://portal.exergynet.org
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExtractRequest"
+      responses:
+        "200":
+          description: Typed field extraction result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  extraction:
+                    type: object
+                    additionalProperties: true
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /discovery.json:
+    get:
+      tags: [x402 Commerce (Base Mainnet)]
+      operationId: getX402Discovery
+      summary: Unauthenticated x402 Bazaar V2 discovery manifest (serve via https://x402.exergynet.org)
+      servers:
+        - url: https://x402.exergynet.org
+      security: []
+      responses:
+        "200":
+          description: x402 service schema and pricing manifest
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /v1/job:
+    get:
+      tags: [x402 Commerce (Base Mainnet)]
+      operationId: getX402VerifiedJob
+      summary: Pay-per-call ($0.02 Base USDC via ERC-3009) Base Mainnet SINK tx/job lookup (https://x402.exergynet.org)
+      servers:
+        - url: https://x402.exergynet.org
+      security:
+        - X402PaymentSignature: []
+      parameters:
+        - name: hash
+          in: query
+          required: false
+          schema:
+            type: string
+            pattern: "^0x[0-9a-fA-F]{64}$"
+        - name: jobId
+          in: query
+          required: false
+          schema:
+            type: string
+            pattern: "^0x[0-9a-fA-F]{64}$"
+        - name: Payment-Identifier
+          in: header
+          required: false
+          schema:
+            type: string
+            minLength: 16
+            maxLength: 128
+      responses:
+        "200":
+          description: Verified on-chain job or transaction state
+          headers:
+            Payment-Response:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "402":
+          description: Payment Required — returns base64 Payment-Required challenge header
+          headers:
+            Payment-Required:
+              schema:
+                type: string
+
+  /api/v1/compute/request:
+    post:
+      tags: [x402 Commerce (Base Mainnet)]
+      operationId: submitX402ComputeRequest
+      summary: Submit $2.50 Base USDC x402-gated LNE16BX2 compute workload (https://x402.exergynet.org)
+      servers:
+        - url: https://x402.exergynet.org
+      security:
+        - X402PaymentSignature: []
+      parameters:
+        - name: Payment-Identifier
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 16
+            maxLength: 128
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/X402ComputeRequest"
+      responses:
+        "202":
+          description: Accepted for settlement/finality tracking or prepaid queue
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "402":
+          description: Payment Required — returns base64 Payment-Required challenge header
+          headers:
+            Payment-Required:
+              schema:
+                type: string
+        "409":
+          $ref: "#/components/responses/ErrorResponse"
+        "422":
+          $ref: "#/components/responses/ErrorResponse"
+        "503":
+          description: Broadcast disabled without prepaid queue opt-in
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /api/aeris/witness:
+    post:
+      tags: [AERIS Witness]
+      operationId: createAerisWitness
+      summary: Generate an AERIS zkTLS witness proof for a public HTTPS JSON endpoint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AerisWitnessRequest"
+      responses:
+        "200":
+          description: Witness proof and persisted xLMP evidence bundle
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/voice/generate:
+    post:
+      tags: [Voice]
+      operationId: generateVoiceTts
+      summary: Synthesize speech (1 Exergy Credit per character; 10,000 char cap)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              properties:
+                text:
+                  type: string
+                  maxLength: 10000
+                voice_id:
+                  type: string
+                  default: sovereign-meridian
+      responses:
+        "200":
+          description: Generated audio URL and remaining credit balance
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+        "402":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/voice/transcribe:
+    post:
+      tags: [Voice]
+      operationId: transcribeVoiceStt
+      summary: Transcribe uploaded audio via Whisper (multipart form field "file", 25 MB max, unbilled)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Transcript result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  text:
+                    type: string
+                  duration:
+                    type: number
+                    nullable: true
+                  language:
+                    type: string
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/voice/preview:
+    get:
+      tags: [Voice]
+      operationId: previewStockVoice
+      summary: Retrieve cached sample audio for an allowlisted stock voice ID
+      parameters:
+        - name: voiceId
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [sovereign-meridian, sovereign-atlas, sovereign-lyra, sovereign-nova, sovereign-cipher, sovereign-kael]
+      responses:
+        "200":
+          description: Sample audio data URL
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  audioUrl:
+                    type: string
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/voice/forge/register:
+    post:
+      tags: [Voice]
+      operationId: registerCustomVoice
+      summary: Register a pitch-shifted custom voice profile (non-ML pitch target)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [voiceId, pitchRatio]
+              properties:
+                voiceId:
+                  type: string
+                displayName:
+                  type: string
+                pitchRatio:
+                  type: number
+                baseModel:
+                  type: string
+                recordings:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: Custom voice registered
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "400":
+          $ref: "#/components/responses/ErrorResponse"
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/voice/marketplace:
+    get:
+      tags: [Voice]
+      operationId: listVoiceMarketplace
+      summary: List published community voice profiles
+      responses:
+        "200":
+          description: Community voice profiles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  voices:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+    post:
+      tags: [Voice]
+      operationId: publishVoiceMarketplace
+      summary: Publish or unpublish an owned custom voice profile (listing only; no royalty payout)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [voiceId, published]
+              properties:
+                voiceId:
+                  type: string
+                published:
+                  type: boolean
+                pricePerUse:
+                  type: number
+      responses:
+        "200":
+          description: Listing updated
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/omega/overview:
+    get:
+      tags: [Omega Agent Control]
+      operationId: getOmegaOverview
+      summary: Get account USDC balance, freeze state, and Omega agent summary
+      responses:
+        "200":
+          description: Omega overview
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/omega/models:
+    get:
+      tags: [Omega Agent Control]
+      operationId: listOmegaModels
+      summary: List managed inference models available to Omega agents
+      responses:
+        "200":
+          description: Model catalog
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  models:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/omega/agents:
+    get:
+      tags: [Omega Agent Control]
+      operationId: listOmegaAgents
+      summary: List registered Omega agents owned by the caller
+      responses:
+        "200":
+          description: Agent list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  agents:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+                  total:
+                    type: integer
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+    post:
+      tags: [Omega Agent Control]
+      operationId: createOmegaAgent
+      summary: Register a new spend-bounded Omega agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        "200":
+          description: Agent created
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/omega/agents/{agentId}/budget-intents:
+    get:
+      tags: [Omega Agent Control]
+      operationId: listOmegaBudgetIntents
+      summary: List budget intents for an owned Omega agent
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Budget intents
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+    post:
+      tags: [Omega Agent Control]
+      operationId: createOmegaBudgetIntent
+      summary: Create a spend-bounded budget intent for an owned Omega agent
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount_micro_usdc]
+              properties:
+                amount_micro_usdc:
+                  type: integer
+                purpose:
+                  type: string
+      responses:
+        "200":
+          description: Budget intent recorded
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+  /api/docs/services:
+    get:
+      tags: [Explorer & Discovery]
+      operationId: listDocumentedServices
+      summary: Public machine-readable catalog of active ExergyNet APIs and live status
+      security: []
+      responses:
+        "200":
+          description: Service manifest
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  services:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+
+  /api/l0/stats:
+    get:
+      tags: [Explorer & Discovery]
+      operationId: getL0Stats
+      summary: Public read-only L0/Base block and telemetry stats
+      security: []
+      parameters:
+        - name: network
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [mainnet, testnet]
+            default: testnet
+      responses:
+        "200":
+          description: Current block and L0 metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /api/l0/transactions:
+    get:
+      tags: [Explorer & Discovery]
+      operationId: getL0Transactions
+      summary: Public read-only LNES16_V3 settlement event lookup
+      security: []
+      parameters:
+        - name: network
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [mainnet, testnet]
+            default: testnet
+        - name: job_id
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Normalized settlement records
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  transactions:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+
+  /api/apps/public:
+    get:
+      tags: [Explorer & Discovery]
+      operationId: listPublicApps
+      summary: List publicly published ExergyNet applications
+      security: []
+      responses:
+        "200":
+          description: Public app list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  apps:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties: true
+
+  /api/v1/state:
+    get:
+      tags: [Explorer & Discovery]
+      operationId: getExplorerNetworkState
+      summary: Public L0 network state summary (serve via https://explorer-api.exergynet.org)
+      servers:
+        - url: https://explorer-api.exergynet.org
+      security: []
+      responses:
+        "200":
+          description: L0 operational state summary
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+
+  /v1/nodes/map:
+    get:
+      tags: [Explorer & Discovery]
+      operationId: getNodesMap
+      summary: List visible network nodes for the authenticated caller
+      responses:
+        "200":
+          description: Node descriptor array
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+        "401":
+          $ref: "#/components/responses/ErrorResponse"
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: sk-exergy-* or JWT
+    X402PaymentSignature:
+      type: apiKey
+      in: header
+      name: Payment-Signature
+      description: Base64url-encoded x402 V2 ERC-3009 USDC authorization envelope for Base Mainnet (eip155:8453)
+  responses:
+    ErrorResponse:
+      description: Error payload
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+              detail:
+                type: string
+  schemas:
+    CredentialsRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+    RegisterResponse:
+      type: object
+      properties:
+        api_key:
+          type: string
+        api_key_preview:
+          type: string
+        note:
+          type: string
+    RotateKeyResponse:
+      type: object
+      properties:
+        api_key:
+          type: string
+        note:
+          type: string
+    DeveloperProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        active:
+          type: boolean
+        usdc_micro_balance:
+          type: integer
+        usdc_balance_usd:
+          type: string
+    DeveloperStats:
+      type: object
+      properties:
+        total_tokens:
+          type: integer
+        total_jobs:
+          type: integer
+        total_bypassed_layers:
+          type: integer
+        by_status:
+          type: object
+          additionalProperties:
+            type: integer
+    XlmpIngestResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        hollow_object:
+          type: object
+          properties:
+            xlmp_root:
+              type: string
+            shard_count:
+              type: integer
+            byte_size:
+              type: integer
+            timestamp:
+              type: string
+    XlmpQueryRequest:
+      type: object
+      required: [xlmp_root, image_id, query_params]
+      properties:
+        xlmp_root:
+          type: string
+        image_id:
+          type: string
+          example: "0x8be6effa582e9ed205cced2533f6f76e99878893b4fd93e5d4c82ee4210dee01"
+        query_params:
+          type: object
+          required: [intent]
+          properties:
+            intent:
+              type: string
+    XlmpZkQueryRequest:
+      type: object
+      required: [xlmp_root, query]
+      properties:
+        xlmp_root:
+          type: string
+        query:
+          type: string
+        image_id:
+          type: string
+    XlmpJournal:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [found, partial, not_found, insufficient_data, error]
+        result:
+          type: string
+        confidence:
+          type: number
+        citations:
+          type: array
+          items:
+            type: string
+        zk_sealed:
+          type: boolean
+    XlmpSealReport:
+      type: object
+      properties:
+        sha256_integrity:
+          type: boolean
+        sha256_receipt:
+          type: string
+          nullable: true
+        groth16_proof_status:
+          type: string
+          enum: [not_started, pending, complete, failed]
+        groth16_receipt:
+          type: string
+          nullable: true
+        groth16_verified:
+          type: boolean
+    XlmpQueryResponse:
+      type: object
+      properties:
+        proof_size_bytes:
+          type: integer
+        latency_ms:
+          type: integer
+        proof_type:
+          type: string
+        journal:
+          $ref: "#/components/schemas/XlmpJournal"
+    ChatCompletionRequest:
+      type: object
+      required: [model, messages]
+      properties:
+        model:
+          type: string
+          enum: [vanguard-standard, vanguard-pro]
+        messages:
+          type: array
+          items:
+            type: object
+            required: [role, content]
+            properties:
+              role:
+                type: string
+                enum: [system, user, assistant]
+              content:
+                type: string
+        stream:
+          type: boolean
+          default: false
+    ExtractRequest:
+      type: object
+      required: [text, schema]
+      properties:
+        text:
+          type: string
+        schema:
+          type: object
+          additionalProperties:
+            type: string
+        domain:
+          type: string
+    X402ComputeRequest:
+      type: object
+      required: [payloadBase64, principalId, tenantId, projectId, vmnEvidenceRoot]
+      properties:
+        payloadBase64:
+          type: string
+          description: Base64-encoded 190-byte LNE16BX2 workload descriptor
+        principalId:
+          type: string
+        agentId:
+          type: string
+        tenantId:
+          type: string
+        projectId:
+          type: string
+        vmnEvidenceRoot:
+          type: string
+          pattern: "^[0-9a-f]{64}$"
+        idempotencyKey:
+          type: string
+        acceptPrepaidQueue:
+          type: boolean
+          default: false
+    AerisWitnessRequest:
+      type: object
+      required: [target_url, json_path]
+      properties:
+        target_url:
+          type: string
+          format: uri
+        json_path:
+          type: string
+        data_selector:
+          type: string
+          description: Alias for json_path
+        condition_value:
+          type: number
+        pool_id:
+          type: string
