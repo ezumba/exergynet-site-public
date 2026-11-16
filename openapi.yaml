@@ -353,11 +353,12 @@ paths:
       operationId: getVaultContent
       summary: Retrieve reconstructed content for an owned xlmp_root
       parameters:
-        - name: xlmp_root
+        - name: root
           in: query
           required: true
           schema:
             type: string
+            pattern: "^[a-fA-F0-9]{1,64}$"
       responses:
         "200":
           description: Reconstructed stored object
