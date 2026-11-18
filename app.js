@@ -27,6 +27,24 @@ const SEARCH_INDEX = [
     keywords: 'white paper research V5 101M 220.5x retrieval speedup authority',
   },
   {
+    title: 'Agent Continuity',
+    description: 'Cross-client continuity and verified local checkpoints across Claude Code, OpenCode, and Codex CLI.',
+    url: 'continuity.html',
+    keywords: 'continuity claude opencode codex checkpoints handoff local beta',
+  },
+  {
+    title: 'ExergyNet Studio',
+    description: 'Authenticated web and terminal AI development studio over ExergyNet Continuity.',
+    url: 'https://studio.exergynet.org/',
+    keywords: 'studio web terminal providers models portal sso',
+  },
+  {
+    title: 'Legal & Liability Void',
+    description: 'Official declaration governing the ExergyNet protocol and EDT INC terms.',
+    url: 'legal.html',
+    keywords: 'legal liability void edt inc terms protocol',
+  },
+  {
     title: 'Local memory quickstart',
     description: 'Install Vanguard Memory Node and connect to Claude Desktop or any MCP client.',
     url: 'docs.html',
@@ -254,15 +272,45 @@ function initTocObserver() {
   });
 }
 
+/* ─── Theme toggle (Light/Dark synced via exg-theme) ─────────────────────── */
+function initThemeToggle() {
+  const root = document.documentElement;
+  const btn = document.getElementById('theme-toggle');
+  const metaColor = document.getElementById('meta-theme-color');
+  const sync = (t) => {
+    if (btn) {
+      btn.textContent = t === 'light' ? '☾' : '☀';
+      btn.setAttribute('aria-label', t === 'light' ? 'Switch to dark mode' : 'Switch to light mode');
+      btn.title = t === 'light' ? 'Switch to dark mode' : 'Switch to light mode';
+    }
+    if (metaColor) metaColor.setAttribute('content', t === 'light' ? '#f8fafc' : '#080b12');
+  };
+  sync(root.getAttribute('data-theme') || 'dark');
+  if (btn) {
+    btn.addEventListener('click', () => {
+      const next = (root.getAttribute('data-theme') || 'dark') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('exg-theme', next); } catch {}
+      sync(next);
+    });
+  }
+}
+
 /* ─── Mobile nav toggle ─────────────────────────────────────────────────── */
 function initMobileNav() {
   const toggle = document.querySelector('.menu-toggle');
-  const nav = document.getElementById('main-nav');
+  const nav = document.getElementById('navlinks') || document.getElementById('main-nav');
   if (!toggle || !nav) return;
   toggle.addEventListener('click', () => {
     const open = toggle.getAttribute('aria-expanded') === 'true';
     toggle.setAttribute('aria-expanded', String(!open));
     nav.classList.toggle('open', !open);
+  });
+  nav.addEventListener('click', (e) => {
+    if (e.target.closest('a')) {
+      nav.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
   });
 }
 
@@ -306,6 +354,7 @@ function initSidebarObserver() {
 
 /* ─── Init ──────────────────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
+  initThemeToggle();
   initSearch();
   initOsTabs();
   initCopy();

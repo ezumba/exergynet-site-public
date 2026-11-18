@@ -1,38 +1,53 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b12" id="meta-theme-color">
 <meta name="robots" content="index,follow">
 <title>ExergyNet — Persistent machine infrastructure</title>
 <meta name="description" content="ExergyNet provides persistent state, bounded context delivery, and independent execution authority for machine intelligence systems.">
 <link rel="icon" href="assets/favicon.png">
-<link rel="stylesheet" href="exgn-web006.css">
+<link rel="stylesheet" href="exergynet-ui.css">
+<script>
+  (function(){
+    try {
+      var t = localStorage.getItem('exg-theme');
+      if (!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+      var m = document.getElementById('meta-theme-color');
+      if (m) m.setAttribute('content', t === 'light' ? '#f8fafc' : '#080b12');
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
+<div class="ambient" aria-hidden="true"></div>
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="site-header">
-  <div class="wrap header-inner">
+  <div class="wrap nav">
     <a class="brand" href="index.html" aria-label="ExergyNet home">
-      <img src="assets/logo.png" alt="ExergyNet" width="175" height="34">
+      <img src="assets/nav-logo-green.png" alt="ExergyNet" class="logo-dark">
+      <img src="assets/nav-logo-navy.png" alt="ExergyNet" class="logo-light">
     </a>
-    <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+    <nav class="navlinks" id="navlinks" aria-label="Main navigation">
       <a href="index.html#platform" aria-current="page">Platform</a>
+      <a href="continuity.html">Continuity</a>
+      <a href="https://studio.exergynet.org/">Studio</a>
       <a href="docs.html">Developers</a>
       <a href="whitepaper.html">Research</a>
-      <a href="index.html#company">Company</a>
+      <a href="legal.html">Legal</a>
     </nav>
-    <div class="header-actions">
-      <button class="search-trigger" aria-label="Search" id="search-btn">
+    <div class="nav-right">
+      <button class="search-trigger" aria-label="Search" id="search-btn" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>
         <span class="s-label">Search</span>
         <kbd>⌘K</kbd>
       </button>
-      <a class="btn btn-primary" href="docs.html">Start building <span aria-hidden="true">↗</span></a>
-      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav">
-        <span aria-hidden="true">☰</span>
-      </button>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light/dark theme">☀</button>
+      <a class="button" href="https://portal.exergynet.org/">Portal Sign In <span class="arrow" aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navlinks" type="button">☰</button>
     </div>
   </div>
 </header>
@@ -40,17 +55,18 @@
 <main id="main">
 
   <!-- HERO -->
-  <section class="hero" id="platform">
-    <div class="wrap">
-      <div class="eyebrow hero-eyebrow">
-        <span class="dot" aria-hidden="true"></span>
+  <section class="hero hero-centered wrap" id="platform">
+    <div>
+      <div class="hero-pill">
+        <span class="pulse" aria-hidden="true"></span>
         Persistent machine infrastructure
       </div>
-      <h1>Persistent state.<br><em>Bounded context.</em><br>Independent authority.</h1>
-      <p class="hero-sub">ExergyNet decouples what agents remember from what models reason over — and separates what models propose from what systems execute.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary btn-lg" href="docs.html">Start building <span aria-hidden="true">↗</span></a>
-        <a class="btn btn-outline btn-lg" href="whitepaper.html">Read V5 research <span aria-hidden="true">↓</span></a>
+      <h1>Persistent state.<br><span class="gradient">Bounded context.</span><br>Independent authority.</h1>
+      <p class="hero-lead">ExergyNet decouples what agents remember from what models reason over — and separates what models propose from what systems execute.</p>
+      <div class="cta-row">
+        <a class="button" href="continuity.html">Agent Continuity <span class="arrow" aria-hidden="true">↗</span></a>
+        <a class="button secondary" href="https://studio.exergynet.org/">Open Studio <span class="arrow" aria-hidden="true">↗</span></a>
+        <a class="button secondary" href="whitepaper.html">Read V5 research <span class="arrow" aria-hidden="true">↓</span></a>
       </div>
       <p class="hero-tagline">STATE · CONTEXT · IDENTITY · AUTHORITY</p>
     </div>
@@ -294,35 +310,36 @@
     <div class="footer-top">
       <div class="footer-brand">
         <a class="brand" href="index.html" aria-label="ExergyNet home">
-          <img src="assets/logo.png" alt="ExergyNet" width="175" height="34">
+          <img src="assets/nav-logo-green.png" alt="ExergyNet" class="logo-dark">
+          <img src="assets/nav-logo-navy.png" alt="ExergyNet" class="logo-light">
         </a>
         <p>Persistent state. Bounded context.<br>Independent authority for machine intelligence.</p>
       </div>
       <div class="foot-col">
         <strong>Explore</strong>
         <a href="index.html#platform">Platform overview</a>
-        <a href="index.html#workflow">Architecture</a>
-        <a href="index.html#capabilities">Capabilities</a>
-        <a href="https://exergynet.org/security.html">Security ↗</a>
+        <a href="continuity.html">Agent Continuity</a>
+        <a href="https://studio.exergynet.org/">ExergyNet Studio ↗</a>
+        <a href="security.html">Security</a>
       </div>
       <div class="foot-col">
         <strong>Build</strong>
         <a href="docs.html">Documentation</a>
         <a href="https://github.com/ezumba/vanguard-memory-node">Open source ↗</a>
-        <a href="https://exergynet.org/api-integration.html">API reference ↗</a>
-        <a href="https://exergynet.org/proof.html">Verification status ↗</a>
+        <a href="api-integration.html">API reference</a>
+        <a href="proof.html">Verification status</a>
       </div>
       <div class="foot-col">
         <strong>Research</strong>
         <a href="whitepaper.html">White paper V5</a>
-        <a href="https://exergynet.org/benchmarks.html">Benchmarks ↗</a>
-        <a href="https://exergynet.org/vanguard.html">Vanguard ↗</a>
+        <a href="benchmarks.html">Benchmarks</a>
+        <a href="vanguard.html">Vanguard</a>
         <a href="https://x.com/ExergyNet">Follow ExergyNet ↗</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 ExergyNet · Infrastructure for machine intelligence.</span>
-      <span><a href="https://exergynet.org/legal.html">Legal ↗</a></span>
+      <span>© 2026 EDT INC. · Infrastructure for machine intelligence.</span>
+      <span><a href="legal.html">Legal</a></span>
     </div>
   </div>
 </footer>
