@@ -10,11 +10,114 @@
 <link rel="icon" href="assets/favicon.png">
 <link rel="stylesheet" href="exergynet-ui.css">
 <style>
-/* ═══════════════════════════════════════
-   Hero Flow Diagram — hfd
-   Vault → Context → Authority
-   ═══════════════════════════════════════ */
-.hfd-wrap { margin-top: 2.75rem; }
+/* ═══════════════════════════════════════════════════
+   HFD V2 — Synchronized Comparison Diagram
+   ExergyNet vs Context-heavy baseline
+   ═══════════════════════════════════════════════════ */
+.hfd-wrap{margin-top:2.75rem}
+/* task header */
+.hfd-thdr{display:flex;align-items:center;justify-content:center;gap:.55rem;margin-bottom:.9rem;font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.09em;text-transform:uppercase}
+.hfd-tn{color:var(--cyan);font-weight:700}
+.hfd-tl{color:var(--ink)}
+.hfd-tdots{display:flex;gap:4px}
+.hfd-td{width:5px;height:5px;border-radius:50%;background:var(--border);transition:background .3s}
+.hfd-td.on{background:var(--cyan)}
+/* comparison grid */
+.hfd-cmp{display:grid;grid-template-columns:1fr 1px 1fr}
+.hfd-cmpd{background:var(--line);margin:0 .4rem}
+.hfd-side{display:flex;flex-direction:column;align-items:stretch;gap:.45rem;padding:0 .4rem}
+.hfd-shdr{text-align:center;font-family:var(--mono)}
+.hfd-sname{display:block;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1px}
+.hfd-exg .hfd-sname{color:var(--cyan)}
+.hfd-base .hfd-sname{color:#f87171}
+.hfd-sflow{font-size:8px;color:var(--sub);letter-spacing:.07em;text-transform:uppercase}
+/* runtime card */
+.hfd-card{background:var(--panel);border:1px solid var(--border);border-radius:11px;padding:0 .85rem .85rem;position:relative;overflow:hidden;font-family:var(--mono)}
+.hfd-exg .hfd-card::before,.hfd-base .hfd-card::before{content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:100%;height:90px;pointer-events:none}
+.hfd-exg .hfd-card::before{background:radial-gradient(ellipse,rgba(104,233,227,.09) 0%,transparent 70%)}
+.hfd-base .hfd-card{border-color:rgba(248,113,113,.18)}
+.hfd-base .hfd-card::before{background:radial-gradient(ellipse,rgba(248,113,113,.07) 0%,transparent 70%)}
+/* chrome */
+.hfd-chrome{display:flex;align-items:center;gap:5px;padding:.6rem 0 .5rem;margin-bottom:.4rem;border-bottom:1px solid var(--line)}
+.hfd-cdot{width:7px;height:7px;border-radius:50%}
+.hfd-cdot-r{background:#ef4444}
+.hfd-cdot-y{background:#f59e0b}
+.hfd-cdot-g{background:#22c55e}
+.hfd-clab{font-size:7.5px;letter-spacing:.14em;color:var(--sub);margin-left:auto;text-transform:uppercase}
+/* 5-col inner layout */
+.hfd-inner{display:grid;grid-template-columns:1fr 52px 1fr 52px 1fr;align-items:center}
+/* panel */
+.hfd-panel{display:flex;flex-direction:column;align-items:center;gap:.3rem;padding:0 .1rem}
+.hfd-plbl{font-size:7.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;margin-bottom:1px}
+.hfd-exg .hfd-plbl{color:var(--cyan)}
+.hfd-base .hfd-plbl{color:#f87171}
+/* cells */
+.hfd-g{display:grid;grid-template-columns:repeat(6,1fr);gap:2px;width:100%;max-width:106px}
+.hfd-c{aspect-ratio:1;border-radius:2px;transition:opacity .3s,box-shadow .3s}
+.hfd-exg .hfd-c{background:var(--cyan)}
+.hfd-base .hfd-c{background:#f87171}
+.hfd-c.i1{opacity:.11}.hfd-c.i2{opacity:.23}.hfd-c.i3{opacity:.40}.hfd-c.i4{opacity:.58}
+.hfd-c.b1{opacity:.42}.hfd-c.b2{opacity:.55}.hfd-c.b3{opacity:.68}.hfd-c.b4{opacity:.78}
+.hfd-base .hfd-c.bpre{opacity:.35}
+.hfd-exg  .hfd-c.wave{opacity:.88!important;box-shadow:0 0 5px rgba(104,233,227,.5)}
+.hfd-exg  .hfd-c.glow{opacity:1!important;box-shadow:0 0 8px rgba(104,233,227,.85)}
+.hfd-base .hfd-c.glow{opacity:1!important;box-shadow:0 0 8px rgba(248,113,113,.8)}
+.hfd-exg  .hfd-c.sel{opacity:1;animation:hfd-sel-e 1.5s ease-in-out infinite}
+.hfd-base .hfd-c.sel{opacity:.88;animation:hfd-sel-b 1.5s ease-in-out infinite}
+@keyframes hfd-sel-e{0%,100%{box-shadow:0 0 10px rgba(104,233,227,.9)}50%{box-shadow:0 0 18px rgba(104,233,227,1)}}
+@keyframes hfd-sel-b{0%,100%{box-shadow:0 0 8px rgba(248,113,113,.75)}50%{box-shadow:0 0 14px rgba(248,113,113,.95)}}
+/* metrics */
+.hfd-mnum{font-size:.95rem;font-weight:700;color:var(--ink);line-height:1;letter-spacing:-.01em;transition:opacity .25s}
+.hfd-munit{font-size:.58rem;color:var(--sub)}
+.hfd-pcap{font-size:7px;letter-spacing:.06em;color:var(--muted);text-align:center}
+/* connectors */
+.hfd-conn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.hfd-ctag{font-size:6.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);white-space:nowrap}
+.hfd-track{position:relative;width:34px;height:2px}
+.hfd-tline{position:absolute;inset:0;border-radius:1px}
+.hfd-exg  .hfd-tline{background:linear-gradient(90deg,rgba(104,233,227,.15),rgba(104,233,227,.5))}
+.hfd-base .hfd-tline{background:linear-gradient(90deg,rgba(248,113,113,.15),rgba(248,113,113,.5))}
+.hfd-arr{position:absolute;right:-4px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:3px solid transparent;border-bottom:3px solid transparent}
+.hfd-exg  .hfd-arr{border-left:5px solid rgba(104,233,227,.5)}
+.hfd-base .hfd-arr{border-left:5px solid rgba(248,113,113,.5)}
+.hfd-pk{position:absolute;left:-4px;top:50%;transform:translateY(-50%);border-radius:50%;opacity:0;pointer-events:none}
+.hfd-exg  .hfd-pk{width:6px;height:6px;background:var(--cyan);box-shadow:0 0 7px var(--cyan)}
+.hfd-base .hfd-pk{width:9px;height:9px;background:#f87171;box-shadow:0 0 10px #f87171}
+.hfd-pk.go{animation:hfd-fly .6s ease-in forwards}
+@keyframes hfd-fly{0%{left:-4px;opacity:1}85%{opacity:.8}100%{left:38px;opacity:0}}
+/* authority / execute icons */
+.hfd-sw{display:flex;flex-direction:column;align-items:center;gap:.35rem}
+.hfd-prule{font-size:6.5px;color:var(--muted);text-align:center;letter-spacing:.05em;min-height:2em;line-height:1.5}
+.hfd-shld{width:30px;height:36px;overflow:visible;color:var(--sub);transition:color .4s,filter .4s}
+.hfd-shld.permit{color:var(--cyan);filter:drop-shadow(0 0 5px rgba(104,233,227,.5))}
+.hfd-shld.deny  {color:#f87171;   filter:drop-shadow(0 0 5px rgba(248,113,113,.5))}
+.hfd-shld.exec  {color:#f59e0b;   filter:drop-shadow(0 0 5px rgba(245,158,11,.4))}
+.hfd-sm-ok,.hfd-sm-no{stroke-dasharray:32;stroke-dashoffset:32;transition:stroke-dashoffset .4s}
+.hfd-sm-el{stroke-dasharray:18;stroke-dashoffset:18;transition:stroke-dashoffset .4s}
+.hfd-sm-ec{stroke-dasharray:20;stroke-dashoffset:20;transition:stroke-dashoffset .4s}
+.hfd-shld.permit .hfd-sm-ok{stroke-dashoffset:0}
+.hfd-shld.deny   .hfd-sm-no{stroke-dashoffset:0}
+.hfd-verd{font-size:8.5px;font-weight:700;letter-spacing:.06em;min-height:1.2em;text-align:center;color:var(--sub);transition:color .4s}
+.hfd-verd.checking{color:var(--muted)}
+.hfd-verd.permit  {color:var(--cyan)}
+.hfd-verd.deny    {color:#fca5a5}
+.hfd-verd.exec    {color:#fcd34d}
+/* thermometer */
+.hfd-trow{display:flex;flex-direction:column;gap:4px}
+.hfd-therm{height:5px;border-radius:3px;background:var(--panel2,#131b29);border:1px solid var(--border);overflow:hidden}
+.hfd-tbar{height:100%;width:0;border-radius:3px;transition:width 1.1s cubic-bezier(.25,.46,.45,.94)}
+.hfd-exg  .hfd-tbar{background:linear-gradient(90deg,rgba(104,233,227,.4),var(--cyan))}
+.hfd-base .hfd-tbar{background:linear-gradient(90deg,rgba(248,113,113,.4),#f87171)}
+.hfd-tnote{font-size:7.5px;color:var(--sub);text-align:center;font-style:italic;font-family:var(--mono)}
+.hfd-costlbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;text-align:center;font-family:var(--mono);margin-top:1px}
+.hfd-exg  .hfd-costlbl{color:var(--cyan)}
+.hfd-base .hfd-costlbl{color:#f87171}
+/* disclaimer */
+.hfd-disc{font-size:7.5px;color:var(--sub);text-align:center;margin-top:.85rem;font-style:italic;line-height:1.5;font-family:var(--mono)}
+/* responsive */
+@media(max-width:700px){.hfd-cmp{grid-template-columns:1fr;gap:1.25rem}.hfd-cmpd{display:none}}
+@media(max-width:420px){.hfd-inner{grid-template-columns:1fr 44px 1fr 44px 1fr}}
+@media(max-width:380px){.hfd-wrap{display:none}}
 .hfd {
   display: grid;
   grid-template-columns: 1fr 72px 1fr 72px 1fr;
@@ -217,118 +320,264 @@
       <p class="hero-tagline">STATE · CONTEXT · IDENTITY · AUTHORITY</p>
 
       <div class="hfd-wrap" aria-hidden="true">
-        <div class="hfd">
-          <div class="hfd-chrome">
-            <span class="hfd-dot hfd-dot-r"></span>
-            <span class="hfd-dot hfd-dot-y"></span>
-            <span class="hfd-dot hfd-dot-g"></span>
-            <span class="hfd-chrome-label">EXERGYNET RUNTIME</span>
-          </div>
-          <div class="hfd-panel">
-            <div class="hfd-plabel">VAULT</div>
-            <div class="hfd-grid" id="hfd-vault-grid">
-              <div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div>
-              <div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div>
-              <div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div>
-              <div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div><div class="hfd-c on"></div>
-            </div>
-            <div class="hfd-mnum">101M</div>
-            <div class="hfd-munit">vectors</div>
-            <div class="hfd-pcap">persistent state</div>
-          </div>
-          <div class="hfd-conn">
-            <div class="hfd-ctag">xLMP</div>
-            <div class="hfd-track">
-              <div class="hfd-track-line"></div>
-              <div class="hfd-arrowhead"></div>
-              <div class="hfd-pk" id="hfd-pk1"></div>
-            </div>
-            <div class="hfd-ctag">select</div>
-          </div>
-          <div class="hfd-panel">
-            <div class="hfd-plabel">CONTEXT</div>
-            <div class="hfd-grid" id="hfd-ctx-grid">
-              <div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div>
-              <div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div>
-              <div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div>
-              <div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div>
-            </div>
-            <div class="hfd-mnum">847</div>
-            <div class="hfd-munit">tokens</div>
-            <div class="hfd-pcap">bounded delivery</div>
-          </div>
-          <div class="hfd-conn">
-            <div class="hfd-ctag">model</div>
-            <div class="hfd-track">
-              <div class="hfd-track-line"></div>
-              <div class="hfd-arrowhead"></div>
-              <div class="hfd-pk" id="hfd-pk2"></div>
-            </div>
-            <div class="hfd-ctag">proposes</div>
-          </div>
-          <div class="hfd-panel">
-            <div class="hfd-plabel">AUTHORITY</div>
-            <div class="hfd-shield-wrap">
-              <svg class="hfd-shield" id="hfd-shield" viewBox="0 0 42 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M21 2L4 10v13c0 10 7.3 19.4 17 22 9.7-2.6 17-12 17-22V10L21 2z" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="1.5"/>
-                <path id="hfd-check" class="hfd-smark hfd-smark-ok" d="M13 25l5.5 6L29 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-                <path id="hfd-x1" class="hfd-smark hfd-smark-no" d="M15 18l12 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-                <path id="hfd-x2" class="hfd-smark hfd-smark-no" d="M27 18L15 32" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
-              </svg>
-              <div class="hfd-verd" id="hfd-verd">— IDLE —</div>
-            </div>
-            <div class="hfd-pcap">independent control</div>
+        <!-- task header -->
+        <div class="hfd-thdr">
+          <span>TASK</span>
+          <span class="hfd-tn" id="hfd-tn">1</span>
+          <span>—</span>
+          <span class="hfd-tl" id="hfd-tl">Financial query</span>
+          <div class="hfd-tdots">
+            <div class="hfd-td on" id="hfd-d0"></div>
+            <div class="hfd-td" id="hfd-d1"></div>
+            <div class="hfd-td" id="hfd-d2"></div>
+            <div class="hfd-td" id="hfd-d3"></div>
           </div>
         </div>
-      </div>
+        <div class="hfd-cmp">
+          <!-- ExergyNet -->
+          <div class="hfd-side hfd-exg">
+            <div class="hfd-shdr">
+              <span class="hfd-sname">ExergyNet</span>
+              <span class="hfd-sflow">Persistent memory → xLMP → Authority</span>
+            </div>
+            <div class="hfd-card">
+              <div class="hfd-chrome">
+                <span class="hfd-cdot hfd-cdot-r"></span><span class="hfd-cdot hfd-cdot-y"></span><span class="hfd-cdot hfd-cdot-g"></span>
+                <span class="hfd-clab">EXERGYNET RUNTIME</span>
+              </div>
+              <div class="hfd-inner">
+                <div class="hfd-panel">
+                  <div class="hfd-plbl">VAULT</div>
+                  <div class="hfd-g" id="hfd-ev">
+                    <div class="hfd-c i2"></div><div class="hfd-c i3"></div><div class="hfd-c i1"></div><div class="hfd-c i4"></div><div class="hfd-c i2"></div><div class="hfd-c i1"></div>
+                    <div class="hfd-c i1"></div><div class="hfd-c i2"></div><div class="hfd-c i3"></div><div class="hfd-c i1"></div><div class="hfd-c i3"></div><div class="hfd-c i2"></div>
+                    <div class="hfd-c i3"></div><div class="hfd-c i2"></div><div class="hfd-c i2"></div><div class="hfd-c i4"></div><div class="hfd-c i2"></div><div class="hfd-c i3"></div>
+                    <div class="hfd-c i1"></div><div class="hfd-c i3"></div><div class="hfd-c i4"></div><div class="hfd-c i2"></div><div class="hfd-c i3"></div><div class="hfd-c i1"></div>
+                  </div>
+                  <div class="hfd-munit">vectors</div>
+                  <div class="hfd-pcap">persistent state</div>
+                </div>
+                <div class="hfd-conn">
+                  <div class="hfd-ctag">xLMP</div>
+                  <div class="hfd-track"><div class="hfd-tline"></div><div class="hfd-arr"></div><div class="hfd-pk" id="hfd-ep1"></div></div>
+                  <div class="hfd-ctag">select</div>
+                </div>
+                <div class="hfd-panel">
+                  <div class="hfd-plbl">CONTEXT</div>
+                  <div class="hfd-g" id="hfd-ec">
+                    <div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div>
+                    <div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div>
+                    <div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div>
+                    <div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div><div class="hfd-c"></div>
+                  </div>
+                  <div class="hfd-mnum" id="hfd-etk">847</div>
+                  <div class="hfd-munit">tokens</div>
+                  <div class="hfd-pcap">bounded delivery</div>
+                </div>
+                <div class="hfd-conn">
+                  <div class="hfd-ctag">model</div>
+                  <div class="hfd-track"><div class="hfd-tline"></div><div class="hfd-arr"></div><div class="hfd-pk" id="hfd-ep2"></div></div>
+                  <div class="hfd-ctag">proposes</div>
+                </div>
+                <div class="hfd-panel">
+                  <div class="hfd-plbl">AUTHORITY</div>
+                  <div class="hfd-sw">
+                    <div class="hfd-prule" id="hfd-eru">scope: read-only</div>
+                    <svg class="hfd-shld" id="hfd-es" viewBox="0 0 42 50" fill="none">
+                      <path d="M21 2L4 10v13c0 10 7.3 19.4 17 22 9.7-2.6 17-12 17-22V10L21 2z" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="1.5"/>
+                      <path id="hfd-eck" class="hfd-sm-ok" d="M13 25l5.5 6L29 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path id="hfd-ex1" class="hfd-sm-no" d="M15 18l12 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                      <path id="hfd-ex2" class="hfd-sm-no" d="M27 18L15 32" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+                    </svg>
+                    <div class="hfd-verd" id="hfd-evd">— IDLE —</div>
+                  </div>
+                  <div class="hfd-pcap">independent control</div>
+                </div>
+              </div>
+            </div>
+            <div class="hfd-trow">
+              <div class="hfd-therm"><div class="hfd-tbar" id="hfd-etm"></div></div>
+              <div class="hfd-tnote">Illustrative cost accumulation</div>
+            </div>
+            <div class="hfd-costlbl">Low relative cost</div>
+          </div>
+          <!-- divider -->
+          <div class="hfd-cmpd"></div>
+          <!-- Baseline -->
+          <div class="hfd-side hfd-base">
+            <div class="hfd-shdr">
+              <span class="hfd-sname">Context-heavy baseline</span>
+              <span class="hfd-sflow">Retrieve → Expand → Model</span>
+            </div>
+            <div class="hfd-card">
+              <div class="hfd-chrome">
+                <span class="hfd-cdot hfd-cdot-r"></span><span class="hfd-cdot hfd-cdot-y"></span><span class="hfd-cdot hfd-cdot-g"></span>
+                <span class="hfd-clab">BASELINE RUNTIME</span>
+              </div>
+              <div class="hfd-inner">
+                <div class="hfd-panel">
+                  <div class="hfd-plbl">CORPUS</div>
+                  <div class="hfd-g" id="hfd-bv">
+                    <div class="hfd-c b3"></div><div class="hfd-c b4"></div><div class="hfd-c b3"></div><div class="hfd-c b2"></div><div class="hfd-c b4"></div><div class="hfd-c b3"></div>
+                    <div class="hfd-c b2"></div><div class="hfd-c b3"></div><div class="hfd-c b4"></div><div class="hfd-c b3"></div><div class="hfd-c b3"></div><div class="hfd-c b4"></div>
+                    <div class="hfd-c b4"></div><div class="hfd-c b3"></div><div class="hfd-c b3"></div><div class="hfd-c b4"></div><div class="hfd-c b3"></div><div class="hfd-c b4"></div>
+                    <div class="hfd-c b3"></div><div class="hfd-c b4"></div><div class="hfd-c b2"></div><div class="hfd-c b3"></div><div class="hfd-c b4"></div><div class="hfd-c b3"></div>
+                  </div>
+                  <div class="hfd-munit">vectors</div>
+                  <div class="hfd-pcap">full corpus</div>
+                </div>
+                <div class="hfd-conn">
+                  <div class="hfd-ctag">retrieve</div>
+                  <div class="hfd-track"><div class="hfd-tline"></div><div class="hfd-arr"></div><div class="hfd-pk" id="hfd-bp1"></div></div>
+                  <div class="hfd-ctag">expand</div>
+                </div>
+                <div class="hfd-panel">
+                  <div class="hfd-plbl">CONTEXT</div>
+                  <div class="hfd-g" id="hfd-bc">
+                    <div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div>
+                    <div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div>
+                    <div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div>
+                    <div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div><div class="hfd-c bpre"></div>
+                  </div>
+                  <div class="hfd-mnum">32K</div>
+                  <div class="hfd-munit">tokens*</div>
+                  <div class="hfd-pcap">full history</div>
+                </div>
+                <div class="hfd-conn">
+                  <div class="hfd-ctag">model</div>
+                  <div class="hfd-track"><div class="hfd-tline"></div><div class="hfd-arr"></div><div class="hfd-pk" id="hfd-bp2"></div></div>
+                  <div class="hfd-ctag">infers</div>
+                </div>
+                <div class="hfd-panel">
+                  <div class="hfd-plbl">EXECUTE</div>
+                  <div class="hfd-sw">
+                    <div class="hfd-prule">no policy gate</div>
+                    <svg class="hfd-shld" id="hfd-bs" viewBox="0 0 42 50" fill="none">
+                      <rect x="4" y="8" width="34" height="34" rx="5" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="1.5"/>
+                      <line id="hfd-bex1" class="hfd-sm-el" x1="11" y1="25" x2="29" y2="25" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      <path id="hfd-bex2" class="hfd-sm-ec" d="M22 18l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <div class="hfd-verd" id="hfd-bvd">— IDLE —</div>
+                  </div>
+                  <div class="hfd-pcap">model decides</div>
+                </div>
+              </div>
+            </div>
+            <div class="hfd-trow">
+              <div class="hfd-therm"><div class="hfd-tbar" id="hfd-btm"></div></div>
+              <div class="hfd-tnote">Illustrative cost accumulation</div>
+            </div>
+            <div class="hfd-costlbl">Higher relative cost</div>
+          </div>
+        </div>
+        <p class="hfd-disc">*Conceptual comparison only. The 32K baseline and cost bar proportions are visual placeholders, not measured benchmark results.</p>
+      </div><!-- /hfd-wrap -->
       <script>
       (function(){
-        var CYCLE=5500;
-        var vc=document.getElementById('hfd-vault-grid').children;
-        var cc=document.getElementById('hfd-ctx-grid').children;
-        var pk1=document.getElementById('hfd-pk1');
-        var pk2=document.getElementById('hfd-pk2');
-        var sh=document.getElementById('hfd-shield');
-        var vd=document.getElementById('hfd-verd');
-        var amb=null, SEL=[2,7,14];
-        function resetCtx(){ for(var i=0;i<cc.length;i++) cc[i].classList.remove('sel'); }
-        function lightCtx(){ for(var i=0;i<SEL.length;i++) cc[SEL[i]].classList.add('sel'); }
-        function fire(el){ el.classList.remove('go'); void el.offsetWidth; el.classList.add('go'); }
+        function $(id){return document.getElementById(id);}
+        var CYCLE=7000;
+        var POLICIES=[
+          {task:'Financial query',    rule:'scope: read-only',   verdict:'PERMIT'},
+          {task:'Cross-region write', rule:'geo: restricted',    verdict:'DENY'},
+          {task:'API request 47/100', rule:'rate: within limit', verdict:'PERMIT'},
+          {task:'Unverified request', rule:'identity: required', verdict:'DENY'},
+        ];
+        var TOKENS=[847,391,2891,1204];
+        var SEL=[[2,7,14],[0,9,20],[4,11,17],[1,13,22]];
+        var COLS=[[4,5,10,11,16,17,22,23],[2,3,8,9,14,15,20,21],[0,1,6,7,12,13,18,19]];
+        var exgPct=0,basePct=0,ti=0,amb=null;
+        var EV=$('hfd-ev').children,EC=$('hfd-ec').children;
+        var BV=$('hfd-bv').children,BC=$('hfd-bc').children;
+        var ep1=$('hfd-ep1'),ep2=$('hfd-ep2');
+        var bp1=$('hfd-bp1'),bp2=$('hfd-bp2');
+        var esh=$('hfd-es'),evd=$('hfd-evd'),eru=$('hfd-eru');
+        var eck=$('hfd-eck'),ex1=$('hfd-ex1'),ex2=$('hfd-ex2');
+        var bsh=$('hfd-bs'),bvd=$('hfd-bvd');
+        var bex1=$('hfd-bex1'),bex2=$('hfd-bex2');
+        var etm=$('hfd-etm'),btm=$('hfd-btm');
+        var tnEl=$('hfd-tn'),tlEl=$('hfd-tl'),etkEl=$('hfd-etk');
+        function fire(el){el.classList.remove('go');void el.offsetWidth;el.classList.add('go');}
+        function resetEC(){for(var i=0;i<EC.length;i++)EC[i].classList.remove('sel');}
+        function resetBC(){for(var i=0;i<BC.length;i++)BC[i].classList.remove('sel');}
         function resetAuth(){
-          sh.classList.remove('permit','deny');
-          vd.className='hfd-verd'; vd.textContent='— IDLE —';
-          document.getElementById('hfd-check').style.strokeDashoffset='32';
-          document.getElementById('hfd-x1').style.strokeDashoffset='32';
-          document.getElementById('hfd-x2').style.strokeDashoffset='32';
+          esh.classList.remove('permit','deny');
+          evd.className='hfd-verd';evd.textContent='— IDLE —';
+          eck.style.strokeDashoffset='32';
+          ex1.style.strokeDashoffset='32';
+          ex2.style.strokeDashoffset='32';
         }
-        function runAuth(){
-          vd.className='hfd-verd checking'; vd.textContent='CHECKING…';
+        function resetBase(){
+          bsh.classList.remove('exec');
+          bvd.className='hfd-verd';bvd.textContent='— IDLE —';
+          bex1.style.strokeDashoffset='18';
+          bex2.style.strokeDashoffset='20';
+        }
+        function ambPulse(){
+          var i=Math.floor(Math.random()*EV.length);
+          EV[i].classList.add('glow');
+          setTimeout(function(){EV[i].classList.remove('glow');},400);
+        }
+        function wave(){
+          COLS.forEach(function(col,ci){
+            setTimeout(function(){
+              col.forEach(function(j){EV[j].classList.add('wave');});
+              setTimeout(function(){col.forEach(function(j){EV[j].classList.remove('wave');});},280);
+            },ci*140);
+          });
+        }
+        function runCycle(){
+          var p=POLICIES[ti%4],sel=SEL[ti%4],tok=TOKENS[ti%4];
+          tnEl.textContent=(ti%4)+1;
+          tlEl.textContent=p.task;
+          for(var d=0;d<4;d++){
+            var dot=$('hfd-d'+d);
+            if(dot)dot.className='hfd-td'+(d===ti%4?' on':'');
+          }
+          resetEC();resetAuth();resetBC();resetBase();
+          eru.textContent=p.rule;
+          etkEl.style.opacity='0';
+          setTimeout(function(){etkEl.textContent=tok.toLocaleString();etkEl.style.opacity='1';},250);
+          if(amb)clearInterval(amb);
+          amb=setInterval(ambPulse,420);
+          setTimeout(wave,600);
           setTimeout(function(){
-            if(Math.random()>0.15){
-              sh.classList.add('permit');
-              document.getElementById('hfd-check').style.strokeDashoffset='0';
-              vd.className='hfd-verd permit'; vd.textContent='✓ PERMIT';
-            } else {
-              sh.classList.add('deny');
-              document.getElementById('hfd-x1').style.strokeDashoffset='0';
-              document.getElementById('hfd-x2').style.strokeDashoffset='0';
-              vd.className='hfd-verd deny'; vd.textContent='✗ DENY';
+            fire(ep1);
+            for(var i=0;i<BV.length;i++)BV[i].classList.add('glow');
+            fire(bp1);
+          },900);
+          setTimeout(function(){for(var i=0;i<BV.length;i++)BV[i].classList.remove('glow');},1300);
+          setTimeout(function(){
+            sel.forEach(function(i){EC[i].classList.add('sel');});
+            fire(ep2);
+            for(var i=0;i<BC.length;i++)BC[i].classList.add('sel');
+            fire(bp2);
+            evd.className='hfd-verd checking';evd.textContent='CHECKING…';
+            bsh.classList.add('exec');
+            bex1.style.strokeDashoffset='0';
+            bex2.style.strokeDashoffset='0';
+            bvd.className='hfd-verd exec';bvd.textContent='▶ EXECUTE';
+          },1700);
+          setTimeout(function(){
+            if(p.verdict==='PERMIT'){
+              esh.classList.add('permit');
+              eck.style.strokeDashoffset='0';
+              evd.className='hfd-verd permit';evd.textContent='✓ PERMIT';
+            }else{
+              esh.classList.add('deny');
+              ex1.style.strokeDashoffset='0';ex2.style.strokeDashoffset='0';
+              evd.className='hfd-verd deny';evd.textContent='✗ DENY';
             }
-          },1100);
+          },2900);
+          setTimeout(function(){
+            exgPct=Math.min(exgPct+6,95);
+            basePct=Math.min(basePct+18,95);
+            etm.style.width=exgPct+'%';
+            btm.style.width=basePct+'%';
+          },3800);
+          ti++;
         }
-        function pulse(){
-          var i=Math.floor(Math.random()*vc.length);
-          vc[i].classList.add('glow');
-          setTimeout(function(){ vc[i].classList.remove('glow'); },400);
-        }
-        function cycle(){
-          if(amb) clearInterval(amb);
-          amb=setInterval(pulse,450);
-          resetCtx(); resetAuth();
-          setTimeout(function(){ fire(pk1); },800);
-          setTimeout(function(){ lightCtx(); fire(pk2); runAuth(); },1700);
-        }
-        cycle(); setInterval(cycle,CYCLE);
+        runCycle();
+        setInterval(runCycle,CYCLE);
       })();
       </script>
     </div>
