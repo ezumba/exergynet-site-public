@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#080b12" id="meta-theme-color">
+  <title>Intellectual Property | ExergyNet</title>
+  <meta name="description" content="ExergyNet's intellectual property portfolio: three filed U.S. provisional patent applications covering sovereign AI memory, deterministic retrieval, persistent computational state, and physical-state intelligence, developed within the Type-II Physics architectural framework.">
+  <meta property="og:title" content="Intellectual Property | ExergyNet">
+  <meta property="og:description" content="Three filed U.S. provisional patent applications. Sovereign computational memory, persistent AI state governance, epistemic-state intelligence, and execution-state mobility.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://exergynet.org/intellectual-property.html">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Intellectual Property | ExergyNet">
+  <meta name="twitter:description" content="ExergyNet's patent-pending technology portfolio: sovereign computational memory, persistent AI state, and physical-state intelligence.">
+  <link rel="canonical" href="https://exergynet.org/intellectual-property.html">
+  <link rel="icon" href="assets/favicon.png">
+  <link rel="stylesheet" href="exergynet-ui.css">
+  <script>
+    (function(){
+      try {
+        var t = localStorage.getItem('exg-theme');
+        if (!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+        var m = document.getElementById('meta-theme-color');
+        if (m) m.setAttribute('content', t === 'light' ? '#f8fafc' : '#080b12');
+      } catch(e) {}
+    })();
+  </script>
+  <style>
+    /* ── Intellectual Property Page ──────────────────────────────────────── */
+    .ip-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      margin-top: 10px;
+    }
+    .ip-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 26px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .ip-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font: 700 10px/1 var(--mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green);
+    }
+    .ip-status::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 4px rgba(128, 219, 181, 0.12);
+      flex-shrink: 0;
+    }
+    .ip-card-title {
+      font-size: 14px;
+      font-weight: 680;
+      line-height: 1.55;
+      color: var(--ink);
+      margin: 0;
+    }
+    .ip-card-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      padding: 13px 14px;
+      background: var(--panel2);
+      border-radius: 11px;
+      border: 1px solid var(--line);
+    }
+    .ip-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .ip-meta-label {
+      font: 10px/1 var(--mono);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--sub);
+      flex-shrink: 0;
+    }
+    .ip-meta-value {
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+    }
+    .ip-card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.72;
+      margin: 0;
+      flex: 1;
+    }
+    /* Type-II block */
+    .ip-t2-block {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 34px 36px;
+    }
+    .ip-t2-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font: 700 10px/1 var(--mono);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 16px;
+    }
+    .ip-t2-title {
+      font-size: 22px;
+      font-weight: 720;
+      letter-spacing: -0.03em;
+      line-height: 1.25;
+      color: var(--ink);
+      margin: 0 0 14px;
+    }
+    .ip-t2-body {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.8;
+      max-width: 760px;
+      margin: 0 0 14px;
+    }
+    .ip-t2-filing {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      font: 10.5px/1.6 var(--mono);
+      color: var(--sub);
+      letter-spacing: 0.04em;
+      padding: 10px 13px;
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 9px;
+    }
+    .ip-t2-filing-sep {
+      color: var(--border);
+      margin: 0 2px;
+    }
+    /* Technology domains */
+    .ip-domains-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      margin-top: 10px;
+    }
+    .ip-domain-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 18px;
+    }
+    .ip-domain-num {
+      font: 700 10px/1 var(--mono);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--cyan);
+      margin-bottom: 10px;
+    }
+    .ip-domain-title {
+      font-size: 13px;
+      font-weight: 640;
+      line-height: 1.5;
+      color: var(--ink);
+      margin: 0 0 7px;
+    }
+    .ip-domain-desc {
+      font-size: 12px;
+      color: var(--sub);
+      line-height: 1.65;
+      margin: 0;
+    }
+    /* Contact/engagement block */
+    .ip-cta-block {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 32px 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+    }
+    .ip-cta-text h2 {
+      font-size: clamp(20px, 2.5vw, 30px);
+      letter-spacing: -0.04em;
+      margin: 0 0 11px;
+    }
+    .ip-cta-text p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+      max-width: 560px;
+      margin: 0 0 7px;
+    }
+    .ip-cta-text p:last-child { color: var(--sub); font-size: 13px; }
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .ip-grid { grid-template-columns: 1fr; }
+      .ip-domains-grid { grid-template-columns: repeat(2, 1fr); }
+      .ip-cta-block { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 640px) {
+      .ip-t2-block, .ip-cta-block { padding: 24px 20px; }
+      .ip-domains-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"></div>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="ExergyNet home">
+      <img src="assets/nav-logo-green.png" alt="ExergyNet" class="logo-dark">
+      <img src="assets/nav-logo-navy.png" alt="ExergyNet" class="logo-light">
+    </a>
+    <nav class="navlinks" id="navlinks" aria-label="Main navigation">
+      <a href="index.html">Platform</a>
+      <a href="continuity.html">Continuity</a>
+      <a href="https://studio.exergynet.org/">Studio</a>
+      <a href="docs.html">Developers</a>
+      <a href="whitepaper.html">Research</a>
+      <a href="intellectual-property.html" aria-current="page">IP Portfolio</a>
+      <a href="legal.html">Legal</a>
+    </nav>
+    <div class="nav-right">
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light/dark theme">&#9788;</button>
+      <a class="button" href="https://portal.exergynet.org/">Portal Sign In <span class="arrow" aria-hidden="true">&#8599;</span></a>
+      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navlinks" type="button">&#9776;</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ── SECTION A: Foundation ─────────────────────────────────────────────── -->
+  <section class="page-header">
+    <div class="wrap">
+      <div class="hero-pill"><span class="pulse" aria-hidden="true"></span>Intellectual Property</div>
+      <h1>Proprietary Computing.<br><span class="gradient">Protected Architecture.</span><br>Sovereign Innovation.</h1>
+      <p class="hero-lead" style="margin-bottom:0;max-width:720px">
+        ExergyNet's technology portfolio encompasses three filed United States provisional patent applications addressing sovereign computational memory, deterministic retrieval, persistent artificial intelligence state, governed execution, and related computational systems. These innovations form part of ExergyNet's broader technology architecture, developed within the Type-II Physics framework.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── SECTION B: Patent Portfolio ──────────────────────────────────────── -->
+  <section class="section" style="padding-top:24px">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Patent Portfolio</div>
+        <h2>Filed United States Provisional Applications</h2>
+        <p>Three independently filed provisional patent applications protecting ExergyNet's core computational technologies. Each application is a U.S. provisional under 35&nbsp;U.S.C.&nbsp;§&nbsp;111(b) and establishes a priority date; it is not yet an issued patent.</p>
+      </div>
+
+      <div class="ip-grid">
+
+        <!-- PPA-001 -->
+        <article class="ip-card">
+          <div class="ip-status">U.S. Provisional Application Filed</div>
+          <h3 class="ip-card-title">Sovereign Cryptographic Memory Substrate and Deterministic Retrieval Protocol for Artificial Intelligence Inference</h3>
+          <div class="ip-card-meta">
+            <div class="ip-meta-row">
+              <span class="ip-meta-label">Application</span>
+              <span class="ip-meta-value">64/111,103</span>
+            </div>
+            <div class="ip-meta-row">
+              <span class="ip-meta-label">Filed</span>
+              <span class="ip-meta-value">2026</span>
+            </div>
+            <div class="ip-meta-row">
+              <span class="ip-meta-label">Inventor</span>
+              <span class="ip-meta-value">Seven Ezumba</span>
+            </div>
+            <div class="ip-meta-row">
+              <span class="ip-meta-label">Assignee</span>
+              <span class="ip-meta-value">Ezumba Dynasty Trust</span>
+            </div>
+          </div>
+          <p class="ip-card-desc">Sovereign computational memory and deterministic retrieval for artificial intelligence inference systems. Covers content-addressed persistent document storage, cryptographic agent identity, evidence-bounded retrieval protocols, and auditable build authorization for AI infrastructure.</p>
+        </article>
+
+        <!-- PPA-002 -->
+        <article class="ip-card">
+          <div class="ip-status">U.S. Provisional Application Filed</div>
+          <h3 class="ip-card-title">Systems and Methods for Governing Persistent Artificial Intelligence State, Work-Compressed Deterministic Memory Retrieval, and Cryptographic Consequence Authorization</h3>
+          <div class="ip-card-meta">
+            <div class="ip-meta-row">
+              <span class="ip-meta-label">Application</span>
+              <span class="ip-meta-value">64/134,973</span>
+            </div>
+            <div class="ip-meta-row">
+              <span class="ip-meta-label">Filed</span>
+              <span class="ip-meta-value">2026</span>
+            </div>
+            <div class="ip-meta-row">
+              <span class="ip-meta-label">Inventor</span>
+              <span class="ip-meta-value">Seven Ezumba</span>
+            </div>
+            <div class="ip-meta-row">
+              <span class="ip-meta-label">Assignee</span>
+              <span class="ip-meta-value">Ezumba Dynasty Trust</span>
+            </div>
+          </div>
+          <p class="ip-card-desc">Persistent computational state governance, deterministic memory retrieval, and cryptographically governed execution for autonomous AI agents. Covers cross-model state persistence, consequence-authority architecture, and AI agent delegation systems.</p>
+        </article>
+
+        <!-- PPA-004 -->
+        <article class="ip-card">
+          <div class="ip-status">U.S. Provisional Application Filed</div>
+          <h3 class="ip-card-title">Systems and Methods for Epistemic-State Governance, Physical Truth Convergence, Witness Trust Governance, Deterministic Work-Compression Retrieval, Physical State Economics, and Execution-State Mobility in Artificial Intelligence Inference</h3>
+          <div class="ip-card-meta">
+            <div class="ip-meta-row">
+              <span class="ip-meta-label">Application</span>
+              <span class="ip-meta-value">64/167,637</span>
+            </div>
+            <div class="ip-meta-row">
+              <span class="ip-meta-label">Filed</span>
+              <span class="ip-meta-value">2026</span>
+            </div>
+            <div class="ip-meta-row">
+              <span class="ip-meta-label">Inventor</span>
+              <span class="ip-meta-value">Seven Ezumba</span>
+            </div>
+            <div class="ip-meta-row">
+              <span class="ip-meta-label">Assignee</span>
+              <span class="ip-meta-value">Ezumba Dynasty Trust</span>
+            </div>
+          </div>
+          <p class="ip-card-desc">Epistemic-state governance, physical-state intelligence, trust governance, and execution-state mobility for AI inference. Covers multi-plane physical truth convergence, work-compression retrieval, physical state economics, and portable execution-state objects.</p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION C: Type-II Physics Foundation ─────────────────────────────── -->
+  <section class="section section-alt">
+    <div class="wrap">
+      <div class="ip-t2-block">
+        <div class="ip-t2-eyebrow">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/><line x1="6" y1="2" x2="6" y2="10" stroke="currentColor" stroke-width="1.5"/><line x1="2" y1="6" x2="10" y2="6" stroke="currentColor" stroke-width="1.5"/></svg>
+          Governing Architecture
+        </div>
+        <h2 class="ip-t2-title">Type-II Physics: The Governing Computational Architecture</h2>
+        <p class="ip-t2-body">
+          Type-II Physics provides the foundational architectural framework within which ExergyNet develops its proprietary computational systems — a physical computing architecture grounded in exergonic logic processing and deterministic state computation. ExergyNet's patent-pending technologies address specific functional expressions of this broader framework.
+        </p>
+        <p class="ip-t2-body">
+          The Type-II Physics architecture is independently patent-pending, based on provisional patent applications filed in 2025. A nonprovisional patent application has been filed. The architectural relationship between Type-II Physics and ExergyNet's filed provisional applications represents a design relationship, not an established or expressly claimed patent priority chain. No legal priority relationship between these applications should be inferred from this presentation.
+        </p>
+        <div class="ip-t2-filing">
+          <span>Patent Pending</span>
+          <span class="ip-t2-filing-sep">&middot;</span>
+          <span>Provisional Basis: Filed 2025</span>
+          <span class="ip-t2-filing-sep">&middot;</span>
+          <span>Nonprovisional Filed 2026</span>
+          <span class="ip-t2-filing-sep">&middot;</span>
+          <span>Inventor: Seven Ezumba</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION D: Technology Applications ────────────────────────────────── -->
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Technology Domains</div>
+        <h2>Patent-Covered Application Areas</h2>
+        <p>ExergyNet's filed applications address five publicly disclosed computational domains with identifiable commercial applications.</p>
+      </div>
+      <div class="ip-domains-grid">
+
+        <div class="ip-domain-card">
+          <div class="ip-domain-num">Domain 01</div>
+          <h3 class="ip-domain-title">Sovereign AI Memory and Deterministic Retrieval</h3>
+          <p class="ip-domain-desc">Content-addressed persistent memory for AI agents with cryptographic provenance, bounded evidence extraction, and flat-rate cost accounting.</p>
+        </div>
+
+        <div class="ip-domain-card">
+          <div class="ip-domain-num">Domain 02</div>
+          <h3 class="ip-domain-title">Persistent Computational State and Execution Governance</h3>
+          <p class="ip-domain-desc">Cross-model AI state persistence, consequence-authority enforcement, and delegation governance for autonomous systems operating across compute environments.</p>
+        </div>
+
+        <div class="ip-domain-card">
+          <div class="ip-domain-num">Domain 03</div>
+          <h3 class="ip-domain-title">Cryptographically Verifiable Computational Operations</h3>
+          <p class="ip-domain-desc">On-chain verifiable computation, zero-knowledge proof integration, and auditable build authorization for production AI infrastructure.</p>
+        </div>
+
+        <div class="ip-domain-card">
+          <div class="ip-domain-num">Domain 04</div>
+          <h3 class="ip-domain-title">Physical-State Intelligence and Trust Governance</h3>
+          <p class="ip-domain-desc">Multi-plane physical truth convergence, epistemic-state governance, and witness-trust systems governing AI inference from real-world observational data.</p>
+        </div>
+
+        <div class="ip-domain-card">
+          <div class="ip-domain-num">Domain 05</div>
+          <h3 class="ip-domain-title">Energy-Aware and Physical-State Computing</h3>
+          <p class="ip-domain-desc">Physical state economics, post-inference energy attribution, telemetry-governed computational infrastructure, and execution-state mobility across compute nodes.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SECTION E: Commercial and Institutional Engagement ─────────────────── -->
+  <section class="section section-alt">
+    <div class="wrap">
+      <div class="ip-cta-block">
+        <div class="ip-cta-text">
+          <div class="eyebrow" style="margin-bottom:12px"><span class="dot" aria-hidden="true"></span>Licensing &amp; Development</div>
+          <h2>Technology Licensing and Strategic Development</h2>
+          <p>ExergyNet engages with enterprise technology organizations, computational infrastructure providers, research institutions, and qualified strategic partners regarding technology evaluation, licensing, and development opportunities.</p>
+          <p>Detailed patent and technical diligence materials are made available through controlled disclosure arrangements.</p>
+        </div>
+        <div style="flex-shrink:0">
+          <a href="connect.html" class="button">Inquire About Licensing <span class="arrow" aria-hidden="true">&#8599;</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-bottom" style="border-top:0;padding-top:0">
+      <a class="brand" href="index.html" aria-label="ExergyNet home">
+        <img src="assets/nav-logo-green.png" alt="ExergyNet" class="logo-dark">
+        <img src="assets/nav-logo-navy.png" alt="ExergyNet" class="logo-light">
+      </a>
+      <span>&#169; 2026 EDT INC. &middot; All rights reserved.</span>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="continuity.html">Continuity</a>
+        <a href="https://studio.exergynet.org/">Studio</a>
+        <a href="docs.html">Docs</a>
+        <a href="intellectual-property.html" aria-current="page">IP Portfolio</a>
+        <a href="legal.html">Legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<dialog class="search-dialog" id="search-dialog" aria-label="Search">
+  <div class="search-top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>
+    <label class="sr-only" for="site-search">Search pages and guides</label>
+    <input id="site-search" type="search" placeholder="Search pages and guides&#8230;" autocomplete="off">
+    <button class="search-esc" aria-label="Close search" type="button">Esc</button>
+  </div>
+  <div class="search-results" role="listbox"></div>
+  <div class="search-footer-bar">Tab to navigate &middot; Enter to open &middot; Esc to close</div>
+</dialog>
+
+<div class="toast" role="status" aria-live="polite" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>
