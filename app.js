@@ -45,6 +45,12 @@ const SEARCH_INDEX = [
     keywords: 'legal liability void edt inc terms protocol',
   },
   {
+    title: 'Intellectual Property',
+    description: 'Proprietary technology and patent-pending portfolio developed within the Type-II Physics framework. Strategic licensing and development.',
+    url: 'intellectual-property.html',
+    keywords: 'intellectual property patent pending portfolio licensing strategic engagement type-ii physics sovereign memory',
+  },
+  {
     title: 'Local memory quickstart',
     description: 'Install Vanguard Memory Node and connect to Claude Desktop or any MCP client.',
     url: 'docs.html',

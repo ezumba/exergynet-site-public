@@ -24,6 +24,7 @@
 <div class="ambient" aria-hidden="true"></div>
 <a class="skip" href="#main">Skip to content</a>
 
+<!-- CANONICAL:HEADER:START -->
 <header class="site-header">
   <div class="wrap nav">
     <a class="brand" href="index.html" aria-label="ExergyNet home">
@@ -31,11 +32,12 @@
       <img src="assets/nav-logo-navy.png" alt="ExergyNet" class="logo-light">
     </a>
     <nav class="navlinks" id="navlinks" aria-label="Main navigation">
-      <a href="index.html">Platform</a>
+      <a href="index.html#platform">Platform</a>
       <a href="continuity.html">Continuity</a>
       <a href="https://studio.exergynet.org/">Studio</a>
       <a href="docs.html">Developers</a>
       <a href="whitepaper.html">Research</a>
+      <a href="intellectual-property.html">IP Portfolio</a>
       <a href="legal.html" aria-current="page">Legal</a>
     </nav>
     <div class="nav-right">
@@ -50,6 +52,7 @@
     </div>
   </div>
 </header>
+<!-- CANONICAL:HEADER:END -->
 
 <main id="main">
   <section class="page-header">
@@ -104,25 +107,51 @@
   </section>
 </main>
 
-<footer class="site-footer">
+<!-- CANONICAL:FOOTER:START -->
+<footer class="site-footer" id="company">
   <div class="wrap">
-    <div class="footer-bottom" style="border-top:0;padding-top:0">
-      <a class="brand" href="index.html" aria-label="ExergyNet home">
-        <img src="assets/nav-logo-green.png" alt="ExergyNet" class="logo-dark">
-        <img src="assets/nav-logo-navy.png" alt="ExergyNet" class="logo-light">
-      </a>
-      <span>© 2026 EDT INC. · All rights reserved.</span>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html" aria-label="ExergyNet home">
+          <img src="assets/nav-logo-green.png" alt="ExergyNet" class="logo-dark">
+          <img src="assets/nav-logo-navy.png" alt="ExergyNet" class="logo-light">
+        </a>
+        <p>Persistent state. Bounded context.<br>Independent authority for machine intelligence.</p>
+      </div>
+      <div class="foot-col">
+        <strong>Explore</strong>
+        <a href="index.html#platform">Platform overview</a>
+        <a href="continuity.html">Agent Continuity</a>
+        <a href="https://studio.exergynet.org/">ExergyNet Studio ↗</a>
+        <a href="security.html">Security</a>
+      </div>
+      <div class="foot-col">
+        <strong>Build</strong>
+        <a href="docs.html">Documentation</a>
+        <a href="https://github.com/ezumba/vanguard-memory-node">Open source ↗</a>
+        <a href="api-integration.html">API reference</a>
+        <a href="proof.html">Verification status</a>
+      </div>
+      <div class="foot-col">
+        <strong>Research</strong>
+        <a href="whitepaper.html">White paper V5</a>
+        <a href="benchmarks.html">Benchmarks</a>
+        <a href="vanguard.html">Vanguard</a>
+        <a href="https://x.com/ExergyNet">Follow ExergyNet ↗</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 EDT INC. · Infrastructure for machine intelligence.</span>
       <div class="footer-links">
-        <a href="index.html">Home</a>
-        <a href="continuity.html">Continuity</a>
-        <a href="https://studio.exergynet.org/">Studio</a>
-        <a href="docs.html">Docs</a>
+        <a href="intellectual-property.html">Intellectual Property</a>
         <a href="legal.html">Legal</a>
       </div>
     </div>
   </div>
 </footer>
+<!-- CANONICAL:FOOTER:END -->
 
+<!-- CANONICAL:SEARCH:START -->
 <dialog class="search-dialog" id="search-dialog" aria-label="Search">
   <div class="search-top">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>
@@ -135,6 +164,7 @@
 </dialog>
 
 <div class="toast" role="status" aria-live="polite" hidden></div>
+<!-- CANONICAL:SEARCH:END -->
 <script src="app.js"></script>
 </body>
 </html>
