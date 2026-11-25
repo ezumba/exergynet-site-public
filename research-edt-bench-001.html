@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDT-BENCH-001: 76.2% Accuracy on LongMemEval-S | ExergyNet Research</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta name="description" content="ExergyNet achieves 76.2% accuracy on LongMemEval-S with 91.6% lower context consumption versus session-level BM25. 500 questions, full methodology and statistical analysis. Published by EDT INC.">
+<meta name="keywords" content="ExergyNet benchmark, LongMemEval, conversational memory, xLMP, context efficiency, 76.2% accuracy, 91.6% token reduction, EDT-BENCH-001">
+<link rel="canonical" href="https://exergynet.org/research-edt-bench-001.html">
+<meta property="og:title" content="ExergyNet Achieves 76.2% Accuracy on LongMemEval-S with 91.6% Lower Context Consumption">
+<meta property="og:description" content="381 correct answers across 500 LongMemEval-S questions. 91.6% fewer prompt tokens than session-level BM25. Full methodology, statistical analysis, and research limitations.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://exergynet.org/research-edt-bench-001.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ExergyNet: 76.2% on LongMemEval-S, 91.6% Lower Context">
+<meta name="twitter:description" content="381 correct answers, 2,456 mean tokens/query vs 29,382 for BM25. Full benchmark report by EDT INC.">
+<link rel="stylesheet" href="style.css">
+<script>
+(function(){
+  var t = localStorage.getItem('exg-theme');
+  if (!t) t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<style>
+  .bench-hero{position:relative;overflow:hidden;padding:6rem 0 4rem;}
+  .bench-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;}
+  .result-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;border:1px solid var(--border-mid);background:var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-top:2rem;}
+  .result-cell{background:var(--bg-card);padding:1.35rem;}
+  .result-value{font-family:var(--display);font-size:clamp(2rem,5vw,3.2rem);line-height:.9;font-weight:900;color:var(--accent);margin-bottom:.55rem;}
+  .result-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text);line-height:1.45;}
+  .result-scope{font-size:12px;color:var(--text-soft);line-height:1.45;margin-top:.55rem;}
+
+  /* Data table */
+  .data-table{width:100%;border-collapse:collapse;font-size:14px;margin-top:1rem;}
+  .data-table th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-soft);padding:.6rem .75rem;border-bottom:1px solid var(--border-mid);text-align:left;}
+  .data-table th:not(:first-child){text-align:right;}
+  .data-table td{padding:.55rem .75rem;border-bottom:1px solid var(--border);color:var(--text);}
+  .data-table td:not(:first-child){text-align:right;font-family:var(--mono);font-size:13px;}
+  .data-table tr.highlight td{color:var(--accent);font-weight:600;}
+  .data-table tr.oracle-row td{color:var(--blue);}
+  .data-table .delta-pos{color:var(--accent);}
+  .data-table .delta-neg{color:var(--amber);}
+  .data-table .delta-tie{color:var(--text-soft);}
+
+  /* Chart containers */
+  .chart-wrap{border:1px solid var(--border);border-radius:var(--radius);background:rgba(0,0,0,.1);overflow:hidden;margin-top:1rem;}
+
+  /* Stat box */
+  .stat-box{border:1px solid var(--border);background:var(--bg-card);border-radius:var(--radius);padding:1.25rem;margin-bottom:1rem;}
+  .stat-box p{font-size:14px;color:var(--text-soft);line-height:1.65;margin-top:.5rem;}
+
+  /* Method grid */
+  .method-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-top:1rem;}
+  .method-item{border:1px solid var(--border);border-radius:var(--radius);padding:1rem;}
+  .method-item strong{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-soft);margin-bottom:.35rem;}
+  .method-item span{font-size:14px;color:var(--text);}
+
+  /* Limitation card */
+  .limit-card{border:1px solid var(--border-mid);background:var(--bg-card);border-radius:var(--radius);padding:1.25rem;margin-bottom:.75rem;}
+  .limit-card strong{color:var(--amber);}
+
+  /* Artifact row */
+  .artifact-row{display:flex;align-items:baseline;gap:.75rem;border-bottom:1px solid var(--border);padding:.6rem 0;font-size:13px;}
+  .artifact-row:last-child{border-bottom:none;}
+  .artifact-name{font-family:var(--mono);font-size:11px;color:var(--text);min-width:280px;}
+  .artifact-hash{font-family:var(--mono);font-size:10px;color:var(--text-faint);word-break:break-all;}
+
+  /* TOC */
+  .toc{border:1px solid var(--border);background:var(--bg-card);border-radius:var(--radius);padding:1.25rem;margin-bottom:2rem;}
+  .toc strong{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-soft);margin-bottom:.65rem;}
+  .toc a{display:block;font-size:13px;color:var(--text-soft);padding:.2rem 0;transition:color .15s;}
+  .toc a:hover{color:var(--accent);}
+
+  /* Section divider */
+  .section-divider{border:none;border-top:1px solid var(--border);margin:3rem 0;}
+
+  @media(max-width:900px){.result-strip{grid-template-columns:repeat(2,1fr)}.method-grid{grid-template-columns:1fr}}
+  @media(max-width:640px){.result-strip{grid-template-columns:1fr}.bench-hero{padding:4rem 0 3rem}}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  "name": "ExergyNet Achieves 76.2% Accuracy on LongMemEval-S with 91.6% Lower Context Consumption",
+  "headline": "ExergyNet Achieves 76.2% Accuracy on LongMemEval-S with 91.6% Lower Context Consumption",
+  "datePublished": "2026-11-25",
+  "publisher": {
+    "@type": "Organization",
+    "name": "EDT INC",
+    "url": "https://exergynet.org"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "EDT INC",
+    "email": "ai@exergynet.org"
+  },
+  "description": "EDT-BENCH-001: ExergyNet xLMP achieves 76.2% accuracy on LongMemEval-S (500 questions) with 91.6% lower provider-reported prompt token consumption versus session-level BM25.",
+  "url": "https://exergynet.org/research-edt-bench-001.html",
+  "keywords": "LongMemEval, conversational memory, xLMP, context efficiency, benchmark"
+}
+</script>
+</head>
+<body>
+<canvas id="circuit-canvas"></canvas>
+<div class="site-wrap">
+<div id="site-header"></div>
+<main class="page">
+
+<!-- Hero -->
+<section class="bench-hero">
+  <div class="glow-accent" style="width:560px;height:460px;top:-130px;left:-190px;"></div>
+  <div class="glow-blue" style="width:600px;height:420px;top:-80px;right:-220px;"></div>
+  <div class="container-wide">
+    <div class="bench-kicker">EDT-BENCH-001 &middot; EXERGYNET RESEARCH &middot; 2026-11-25</div>
+    <h1 style="max-width:860px;">ExergyNet Achieves 76.2% Accuracy on LongMemEval-S with 91.6% Lower Context Consumption</h1>
+    <p class="hero-sub" style="max-width:760px;margin-top:1rem;">Across 500 standardized conversational memory questions, ExergyNet's xLMP Semantic Router delivered 381 correct answers while consuming 91.6% fewer provider-reported prompt tokens than the session-level BM25 baseline.</p>
+    <div class="btn-row" style="margin-top:1.5rem;">
+      <a href="#results" class="btn btn-primary">View Results</a>
+      <a href="https://github.com/ezumba/exergynet-research/tree/main/benchmarks/EDT-BENCH-001" target="_blank" rel="noopener" class="btn btn-secondary">GitHub &rarr;</a>
+      <a href="#methodology" class="btn btn-secondary">Methodology</a>
+    </div>
+
+    <div class="result-strip" aria-label="Key benchmark results">
+      <div class="result-cell">
+        <div class="result-value">76.2%</div>
+        <div class="result-label">Accuracy</div>
+        <div class="result-scope">381/500 correct &middot; LongMemEval-S</div>
+      </div>
+      <div class="result-cell">
+        <div class="result-value">91.6%</div>
+        <div class="result-label">Context reduction</div>
+        <div class="result-scope">Provider-reported tokens vs BM25</div>
+      </div>
+      <div class="result-cell">
+        <div class="result-value">+19.8pp</div>
+        <div class="result-label">vs BM25 baseline</div>
+        <div class="result-scope">56.4% &rarr; 76.2%</div>
+      </div>
+      <div class="result-cell">
+        <div class="result-value">2,456</div>
+        <div class="result-label">Mean tokens/query</div>
+        <div class="result-scope">vs 29,382 for BM25</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Table of contents -->
+<section style="padding:1.5rem 0 0;">
+  <div class="container-wide">
+    <div class="toc">
+      <strong>Contents</strong>
+      <a href="#results">1. Results</a>
+      <a href="#by-category">2. Accuracy by Question Type</a>
+      <a href="#oracle-comparison">3. Statistical Comparison with Oracle</a>
+      <a href="#context-efficiency">4. Context Efficiency</a>
+      <a href="#methodology">5. Benchmark Methodology</a>
+      <a href="#limitations">6. Known Limitations</a>
+      <a href="#artifacts">7. Sealed Artifacts and Integrity</a>
+      <a href="#citation">8. Citation</a>
+    </div>
+  </div>
+</section>
+
+<!-- Results -->
+<section id="results" style="padding:3rem 0 1.5rem;">
+  <div class="container-wide">
+    <div class="section-label">Section 1</div>
+    <h2>Results</h2>
+    <p>Three evaluation conditions were tested on 500 LongMemEval-S questions. Token counts for B3 and xLMP are provider-reported from the Gemini API. The Oracle token count is a local-tokenizer estimate.</p>
+
+    <table class="data-table" aria-label="Overall accuracy and context consumption by system">
+      <thead>
+        <tr>
+          <th>System</th>
+          <th>Accuracy</th>
+          <th>Correct (500q)</th>
+          <th>Mean Tokens/Query</th>
+          <th>Total Tokens (500q)</th>
+          <th>Δ Accuracy vs BM25</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>BM25 RAG (B3, baseline)</td>
+          <td>56.4%</td>
+          <td>282</td>
+          <td>29,382</td>
+          <td>14,690,941</td>
+          <td>—</td>
+        </tr>
+        <tr class="oracle-row">
+          <td>Oracle (B1) †</td>
+          <td>74.4%</td>
+          <td>372</td>
+          <td>~5,600 est.</td>
+          <td>—</td>
+          <td>+18.0 pp</td>
+        </tr>
+        <tr class="highlight">
+          <td><strong>ExergyNet xLMP (VERIFY-006)</strong></td>
+          <td><strong>76.2%</strong></td>
+          <td><strong>381</strong></td>
+          <td><strong>2,456</strong></td>
+          <td><strong>1,227,949</strong></td>
+          <td class="delta-pos"><strong>+19.8 pp</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:12px;color:var(--text-faint);margin-top:.75rem;">† Oracle: <code>longmemeval_oracle.json</code> split — evidence-bearing sessions only (mean ~1.9 sessions/question, ~5,600 tokens estimated via local tokenizer). This is the benchmark's theoretical ideal-retrieval baseline, not the full conversation history.</p>
+
+    <div class="chart-wrap" style="margin-top:2rem;">
+      <img src="figures/research-overall-accuracy.svg" alt="Bar chart: BM25 56.4%, Oracle 74.4%, ExergyNet xLMP 76.2%" style="width:100%;height:auto;display:block;"/>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider"/>
+
+<!-- By Category -->
+<section id="by-category" style="padding:1.5rem 0;">
+  <div class="container-wide">
+    <div class="section-label">Section 2</div>
+    <h2>Accuracy by Question Type</h2>
+    <p>LongMemEval-S includes six question types testing different memory and reasoning capabilities. ExergyNet xLMP beats BM25 on 5 of 6 categories and matches or exceeds Oracle accuracy across four of six categories (3 wins + 1 tie).</p>
+
+    <table class="data-table" aria-label="Accuracy by question type for all three systems">
+      <thead>
+        <tr>
+          <th>Question Type</th>
+          <th>n</th>
+          <th>xLMP</th>
+          <th>Oracle</th>
+          <th>BM25</th>
+          <th>Δ vs BM25</th>
+          <th>vs Oracle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Single-Session User</td>
+          <td>70</td>
+          <td>94.3%</td>
+          <td>94.3%</td>
+          <td>84.3%</td>
+          <td class="delta-pos">+10.0 pp</td>
+          <td class="delta-tie">0.0 pp (tie)</td>
+        </tr>
+        <tr>
+          <td>Single-Session Assistant ‡</td>
+          <td>56</td>
+          <td>80.4%</td>
+          <td>100.0%</td>
+          <td>83.9%</td>
+          <td class="delta-neg">−3.5 pp</td>
+          <td class="delta-neg">−19.6 pp</td>
+        </tr>
+        <tr>
+          <td>Knowledge Update</td>
+          <td>78</td>
+          <td>91.0%</td>
+          <td>85.9%</td>
+          <td>68.0%</td>
+          <td class="delta-pos">+23.0 pp</td>
+          <td class="delta-pos">+5.1 pp</td>
+        </tr>
+        <tr>
+          <td>Multi-Session</td>
+          <td>133</td>
+          <td>56.4%</td>
+          <td>60.9%</td>
+          <td>36.1%</td>
+          <td class="delta-pos">+20.3 pp</td>
+          <td class="delta-neg">−4.5 pp</td>
+        </tr>
+        <tr>
+          <td>Temporal Reasoning</td>
+          <td>133</td>
+          <td>78.2%</td>
+          <td>66.2%</td>
+          <td>53.4%</td>
+          <td class="delta-pos">+24.8 pp</td>
+          <td class="delta-pos">+12.0 pp</td>
+        </tr>
+        <tr>
+          <td>Single-Session Preference</td>
+          <td>30</td>
+          <td>66.7%</td>
+          <td>46.7%</td>
+          <td>13.3%</td>
+          <td class="delta-pos">+53.3 pp</td>
+          <td class="delta-pos">+20.0 pp</td>
+        </tr>
+        <tr class="highlight">
+          <td><strong>Overall</strong></td>
+          <td><strong>500</strong></td>
+          <td><strong>76.2%</strong></td>
+          <td><strong>74.4%</strong></td>
+          <td><strong>56.4%</strong></td>
+          <td class="delta-pos"><strong>+19.8 pp</strong></td>
+          <td><strong>+1.8 pp</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:12px;color:var(--text-faint);margin-top:.75rem;">‡ Single-Session Assistant: ExergyNet achieved higher accuracy than BM25 across five of six categories. SSA accuracy was 80.4%, versus 83.9% for BM25 and 100.0% for the Oracle. Internal forensic analysis identified retrieval misses in two of the eleven incorrect responses and long-response truncation in the remaining nine. The evaluated VERIFY-006 configuration indexed both user and assistant conversational content. The Oracle provides complete sessions in which all assistant-turn content is available; the observed 100.0% SSA accuracy is consistent with this architecture, though the causal relationship has not been independently established.</p>
+
+    <div class="chart-wrap" style="margin-top:2rem;">
+      <img src="figures/research-accuracy-by-category.svg" alt="Grouped bar chart showing accuracy by question type for xLMP, Oracle, and BM25" style="width:100%;height:auto;display:block;"/>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider"/>
+
+<!-- Oracle comparison -->
+<section id="oracle-comparison" style="padding:1.5rem 0;">
+  <div class="container-wide">
+    <div class="section-label">Section 3</div>
+    <h2>Statistical Comparison with Oracle</h2>
+    <p>The Oracle provides only the evidence-bearing sessions for each question (~1.9 sessions/question on average) — the benchmark's theoretical ideal-retrieval ceiling. xLMP's 1.8 pp observed advantage was tested for statistical significance.</p>
+
+    <div class="stat-box">
+      <strong>McNemar Test (n = 500 paired questions)</strong>
+      <p>Exact two-tailed p = <strong>0.474</strong>. The result is <strong>not statistically significant</strong> at any conventional threshold (α = 0.05, 0.10, 0.20). This result does not establish statistical superiority, non-inferiority, or equivalence between xLMP and the Oracle.</p>
+      <p style="margin-top:.75rem;">Contingency: both correct = 314; xLMP correct / Oracle wrong = 67; xLMP wrong / Oracle correct = 58; both wrong = 61.</p>
+      <p style="margin-top:.75rem;">Approximate 95% confidence interval for the accuracy difference (normal approximation; SE = √((b+c)/n²) = √(125/500²)): <strong>[−2.6 pp, +6.2 pp]</strong></p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider"/>
+
+<!-- Context Efficiency -->
+<section id="context-efficiency" style="padding:1.5rem 0;">
+  <div class="container-wide">
+    <div class="section-label">Section 4</div>
+    <h2>Context Efficiency</h2>
+    <p>Token counts for B3 and xLMP are provider-reported from the Gemini API. The 91.6% reduction is computed from verified provider totals.</p>
+
+    <table class="data-table" aria-label="Context consumption comparison">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>BM25 (B3)</th>
+          <th>ExergyNet xLMP</th>
+          <th>Reduction</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Mean tokens/query</td>
+          <td>29,382</td>
+          <td>2,456</td>
+          <td class="delta-pos">91.6%</td>
+        </tr>
+        <tr>
+          <td>Total prompt tokens (500q)</td>
+          <td>14,690,941</td>
+          <td>1,227,949</td>
+          <td class="delta-pos">91.6%</td>
+        </tr>
+        <tr>
+          <td>Correct answers delivered</td>
+          <td>282</td>
+          <td>381</td>
+          <td class="delta-pos">+99 answers</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p style="font-size:14px;color:var(--text-soft);margin-top:1rem;">ExergyNet delivered <strong>35.1% more correct answers</strong> than session-level BM25 (381 vs 282) while consuming <strong>91.6% fewer context tokens</strong> across 500 LongMemEval-S questions.</p>
+
+    <div class="chart-wrap" style="margin-top:1.5rem;">
+      <img src="figures/research-context-consumption.svg" alt="Horizontal bar chart: BM25 29,382 tokens vs ExergyNet 2,456 tokens per query" style="width:100%;height:auto;display:block;"/>
+    </div>
+
+    <div class="chart-wrap" style="margin-top:1rem;">
+      <img src="figures/research-accuracy-context-comparison.svg" alt="Scatter plot: ExergyNet achieves higher accuracy with dramatically fewer tokens than BM25" style="width:100%;height:auto;display:block;"/>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider"/>
+
+<!-- Why Context Efficiency Matters -->
+<section style="padding:1.5rem 0;">
+  <div class="container-wide">
+    <div class="section-label">Commercial Relevance</div>
+    <h2>Why Context Efficiency Matters</h2>
+    <p style="max-width:800px;">Reducing unnecessary context processing has practical implications across a range of applications involving persistent information.</p>
+
+    <div class="bench-grid" style="margin-top:1.5rem;">
+      <div class="bench-card">
+        <h3>Persistent Enterprise Intelligence</h3>
+        <p>Applications that maintain conversation history, customer context, or operational state across extended interactions may benefit from architectures that bound context delivery without sacrificing recall.</p>
+      </div>
+      <div class="bench-card">
+        <h3>Longitudinal Information Management</h3>
+        <p>Systems managing growing knowledge bases face the challenge of delivering relevant historical content without proportional growth in per-query computational requirements.</p>
+      </div>
+      <div class="bench-card">
+        <h3>Agentic Systems</h3>
+        <p>Autonomous agents that accumulate state across extended task sequences may require architectures capable of selecting relevant historical context within bounded computational budgets.</p>
+      </div>
+      <div class="bench-card">
+        <h3>Model-Independent Memory</h3>
+        <p>Memory infrastructure that operates across model families without fine-tuning or context window modification offers architectural flexibility for evolving AI deployments.</p>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:var(--text-faint);margin-top:1.5rem;">These are described as potential application benefits. EDT-BENCH-001 results are specific to the LongMemEval-S evaluation under the stated conditions. Performance on other workloads, production environments, or different model families has not been independently demonstrated.</p>
+  </div>
+</section>
+
+<hr class="section-divider"/>
+
+<!-- Methodology -->
+<section id="methodology" style="padding:1.5rem 0;">
+  <div class="container-wide">
+    <div class="section-label">Section 5</div>
+    <h2>Benchmark Methodology</h2>
+
+    <div class="method-grid">
+      <div class="method-item">
+        <strong>Dataset</strong>
+        <span>LongMemEval-S, 500 questions, 6 question types (single-session user/assistant/preference, knowledge-update, multi-session, temporal-reasoning)</span>
+      </div>
+      <div class="method-item">
+        <strong>Evaluation scope</strong>
+        <span>Single-run evaluation; temperature=0 reduces but does not eliminate provider-side nondeterminism</span>
+      </div>
+      <div class="method-item">
+        <strong>B3 retrieval</strong>
+        <span>rank_bm25, session-level, top-10 sessions per question</span>
+      </div>
+      <div class="method-item">
+        <strong>xLMP retrieval</strong>
+        <span>VMN turn-level BM25, top-10 turns per question; per-turn indexed corpus; bounded context window</span>
+      </div>
+      <div class="method-item">
+        <strong>Generation model</strong>
+        <span>gemini-3.8-flash, temperature=0, max_tokens=16,000, chain-of-thought enabled</span>
+      </div>
+      <div class="method-item">
+        <strong>Evaluation model</strong>
+        <span>gemini-3.8-flash (matched generation methodology — same model and prompt template, not independent third-party evaluation)</span>
+      </div>
+      <div class="method-item">
+        <strong>Oracle (B1)</strong>
+        <span>longmemeval_oracle.json split; evidence-bearing sessions only; no retrieval truncation applied</span>
+      </div>
+      <div class="method-item">
+        <strong>Question completeness</strong>
+        <span>500/500 unique LongMemEval-S question IDs generated and evaluated; zero duplicates, zero skips</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider"/>
+
+<!-- Limitations -->
+<section id="limitations" style="padding:1.5rem 0;">
+  <div class="container-wide">
+    <div class="section-label">Section 6</div>
+    <h2>Known Limitations</h2>
+
+    <div class="limit-card">
+      <strong>Granularity attribution (open)</strong>
+      <p>xLMP retrieves at turn level while B3 retrieves at session level. Wu et al. (2024) document that turn-level retrieval substantially outperforms session-level retrieval on LongMemEval. An independent turn-level BM25 control (B4) would isolate what fraction of the +19.8 pp accuracy improvement is specifically attributable to xLMP's semantic routing versus the inherent advantage of finer retrieval granularity. That experiment has not been conducted. Without B4, the full +19.8 pp cannot be attributed solely to xLMP.</p>
+    </div>
+
+    <div class="limit-card">
+      <strong>Single-run evaluation</strong>
+      <p>Results reflect a single benchmark run. Temperature=0 reduces but does not eliminate provider-side nondeterminism. Repeat-run variance has not been characterized.</p>
+    </div>
+
+    <div class="limit-card">
+      <strong>Same-model evaluation</strong>
+      <p>Both generation and evaluation used gemini-3.8-flash. Results have not been independently verified with a third-party evaluation model.</p>
+    </div>
+
+    <div class="limit-card">
+      <strong>Oracle token estimation</strong>
+      <p>Oracle token counts are estimated via a local tokenizer, not provider-reported. Direct comparison of xLMP token efficiency against Oracle is therefore approximate.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider"/>
+
+<!-- Artifacts -->
+<section id="artifacts" style="padding:1.5rem 0;">
+  <div class="container-wide">
+    <div class="section-label">Section 7</div>
+    <h2>Evidence Integrity</h2>
+    <p>All numerical results derive from sealed evaluation records. The generation and evaluation logs, retrieval corpus, and reference dataset are identified by SHA-256 hash.</p>
+
+    <div class="stat-box" style="margin-top:1rem;">
+      <div class="artifact-row">
+        <div class="artifact-name">Generation log (500 records)</div>
+        <div class="artifact-hash">cb154d2949b6c6bf94406c11a8f80ec373e3bececa2e066e61fb074b9d0bfa1e</div>
+      </div>
+      <div class="artifact-row">
+        <div class="artifact-name">Evaluation log (500 records)</div>
+        <div class="artifact-hash">4ddaf962cdb5b6152bed91da4b4b14f0cb2cea000055b93e57f103a75b3d3719</div>
+      </div>
+      <div class="artifact-row">
+        <div class="artifact-name">Retrieval corpus</div>
+        <div class="artifact-hash">7cdcf2860d4fa58d3b35aae602598f1a397702cd3aeaf0d30957b10566ebc532</div>
+      </div>
+      <div class="artifact-row">
+        <div class="artifact-name">Reference dataset</div>
+        <div class="artifact-hash">d6f21ea9d60a0d56f34a05b609c79c88a451d2ae03597821ea3d5a9678c3a442</div>
+      </div>
+      <div class="artifact-row">
+        <div class="artifact-name">Final report R5 (this document)</div>
+        <div class="artifact-hash">d6f1c18f4e3c7d604af1a0636794e853f976d506d49139bcb86ff9c7b62d6477</div>
+      </div>
+    </div>
+
+    <p style="font-size:12px;color:var(--text-faint);margin-top:.75rem;">Raw per-question logs are restricted. The public reproducibility manifest identifies which evidence is publicly accessible and which remains restricted pending dataset licensing review.</p>
+  </div>
+</section>
+
+<hr class="section-divider"/>
+
+<!-- Citation -->
+<section id="citation" style="padding:1.5rem 0 4rem;">
+  <div class="container-wide">
+    <div class="section-label">Section 8</div>
+    <h2>Citation and References</h2>
+
+    <div class="stat-box">
+      <strong>Cite this benchmark report</strong>
+      <p style="font-family:var(--mono);font-size:12px;line-height:1.8;white-space:pre-wrap;margin-top:.75rem;">EDT INC. (2026). ExergyNet Achieves 76.2% Accuracy on
+LongMemEval-S with 91.6% Lower Context Consumption
+(EDT-BENCH-001). ExergyNet Research.
+https://doi.org/10.5281/zenodo.24544305</p>
+    </div>
+
+    <div class="stat-box" style="margin-top:1rem;">
+      <strong>LongMemEval benchmark reference</strong>
+      <p style="font-family:var(--mono);font-size:12px;line-height:1.8;">Wu, D., Wang, H., Yu, W., Zhang, Y., Chang, K.-W., &amp; Yu, D. (2024).<br>LongMemEval: Benchmarking Chat Assistants on Long-Term Interactive Memory.<br>arXiv:2410.10813. ICLR 2025.</p>
+    </div>
+
+    <div style="margin-top:2rem;border-top:1px solid var(--border);padding-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap;">
+      <a href="https://doi.org/10.5281/zenodo.24544305" target="_blank" rel="noopener" class="btn btn-primary" style="font-size:12px;">DOI: 10.5281/zenodo.24544305 &rarr;</a>
+      <a href="https://github.com/ezumba/exergynet-research/tree/main/benchmarks/EDT-BENCH-001" target="_blank" rel="noopener" class="btn btn-secondary" style="font-size:12px;">GitHub Repository</a>
+      <a href="mailto:ai@exergynet.org" class="btn btn-secondary" style="font-size:12px;">ai@exergynet.org</a>
+      <a href="research.html" class="btn btn-secondary" style="font-size:12px;">All Research</a>
+      <a href="benchmarks.html" class="btn btn-secondary" style="font-size:12px;">All Benchmarks</a>
+    </div>
+
+    <p style="font-size:12px;color:var(--text-faint);margin-top:1.5rem;">EDT-BENCH-001 &middot; Sealed 2026-11-25 &middot; EDT INC / ai@exergynet.org &middot; ExergyNet — Indianapolis</p>
+  </div>
+</section>
+
+</main>
+<div id="site-footer"></div>
+</div>
+<script src="app.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

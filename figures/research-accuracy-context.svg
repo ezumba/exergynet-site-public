@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 340" role="img" aria-labelledby="chartD-title chartD-desc">
+  <title id="chartD-title">Accuracy vs. Prompt Token Consumption — LongMemEval-S</title>
+  <desc id="chartD-desc">Scatter plot showing ExergyNet xLMP achieves higher accuracy (76.2%) with dramatically lower context (2,456 tokens) versus BM25 (56.4% accuracy, 29,382 tokens).</desc>
+
+  <rect width="640" height="340" fill="#091525" rx="8"/>
+  <text x="32" y="28" font-family="'Space Mono',monospace" font-size="10" fill="#7896b8" letter-spacing="0.08em">ACCURACY vs. PROMPT TOKENS · OPTIMAL = UPPER LEFT</text>
+
+  <!-- Axes -->
+  <!-- X-axis: tokens, 0 to 32000, mapped to x=60..600 (540px) -->
+  <!-- Y-axis: accuracy 0-100%, mapped to y=280..60 (220px) -->
+
+  <line x1="60" y1="60" x2="60" y2="280" stroke="rgba(60,140,220,0.3)" stroke-width="1"/>
+  <line x1="60" y1="280" x2="600" y2="280" stroke="rgba(60,140,220,0.3)" stroke-width="1"/>
+
+  <!-- Y gridlines and labels -->
+  <text x="54" y="84" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="end">100%</text>
+  <line x1="60" y1="81" x2="600" y2="81" stroke="#0b1a2e" stroke-width="1"/>
+  <text x="54" y="140" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="end">75%</text>
+  <line x1="60" y1="137" x2="600" y2="137" stroke="#0b1a2e" stroke-width="1"/>
+  <text x="54" y="195" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="end">50%</text>
+  <line x1="60" y1="192" x2="600" y2="192" stroke="#0b1a2e" stroke-width="1"/>
+  <text x="54" y="250" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="end">25%</text>
+  <line x1="60" y1="247" x2="600" y2="247" stroke="#0b1a2e" stroke-width="1"/>
+
+  <!-- X axis labels (tokens) -->
+  <text x="60" y="296" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="middle">0</text>
+  <text x="195" y="296" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="middle">8k</text>
+  <text x="330" y="296" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="middle">16k</text>
+  <text x="465" y="296" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="middle">24k</text>
+  <text x="600" y="296" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="middle">32k</text>
+  <text x="330" y="315" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="middle">Mean prompt tokens per query →</text>
+
+  <!-- Y-axis label (rotated) -->
+  <text transform="rotate(-90, 18, 180)" x="18" y="180" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="middle">Accuracy →</text>
+
+  <!-- BM25 point: x = 29382/32000 * 540 + 60 = 495.4+60 = 556, y = 280 - (0.564*220) = 280-124.1 = 155.9 -->
+  <circle cx="556" cy="156" r="12" fill="rgba(78,158,255,0.3)" stroke="#4e9eff" stroke-width="1.5"/>
+  <text x="556" y="134" font-family="'Barlow Condensed','Barlow',sans-serif" font-size="14" font-weight="700" fill="#4e9eff" text-anchor="middle">56.4%</text>
+  <text x="556" y="122" font-family="'Space Mono',monospace" font-size="8" fill="#7896b8" text-anchor="middle">BM25</text>
+  <text x="556" y="183" font-family="'Space Mono',monospace" font-size="7" fill="#3a5070" text-anchor="middle">29,382t</text>
+
+  <!-- xLMP point: x = 2456/32000 * 540 + 60 = 41.4+60 = 101, y = 280 - (0.762*220) = 280-167.6 = 112.4 -->
+  <circle cx="101" cy="112" r="16" fill="rgba(0,232,135,0.25)" stroke="#00e887" stroke-width="2"/>
+  <text x="140" y="97" font-family="'Barlow Condensed','Barlow',sans-serif" font-size="20" font-weight="900" fill="#00e887">76.2%</text>
+  <text x="101" y="80" font-family="'Space Mono',monospace" font-size="8" fill="#ddeeff" text-anchor="middle">ExergyNet</text>
+  <text x="145" y="112" font-family="'Space Mono',monospace" font-size="8" fill="#7896b8">2,456t</text>
+
+  <!-- Arrow annotation -->
+  <path d="M 530 150 L 130 115" stroke="rgba(0,232,135,0.2)" stroke-width="1" stroke-dasharray="4,4" marker-end="none"/>
+
+  <!-- "Better" annotation -->
+  <text x="68" y="72" font-family="'Space Mono',monospace" font-size="8" fill="rgba(0,232,135,0.5)">↑ Better</text>
+  <text x="62" y="274" font-family="'Space Mono',monospace" font-size="8" fill="rgba(0,232,135,0.5)">← Better</text>
+</svg>

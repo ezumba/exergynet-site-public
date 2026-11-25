@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research — Measured Performance, Verified Evidence | ExergyNet</title>
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="shortcut icon" href="assets/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<meta name="description" content="ExergyNet research publications document measured performance, computational efficiency, and experimental methodology under defined evaluation conditions. Published by EDT INC.">
+<meta name="keywords" content="ExergyNet research, benchmark results, LongMemEval, computational efficiency, context reduction, persistent memory, xLMP, AI infrastructure">
+<link rel="canonical" href="https://exergynet.org/research.html">
+<meta property="og:title" content="Research — ExergyNet">
+<meta property="og:description" content="ExergyNet research: 76.2% accuracy on LongMemEval-S with 91.6% lower context consumption. Validated benchmark results published by EDT INC.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://exergynet.org/research.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ExergyNet Research">
+<meta name="twitter:description" content="Measured performance. Controlled disclosure. Permanent research provenance.">
+<link rel="stylesheet" href="style.css">
+<script>
+(function(){
+  var t = localStorage.getItem('exg-theme');
+  if (!t) t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<style>
+  .research-hero{position:relative;overflow:hidden;padding:6rem 0 4rem;}
+  .research-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;}
+  .kpi-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;border:1px solid var(--border-mid);background:var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-top:2.5rem;}
+  .kpi-cell{background:var(--bg-card);padding:1.5rem 1.25rem;}
+  .kpi-value{font-family:var(--display);font-size:clamp(2rem,5vw,3rem);line-height:.9;font-weight:900;color:var(--accent);margin-bottom:.5rem;}
+  .kpi-label{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text);line-height:1.45;}
+  .kpi-scope{font-size:12px;color:var(--text-soft);line-height:1.45;margin-top:.5rem;}
+  .pub-card{border:1px solid var(--border);background:var(--bg-card);border-radius:var(--radius);padding:1.5rem;display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:start;}
+  .pub-card:hover{border-color:var(--border-mid);}
+  .pub-meta{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--text-soft);margin-bottom:.5rem;}
+  .pub-meta span{color:var(--accent);margin-right:.75rem;}
+  .pub-title{font-family:var(--display);font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:.5rem;line-height:1.2;}
+  .pub-abstract{font-size:14px;color:var(--text-soft);line-height:1.65;margin-bottom:.85rem;}
+  .pub-links{display:flex;gap:.5rem;flex-wrap:wrap;}
+  .pub-links a{font-family:var(--mono);font-size:10px;letter-spacing:.06em;border:1px solid var(--border-mid);border-radius:4px;padding:.35rem .75rem;color:var(--text-soft);transition:border-color .15s,color .15s;}
+  .pub-links a:hover{border-color:var(--accent);color:var(--accent);}
+  .pub-badge{font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:.3rem .65rem;border-radius:4px;white-space:nowrap;align-self:flex-start;}
+  .badge-active{background:var(--accent-dim);color:var(--accent);border:1px solid rgba(0,232,135,.25);}
+  .badge-pending{background:var(--amber-dim);color:var(--amber);border:1px solid rgba(255,184,48,.25);}
+  .pub-grid{display:flex;flex-direction:column;gap:1rem;margin-top:1.5rem;}
+  .research-cta{border:1px solid var(--border-mid);background:var(--bg-card-2);border-radius:var(--radius-lg);padding:2.5rem;text-align:center;margin-top:3rem;}
+  .research-cta h2{font-family:var(--display);font-size:clamp(1.5rem,4vw,2.2rem);font-weight:900;margin-bottom:1rem;}
+  @media(max-width:900px){.kpi-strip{grid-template-columns:repeat(2,1fr)}.pub-card{grid-template-columns:1fr}}
+  @media(max-width:640px){.kpi-strip{grid-template-columns:1fr}.research-hero{padding:4rem 0 3rem}}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "ExergyNet Research",
+  "description": "Official ExergyNet research publications and validated benchmark results. Published by EDT INC.",
+  "url": "https://exergynet.org/research.html",
+  "publisher": {
+    "@type": "Organization",
+    "name": "EDT INC",
+    "url": "https://exergynet.org"
+  }
+}
+</script>
+</head>
+<body>
+<canvas id="circuit-canvas"></canvas>
+<div class="site-wrap">
+<div id="site-header"></div>
+<main class="page">
+
+<section class="research-hero">
+  <div class="glow-accent" style="width:560px;height:400px;top:-130px;left:-180px;"></div>
+  <div class="glow-blue" style="width:600px;height:380px;top:-80px;right:-200px;"></div>
+  <div class="container-wide">
+    <div class="research-kicker">EXERGYNET RESEARCH &middot; VALIDATED BENCHMARK RESULTS</div>
+    <h1>Higher Accuracy.<br>Lower Computational Demand.</h1>
+    <p class="hero-sub" style="max-width:760px;">ExergyNet delivers persistent intelligence through an architecture designed to reduce unnecessary context consumption while maintaining access to relevant historical information. Our research publications document measured performance, experimental methodology, and the computational efficiency of ExergyNet under defined evaluation conditions.</p>
+    <div class="btn-row" style="margin-top:1.5rem;">
+      <a href="#publications" class="btn btn-primary">View Benchmark Results</a>
+      <a href="whitepaper.html" class="btn btn-secondary">Explore Research Publications</a>
+    </div>
+
+    <div class="kpi-strip" aria-label="Featured benchmark results">
+      <div class="kpi-cell">
+        <div class="kpi-value">76.2%</div>
+        <div class="kpi-label">Benchmark accuracy</div>
+        <div class="kpi-scope">LongMemEval-S &middot; 500 questions</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-value">91.6%</div>
+        <div class="kpi-label">Prompt token reduction</div>
+        <div class="kpi-scope">Provider-reported vs BM25 baseline</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-value">+19.8pp</div>
+        <div class="kpi-label">Accuracy improvement</div>
+        <div class="kpi-scope">Above session-level BM25 (56.4%)</div>
+      </div>
+      <div class="kpi-cell">
+        <div class="kpi-value">2,456</div>
+        <div class="kpi-label">Mean prompt tokens</div>
+        <div class="kpi-scope">vs 29,382 for BM25 &middot; same query set</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="publications" style="padding:3rem 0;">
+  <div class="container-wide">
+    <div class="section-label">Research Publications</div>
+    <h2>Measured performance.<br>Controlled disclosure. Permanent provenance.</h2>
+    <p style="max-width:800px;margin-top:.75rem;">ExergyNet research establishes that high-accuracy persistent memory performance can be achieved within a substantially reduced prompt context budget. Each publication documents results bounded to their tested conditions, with stated limitations and open research questions.</p>
+
+    <div class="pub-grid">
+
+      <!-- EDT-BENCH-001 -->
+      <article class="pub-card accent-border">
+        <div>
+          <div class="pub-meta">
+            <span>EDT-BENCH-001</span>
+            <span>Benchmark Report</span>
+            2026-11-25 &middot; LongMemEval-S &middot; 500 Questions
+          </div>
+          <div class="pub-title">ExergyNet Achieves 76.2% Accuracy on LongMemEval-S with 91.6% Lower Context Consumption</div>
+          <div class="pub-abstract">Across 500 standardized conversational memory questions, ExergyNet's xLMP Semantic Router delivered 381 correct answers — 35.1% more than session-level BM25 (282 correct) — while consuming 91.6% fewer provider-reported prompt tokens. The 1.8 pp observed advantage over the evidence-only Oracle was not statistically significant (McNemar p = 0.474). Evaluation used gemini-3.8-flash; a turn-level BM25 granularity control (B4) has not been conducted.</div>
+          <div class="pub-links">
+            <a href="research-edt-bench-001.html">Full Report &rarr;</a>
+            <a href="https://doi.org/10.5281/zenodo.24544305" target="_blank" rel="noopener">DOI &rarr;</a>
+            <a href="https://github.com/ezumba/exergynet-research/tree/main/benchmarks/EDT-BENCH-001" target="_blank" rel="noopener">GitHub</a>
+            <a href="benchmarks.html">All Benchmarks</a>
+          </div>
+        </div>
+        <div>
+          <div class="pub-badge badge-active">Published</div>
+        </div>
+      </article>
+
+      <!-- V5 Whitepaper -->
+      <article class="pub-card">
+        <div>
+          <div class="pub-meta">
+            <span>ExergyNet V5</span>
+            <span>Research Paper</span>
+            2026-11-06 &middot; Zenodo &middot; DOI 10.5281/zenodo.24021817
+          </div>
+          <div class="pub-title">Memory Grows. Context Does Not Have To.</div>
+          <div class="pub-abstract">ExergyNet V5 characterizes the relationship between persistent stored state and delivered active context at a development operating point. As stored memory scales toward and beyond 100 million tokens, delivered context per query remains bounded — by design. Reports retrieval performance from a live environment, accelerator infrastructure behavior, and a live authority-layer result from a production-adjacent environment.</div>
+          <div class="pub-links">
+            <a href="whitepaper.html">View Whitepaper &rarr;</a>
+            <a href="https://doi.org/10.5281/zenodo.24021817" target="_blank" rel="noopener">DOI &rarr;</a>
+            <a href="https://github.com/ezumba/exergynet-whitepaper" target="_blank" rel="noopener">GitHub</a>
+          </div>
+        </div>
+        <div>
+          <div class="pub-badge badge-active">Published</div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section style="padding:3rem 0;border-top:1px solid var(--border);">
+  <div class="container-wide">
+    <div class="section-label">Research Focus</div>
+    <h2>What ExergyNet research investigates</h2>
+    <div class="bench-grid" style="margin-top:1.5rem;">
+      <div class="bench-card">
+        <h3>Persistent Intelligence</h3>
+        <p>How AI systems maintain relevant historical state across extended interactions without proportional growth in active context requirements.</p>
+      </div>
+      <div class="bench-card">
+        <h3>Computational Efficiency</h3>
+        <p>Measuring the relationship between memory scale, retrieval architecture, and prompt token consumption under standardized evaluation conditions.</p>
+      </div>
+      <div class="bench-card">
+        <h3>Model-Independent Memory</h3>
+        <p>Memory infrastructure that operates across model families without requiring model fine-tuning, context window expansion, or architectural modification.</p>
+      </div>
+      <div class="bench-card">
+        <h3>Bounded Context Delivery</h3>
+        <p>Architectures that deliver relevant evidence from large persistent stores within bounded context budgets, preserving accuracy while reducing computational overhead.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:3rem 0 5rem;">
+  <div class="container-wide">
+    <div class="research-cta">
+      <div class="research-kicker">Enterprise Evaluation</div>
+      <h2>Evaluate ExergyNet Against Your Own Workload</h2>
+      <p style="max-width:600px;margin:0 auto 1.5rem;color:var(--text-soft);">EDT INC welcomes controlled technical evaluations with enterprise organizations, research institutions, and strategic development partners seeking to assess persistent memory and computational efficiency within their own environments.</p>
+      <div class="btn-row" style="justify-content:center;">
+        <a href="design-partner.html" class="btn btn-primary">Design Partnership</a>
+        <a href="mailto:ai@exergynet.org" class="btn btn-secondary">ai@exergynet.org</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+<div id="site-footer"></div>
+</div>
+<script src="app.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

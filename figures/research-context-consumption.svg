@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 280" role="img" aria-labelledby="chartB-title chartB-desc">
+  <title id="chartB-title">Prompt Token Consumption Comparison — LongMemEval-S</title>
+  <desc id="chartB-desc">Horizontal bar chart: BM25 RAG 29,382 tokens vs ExergyNet xLMP 2,456 tokens per query — 91.6% reduction.</desc>
+
+  <!-- Background -->
+  <rect width="640" height="280" fill="#091525" rx="8"/>
+
+  <!-- Title -->
+  <text x="32" y="30" font-family="'Space Mono',monospace" font-size="10" fill="#7896b8" letter-spacing="0.1em">MEAN PROMPT TOKENS PER QUERY · PROVIDER-REPORTED</text>
+
+  <!-- BM25 bar: 29382 / 32000 * 480 = 441.1 -->
+  <text x="32" y="80" font-family="'Space Mono',monospace" font-size="9" fill="#7896b8">BM25 RAG</text>
+  <rect x="32" y="88" width="441" height="44" fill="rgba(78,158,255,0.2)" rx="4" stroke="rgba(78,158,255,0.3)" stroke-width="1"/>
+  <text x="484" y="115" font-family="'Barlow Condensed','Barlow',sans-serif" font-size="20" font-weight="900" fill="#4e9eff">29,382</text>
+  <text x="586" y="115" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070">tokens/q</text>
+
+  <!-- xLMP bar: 2456 / 32000 * 480 = 36.84 -->
+  <text x="32" y="160" font-family="'Space Mono',monospace" font-size="9" fill="#ddeeff">ExergyNet xLMP</text>
+  <rect x="32" y="168" width="37" height="44" fill="#00e887" opacity="0.75" rx="4" stroke="#00e887" stroke-width="1.5"/>
+  <text x="84" y="195" font-family="'Barlow Condensed','Barlow',sans-serif" font-size="20" font-weight="900" fill="#00e887">2,456</text>
+  <text x="174" y="195" font-family="'Space Mono',monospace" font-size="9" fill="#7896b8">tokens/q</text>
+
+  <!-- Reduction label -->
+  <text x="32" y="248" font-family="'Barlow Condensed','Barlow',sans-serif" font-size="28" font-weight="900" fill="#00e887">91.6%</text>
+  <text x="120" y="248" font-family="'Barlow',sans-serif" font-size="14" fill="#7896b8"> reduction in context tokens</text>
+  <text x="32" y="268" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070">Total: 14,690,941 tokens (B3) vs 1,227,949 tokens (xLMP) across 500 questions</text>
+</svg>

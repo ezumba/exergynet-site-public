@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 400" role="img" aria-labelledby="chartC-title chartC-desc">
+  <title id="chartC-title">Accuracy by Question Type — LongMemEval-S</title>
+  <desc id="chartC-desc">Grouped bar chart showing ExergyNet xLMP, Oracle, and BM25 accuracy across 6 LongMemEval-S question categories.</desc>
+
+  <rect width="760" height="400" fill="#091525" rx="8"/>
+  <text x="32" y="28" font-family="'Space Mono',monospace" font-size="10" fill="#7896b8" letter-spacing="0.08em">ACCURACY BY QUESTION TYPE · 500 QUESTIONS TOTAL</text>
+
+  <!-- Legend -->
+  <rect x="32" y="38" width="10" height="10" fill="#00e887" rx="2"/>
+  <text x="48" y="48" font-family="'Space Mono',monospace" font-size="9" fill="#ddeeff">ExergyNet xLMP</text>
+  <rect x="168" y="38" width="10" height="10" fill="#4e9eff" opacity="0.6" rx="2"/>
+  <text x="184" y="48" font-family="'Space Mono',monospace" font-size="9" fill="#7896b8">Oracle</text>
+  <rect x="248" y="38" width="10" height="10" fill="rgba(78,158,255,0.25)" rx="2"/>
+  <text x="264" y="48" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070">BM25 Baseline</text>
+
+  <!-- Y-axis -->
+  <text x="30" y="80" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="end">100%</text>
+  <text x="30" y="130" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="end">75%</text>
+  <text x="30" y="180" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="end">50%</text>
+  <text x="30" y="230" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="end">25%</text>
+  <text x="30" y="280" font-family="'Space Mono',monospace" font-size="9" fill="#3a5070" text-anchor="end">0%</text>
+  <line x1="34" y1="277" x2="740" y2="277" stroke="rgba(60,140,220,0.18)" stroke-width="1"/>
+  <line x1="34" y1="77" x2="740" y2="77" stroke="#0b1a2e" stroke-width="1"/>
+  <line x1="34" y1="127" x2="740" y2="127" stroke="#0b1a2e" stroke-width="1"/>
+  <line x1="34" y1="177" x2="740" y2="177" stroke="#0b1a2e" stroke-width="1"/>
+  <line x1="34" y1="227" x2="740" y2="227" stroke="#0b1a2e" stroke-width="1"/>
+
+  <!-- Scale: 100% = 200px. Each group: 3 bars × 18px + 2 gaps × 2px + 10px inter-group = ~80px per group -->
+  <!-- Groups positioned at x= 50, 160, 270, 380, 490, 600 -->
+
+  <!-- Group 1: SSU (n=70) — xLMP 94.3%, Oracle 94.3%, B3 84.3% -->
+  <!-- xLMP: 94.3% * 200 = 188.6, top=277-188.6=88.4 -->
+  <rect x="46" y="89" width="18" height="188" fill="#00e887" opacity="0.75" rx="2"/>
+  <!-- Oracle: 94.3% * 200 = 188.6 -->
+  <rect x="66" y="89" width="18" height="188" fill="#4e9eff" opacity="0.5" rx="2"/>
+  <!-- B3: 84.3% * 200 = 168.6, top=277-168.6=108.4 -->
+  <rect x="86" y="108" width="18" height="169" fill="rgba(78,158,255,0.2)" rx="2"/>
+  <text x="75" y="310" font-family="'Space Mono',monospace" font-size="8" fill="#7896b8" text-anchor="middle">SSU</text>
+  <text x="75" y="322" font-family="'Space Mono',monospace" font-size="7" fill="#3a5070" text-anchor="middle">n=70</text>
+
+  <!-- Group 2: SSA (n=56) — xLMP 80.4%, Oracle 100.0%, B3 83.9% -->
+  <!-- xLMP: 80.4% * 200 = 160.8, top=116.2 -->
+  <rect x="156" y="116" width="18" height="161" fill="#00e887" opacity="0.75" rx="2"/>
+  <!-- Oracle: 100% * 200 = 200, top=77 -->
+  <rect x="176" y="77" width="18" height="200" fill="#4e9eff" opacity="0.5" rx="2"/>
+  <!-- B3: 83.9% * 200 = 167.8, top=109.2 -->
+  <rect x="196" y="109" width="18" height="168" fill="rgba(78,158,255,0.2)" rx="2"/>
+  <text x="185" y="310" font-family="'Space Mono',monospace" font-size="8" fill="#7896b8" text-anchor="middle">SSA</text>
+  <text x="185" y="322" font-family="'Space Mono',monospace" font-size="7" fill="#3a5070" text-anchor="middle">n=56</text>
+
+  <!-- Group 3: KU (n=78) — xLMP 91.0%, Oracle 85.9%, B3 68.0% -->
+  <!-- xLMP: 91.0% * 200 = 182, top=95 -->
+  <rect x="266" y="95" width="18" height="182" fill="#00e887" opacity="0.75" rx="2"/>
+  <!-- Oracle: 85.9% * 200 = 171.8, top=105.2 -->
+  <rect x="286" y="105" width="18" height="172" fill="#4e9eff" opacity="0.5" rx="2"/>
+  <!-- B3: 68.0% * 200 = 136, top=141 -->
+  <rect x="306" y="141" width="18" height="136" fill="rgba(78,158,255,0.2)" rx="2"/>
+  <text x="295" y="310" font-family="'Space Mono',monospace" font-size="8" fill="#ddeeff" text-anchor="middle">KU</text>
+  <text x="295" y="322" font-family="'Space Mono',monospace" font-size="7" fill="#3a5070" text-anchor="middle">n=78</text>
+
+  <!-- Group 4: MS (n=133) — xLMP 56.4%, Oracle 60.9%, B3 36.1% -->
+  <!-- xLMP: 56.4% * 200 = 112.8, top=164.2 -->
+  <rect x="376" y="164" width="18" height="113" fill="#00e887" opacity="0.75" rx="2"/>
+  <!-- Oracle: 60.9% * 200 = 121.8, top=155.2 -->
+  <rect x="396" y="155" width="18" height="122" fill="#4e9eff" opacity="0.5" rx="2"/>
+  <!-- B3: 36.1% * 200 = 72.2, top=204.8 -->
+  <rect x="416" y="205" width="18" height="72" fill="rgba(78,158,255,0.2)" rx="2"/>
+  <text x="405" y="310" font-family="'Space Mono',monospace" font-size="8" fill="#7896b8" text-anchor="middle">MS</text>
+  <text x="405" y="322" font-family="'Space Mono',monospace" font-size="7" fill="#3a5070" text-anchor="middle">n=133</text>
+
+  <!-- Group 5: TR (n=133) — xLMP 78.2%, Oracle 66.2%, B3 53.4% -->
+  <!-- xLMP: 78.2% * 200 = 156.4, top=120.6 -->
+  <rect x="486" y="121" width="18" height="156" fill="#00e887" opacity="0.75" rx="2"/>
+  <!-- Oracle: 66.2% * 200 = 132.4, top=144.6 -->
+  <rect x="506" y="145" width="18" height="132" fill="#4e9eff" opacity="0.5" rx="2"/>
+  <!-- B3: 53.4% * 200 = 106.8, top=170.2 -->
+  <rect x="526" y="170" width="18" height="107" fill="rgba(78,158,255,0.2)" rx="2"/>
+  <text x="515" y="310" font-family="'Space Mono',monospace" font-size="8" fill="#ddeeff" text-anchor="middle">TR</text>
+  <text x="515" y="322" font-family="'Space Mono',monospace" font-size="7" fill="#3a5070" text-anchor="middle">n=133</text>
+
+  <!-- Group 6: SSP (n=30) — xLMP 66.7%, Oracle 46.7%, B3 13.3% -->
+  <!-- xLMP: 66.7% * 200 = 133.4, top=143.6 -->
+  <rect x="596" y="144" width="18" height="133" fill="#00e887" opacity="0.75" rx="2"/>
+  <!-- Oracle: 46.7% * 200 = 93.4, top=183.6 -->
+  <rect x="616" y="184" width="18" height="93" fill="#4e9eff" opacity="0.5" rx="2"/>
+  <!-- B3: 13.3% * 200 = 26.6, top=250.4 -->
+  <rect x="636" y="250" width="18" height="27" fill="rgba(78,158,255,0.2)" rx="2"/>
+  <text x="625" y="310" font-family="'Space Mono',monospace" font-size="8" fill="#ddeeff" text-anchor="middle">SSP</text>
+  <text x="625" y="322" font-family="'Space Mono',monospace" font-size="7" fill="#3a5070" text-anchor="middle">n=30</text>
+
+  <!-- Category legend at bottom -->
+  <text x="34" y="360" font-family="'Space Mono',monospace" font-size="8" fill="#3a5070">SSU=Single-Session User  SSA=Single-Session Assistant  KU=Knowledge Update  MS=Multi-Session  TR=Temporal Reasoning  SSP=Single-Session Preference</text>
+</svg>
