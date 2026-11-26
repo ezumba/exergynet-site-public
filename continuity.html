@@ -8,6 +8,11 @@
   <title>Agent Continuity | ExergyNet</title>
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="stylesheet" href="exergynet-ui.css">
+  <style>
+    .ac-rel-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+    @media(max-width:860px){.ac-rel-grid{grid-template-columns:1fr;gap:28px}}
+    .ac-rel-card{padding:20px 24px;border:1px solid var(--border);border-radius:14px;background:var(--panel)}
+  </style>
   <script>
     (function(){
       try {
@@ -30,7 +35,7 @@
         <img src="assets/nav-logo-navy.png" alt="ExergyNet" class="logo-light">
         <span class="thin">/ CONTINUITY</span>
       </a>
-      <div class="navlinks" id="navlinks"><a href="index.html">Platform</a><a href="#features">Why Continuity</a><a href="#install">Get started</a><a href="#trust">Trust</a><a href="https://studio.exergynet.org/">Studio</a><a href="legal.html">Legal</a></div>
+      <div class="navlinks" id="navlinks"><a href="index.html">Platform</a><a href="exergycode.html">ExergyCode</a><a href="#features">Why Continuity</a><a href="#install">Get started</a><a href="#trust">Trust</a><a href="studio.html">Studio</a><a href="legal.html">Legal</a></div>
       <div class="nav-right">
         <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to light mode" title="Switch to light mode">☀</button>
         <a class="button secondary" href="#install">Explore the beta <span class="arrow" aria-hidden="true">↗</span></a>
@@ -82,6 +87,30 @@ cd exergynet-agent-continuity-0.4.0-beta.3
 sha256sum -c SHA256SUMS
 ./install.sh --prefix "$HOME/.exergynet-continuity"</pre><div class="code-note">Version 0.4.0-beta.3 · Local-only · Installation uses pinned npm dependencies</div></div></div></section>
     <section class="section wrap" id="trust"><div class="section-head"><span class="eyebrow">Bounded by design</span><h2>Your project stays yours.</h2><p>Precise trust boundaries matter. The local beta verifies checkpoint integrity without claiming independently attested remote authority.</p></div><div class="trust-grid"><div class="trust-lead"><span class="eyebrow">Privacy &amp; control</span><h3>Local memory.<br>No required cloud account.</h3><p>Your project vault, checkpoint chain, and local signing material remain on your machine in the supported beta configuration. The local dashboard binds to <code>127.0.0.1</code>.</p><div class="trust-foot"><span class="tag">LOCAL_ONLY</span><span class="tag">authoritative: false</span><span class="tag">expected_origin_attested: false</span><span class="tag">Ed25519 verification</span><span class="tag">No required payment</span></div></div><div class="trust-side"><span class="eyebrow">Trust scope</span><h3>Verified does not mean hosted.</h3><p>Local signature and integrity validation are distinct from independent origin attestation or hosted synchronization.</p><div class="trust-lines"><div><span>Local checkpoint integrity</span><strong>Verified in test</strong></div><div><span>Independent remote authority</span><strong>Not enabled</strong></div><div><span>Storage mode</span><strong>Local only</strong></div><div><span>Multi-writer operation</span><strong>Not qualified</strong></div></div></div></div></section>
+    <section class="section wrap" id="ecosystem" aria-labelledby="ec-rel-heading">
+      <div class="ac-rel-grid">
+        <div>
+          <div class="eyebrow" style="margin-bottom:14px"><span class="dot" aria-hidden="true"></span>ExergyNet ecosystem</div>
+          <h2 id="ec-rel-heading" style="font-size:clamp(28px,3.5vw,42px);margin-bottom:16px">Continuity is part of a larger infrastructure.</h2>
+          <p style="font-size:16px;color:var(--muted);line-height:1.75;margin-bottom:14px">Agent Continuity is the cross-client checkpoint layer. ExergyCode is the terminal engineering environment. ExergyNet Studio is the graphical workspace.</p>
+          <p style="font-size:16px;color:var(--muted);line-height:1.75">When ExergyCode reaches general availability, Continuity becomes the bridge between sessions — carrying what was verified from one interface to the next.</p>
+        </div>
+        <div style="display:grid;gap:14px">
+          <div class="ac-rel-card">
+            <div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--cyan);margin-bottom:6px">AGENT CONTINUITY</div>
+            <div style="font-size:13.5px;color:var(--muted)">Cross-client checkpoint layer. No account required. Available in beta (distribution pending EDT licensing approval).</div>
+          </div>
+          <div class="ac-rel-card">
+            <div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--sub);margin-bottom:6px">EXERGYCODE</div>
+            <div style="font-size:13.5px;color:var(--muted)">Terminal AI engineering environment. In development. <a href="exergycode.html" class="text-link">Learn more →</a></div>
+          </div>
+          <div class="ac-rel-card">
+            <div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--sub);margin-bottom:6px">EXERGYNET STUDIO</div>
+            <div style="font-size:13.5px;color:var(--muted)">Graphical workspace. Alpha. Distribution pending legal approval. <a href="studio.html" class="text-link">Learn more →</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
     <section class="section wrap" id="faq"><div class="section-head"><span class="eyebrow">Questions, answered</span><h2>Built to fit how you work.</h2></div><div class="faq-list"><details><summary>Is Agent Continuity another AI coding assistant?</summary><p>No. It is a continuity and memory layer for supported AI coding clients. Claude Code, OpenCode, and Codex CLI remain the tools that perform the coding work.</p></details><details><summary>Does my project get uploaded to ExergyNet?</summary><p>Not in this local-first beta. The supported configuration stores local memory and checkpoints on your workstation. Feedback is optional and should never include credentials or confidential project content.</p></details><details><summary>What happens when I restart my environment?</summary><p>The local authority can reload persisted checkpoint state. The accepted three-client test included an authority restart before Codex CLI recovered and verified the prior checkpoint.</p></details><details><summary>Can several people write to the same vault simultaneously?</summary><p>Concurrent multi-writer operation is not qualified in this beta. Use sequential single-writer access to each local vault.</p></details><details><summary>Is the beta open source?</summary><p>The Vanguard Memory Node component is licensed separately under MIT, and third-party dependencies retain their own licenses. Newly authored ExergyNet CLI, bridge, and web components are intended for proprietary beta distribution, subject to final Trustee and legal approval.</p></details><details><summary>Which operating systems are supported?</summary><p>Linux and Ubuntu WSL2 were qualified, including Windows Claude Code through the WSL bridge. Native Windows without WSL2 and macOS remain experimental and have not received the same qualification.</p></details></div></section>
     <section class="wrap" id="release-status"><div class="final-cta"><span class="eyebrow">0.4.0-beta.3 · Distribution gate</span><h2>Continuity should not end when a session does.</h2><p>The release candidate has passed local qualification. Public package distribution is awaiting approval of the proprietary beta license and source disclosure boundary.</p><div class="cta-row"><a class="button" href="#install">Review installation <span class="arrow">↗</span></a><a class="button secondary" href="#trust">Trust &amp; licensing status <span class="arrow" aria-hidden="true">→</span></a></div><p class="cta-note">Public release destination awaits final proprietary license approval. Archive SHA-256: 32d7b8317247ded2ae4545b4adeadd113ce9cb737ad9ff66872ea8808590d209.</p></div></section>
   </main>

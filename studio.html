@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080b12" id="meta-theme-color">
+<meta name="robots" content="index,follow">
+<title>ExergyNet Studio | ExergyNet</title>
+<meta name="description" content="ExergyNet Studio is the graphical workspace for AI engineering. Visual checkpoints, multi-agent coordination, and approval workflows — built on the same ExergyNet runtime as ExergyCode.">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="exergynet-ui.css">
+<script>
+  (function(){
+    try {
+      var t = localStorage.getItem('exg-theme');
+      if (!t) t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+      var m = document.getElementById('meta-theme-color');
+      if (m) m.setAttribute('content', t === 'light' ? '#f8fafc' : '#080b12');
+    } catch (e) {}
+  })();
+</script>
+<style>
+/* ═══════════════════════════════════════════════════
+   ExergyNet Studio page — exergynet-ui.css supplemental styles
+   ═══════════════════════════════════════════════════ */
+
+.studio-feat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+@media (max-width: 860px) { .studio-feat-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 540px) { .studio-feat-grid { grid-template-columns: 1fr; } }
+.studio-feat-card {
+  padding: 26px;
+  background: var(--feature-bg);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+}
+.studio-feat-card:hover { border-color: var(--feature-hover); }
+.studio-feat-card h3 { font-size: 16px; font-weight: 650; margin: 16px 0 10px; color: var(--ink); }
+.studio-feat-card p { font-size: 13.5px; color: var(--muted); line-height: 1.65; margin: 0; }
+.studio-feat-icon {
+  width: 42px; height: 42px;
+  border-radius: 10px;
+  background: var(--icon-bg);
+  border: 1px solid var(--icon-border);
+  color: var(--icon-ink);
+  display: grid; place-items: center;
+  font-size: 20px;
+}
+
+.studio-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+@media (max-width: 760px) { .studio-two-col { grid-template-columns: 1fr; gap: 32px; } }
+
+.studio-table-wrap { overflow-x: auto; margin-top: 24px; }
+.studio-qual-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+.studio-qual-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-family: var(--mono);
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--sub);
+  border-bottom: 1px solid var(--border);
+}
+.studio-qual-table td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  vertical-align: middle;
+}
+.studio-qual-table td:first-child { color: var(--ink); font-weight: 550; }
+
+.stu-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 999px;
+  font-size: 11px; font-family: var(--mono); font-weight: 600;
+  white-space: nowrap;
+}
+.stu-badge-green { background: rgba(16, 185, 129, 0.14); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.3); }
+.stu-badge-blue  { background: rgba(59, 130, 246, 0.14); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
+.stu-badge-amber { background: rgba(245, 158, 11, 0.14); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+.stu-badge-gray  { background: var(--tag-bg); color: var(--sub); border: 1px solid var(--border); }
+:root[data-theme="light"] .stu-badge-green { color: #047857; }
+:root[data-theme="light"] .stu-badge-blue  { color: #1d4ed8; }
+:root[data-theme="light"] .stu-badge-amber { color: #92400e; }
+
+.studio-compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 600px) { .studio-compare-grid { grid-template-columns: 1fr; } }
+.studio-compare-card {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--panel);
+}
+.studio-compare-card h3 { font-size: 16px; font-weight: 650; margin: 0 0 14px; color: var(--ink); }
+.studio-compare-card ul {
+  margin: 0; padding: 0 0 0 20px;
+  font-size: 13.5px; color: var(--muted);
+  line-height: 2;
+}
+
+.studio-adapter-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 28px;
+}
+@media (max-width: 600px) { .studio-adapter-grid { grid-template-columns: 1fr; } }
+.studio-adapter-card {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  display: flex; gap: 14px; align-items: start;
+}
+.studio-adapter-num {
+  font-family: var(--mono); font-size: 12px;
+  font-weight: 700; color: var(--cyan);
+  flex-shrink: 0; padding-top: 2px;
+}
+.studio-adapter-body h4 { font-size: 14px; font-weight: 650; margin: 0 0 4px; color: var(--ink); }
+.studio-adapter-body p { font-size: 13.5px; color: var(--muted); margin: 0; line-height: 1.6; }
+
+.ec-notice {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  border-radius: 14px;
+  padding: 16px 20px;
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-top: 24px;
+}
+.ec-notice strong { color: var(--ink); }
+
+.studio-access-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 760px) { .studio-access-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<div class="ambient" aria-hidden="true"></div>
+<a class="skip" href="#main-content">Skip to content</a>
+
+<div class="topbar">
+  <strong>Alpha release.</strong> ExergyNet Studio has completed automated qualification (21/21 PASS). Distribution is pending final legal approval. <a href="#release-status">Release status ↓</a>
+</div>
+
+<!-- CANONICAL:HEADER:START -->
+<header class="site-header">
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="ExergyNet home">
+      <img src="assets/nav-logo-green.png" alt="ExergyNet" class="logo-dark">
+      <img src="assets/nav-logo-navy.png" alt="ExergyNet" class="logo-light">
+    </a>
+    <nav class="navlinks" id="navlinks" aria-label="Main navigation">
+      <a href="index.html#platform">Platform</a>
+      <a href="exergycode.html">ExergyCode</a>
+      <a href="continuity.html">Continuity</a>
+      <a href="studio.html" aria-current="page">Studio</a>
+      <a href="docs.html">Developers</a>
+      <a href="whitepaper.html">Research</a>
+      <a href="intellectual-property.html">IP Portfolio</a>
+      <a href="legal.html">Legal</a>
+    </nav>
+    <div class="nav-right">
+      <button class="search-trigger" aria-label="Search" id="search-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>
+        <span class="s-label">Search</span>
+        <kbd>⌘K</kbd>
+      </button>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle light/dark theme">☀</button>
+      <a class="button" href="https://portal.exergynet.org/">Portal Sign In <span class="arrow" aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navlinks" type="button">☰</button>
+    </div>
+  </div>
+</header>
+<!-- CANONICAL:HEADER:END -->
+
+<main id="main-content">
+
+  <!-- HERO -->
+  <section class="hero hero-centered">
+    <div class="wrap">
+      <div class="hero-pill"><span class="pulse" aria-hidden="true"></span>ExergyNet / Studio</div>
+      <h1>The graphical workspace<br>for <em>AI engineering.</em></h1>
+      <p class="hero-sub">ExergyNet Studio is the visual layer for the ExergyNet runtime. Checkpoint timelines, multi-agent coordination, approval workflows, and swarm command — built on the same persistent memory and authority infrastructure as ExergyCode.</p>
+      <div class="hero-actions">
+        <a class="btn btn-lg" href="https://studio.exergynet.org" target="_blank" rel="noopener">Open Studio <span aria-hidden="true">↗</span></a>
+        <a class="btn btn-outline btn-lg" href="exergycode.html">Explore ExergyCode first <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="hero-tagline">
+        v0.5.0-alpha.6 · 21/21 automated tests PASS · Swarm Command Center qualified · Distribution pending legal approval
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT STUDIO IS -->
+  <section class="section section-alt" aria-labelledby="what-heading">
+    <div class="wrap">
+      <div class="studio-two-col">
+        <div>
+          <div class="eyebrow" style="margin-bottom:14px"><span class="dot" aria-hidden="true"></span>Product definition</div>
+          <h2 id="what-heading" style="font-size:clamp(28px,3.5vw,42px);margin-bottom:16px">Not a new runtime.<br>A better view of the same one.</h2>
+          <p style="font-size:16px;color:var(--muted);line-height:1.75;margin-bottom:14px">ExergyNet Studio does not replace ExergyCode. It runs on the same ExergyNet authority layer, the same VMN namespace, and the same persistent state infrastructure.</p>
+          <p style="font-size:16px;color:var(--muted);line-height:1.75;margin-bottom:14px">Studio adds a graphical surface to work already in progress. Visual diffs, checkpoint inspection, multi-agent approval flows — the operations that benefit from a broader view than a single terminal.</p>
+          <p style="font-size:13px;color:var(--sub);font-family:var(--mono)">One account. One memory namespace. Two interfaces.</p>
+        </div>
+        <div>
+          <div class="studio-compare-grid">
+            <div class="studio-compare-card">
+              <h3>ExergyCode</h3>
+              <ul>
+                <li>Terminal-native</li>
+                <li>Full CLI engineering</li>
+                <li>Script and pipeline automation</li>
+                <li>Low-overhead, keyboard-first</li>
+                <li>BYOK provider management</li>
+              </ul>
+            </div>
+            <div class="studio-compare-card">
+              <h3>Studio</h3>
+              <ul>
+                <li>Graphical workspace</li>
+                <li>Visual checkpoint timeline</li>
+                <li>Multi-agent coordination</li>
+                <li>Approval interfaces</li>
+                <li>Swarm Command Center</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" aria-labelledby="features-heading">
+    <div class="wrap">
+      <div class="section-heading">
+        <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Capabilities</div>
+        <h2 id="features-heading">Qualified capabilities.</h2>
+        <p>What Studio has completed in automated qualification — and what is forthcoming.</p>
+      </div>
+      <div class="studio-feat-grid">
+        <div class="studio-feat-card">
+          <div class="studio-feat-icon" aria-hidden="true">◫</div>
+          <h3>Ink 5 TUI interface</h3>
+          <p>Terminal UI built on Ink 5. Runs locally on the developer's machine. Requires no browser for the core engineering workflow.</p>
+        </div>
+        <div class="studio-feat-card">
+          <div class="studio-feat-icon" aria-hidden="true">⌁</div>
+          <h3>Loopback WebSocket bridge</h3>
+          <p>Local WebSocket connection between the TUI and the web workspace. All traffic stays on <code>127.0.0.1</code> in the local configuration.</p>
+        </div>
+        <div class="studio-feat-card">
+          <div class="studio-feat-icon" aria-hidden="true">▣</div>
+          <h3>Swarm Command Center</h3>
+          <p>Coordinate multiple concurrent agents from a single workspace. 7/7 concurrent swarm sessions qualified in test.</p>
+        </div>
+        <div class="studio-feat-card">
+          <div class="studio-feat-icon" aria-hidden="true">↗</div>
+          <h3>Four provider adapters</h3>
+          <p>Provider adapter architecture connects Studio sessions to authorized inference providers. BYOK keys stay in your environment.</p>
+        </div>
+        <div class="studio-feat-card">
+          <div class="studio-feat-icon" aria-hidden="true">✓</div>
+          <h3>Sequential agent qualification</h3>
+          <p>9/9 sequential 3-agent sessions qualified. Persistent memory and authority layer operate consistently across sequential sessions.</p>
+        </div>
+        <div class="studio-feat-card">
+          <div class="studio-feat-icon" aria-hidden="true">◇</div>
+          <h3>VMN namespace integration</h3>
+          <p>Studio sessions share the same VMN namespace as ExergyCode. Memory persists across both interfaces without duplication.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROVIDER ADAPTERS -->
+  <section class="section section-alt" aria-labelledby="adapters-heading">
+    <div class="wrap">
+      <div class="section-heading">
+        <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Architecture</div>
+        <h2 id="adapters-heading">Adapter architecture.</h2>
+        <p>Studio's provider adapter layer connects your existing inference account to the ExergyNet authority layer.</p>
+      </div>
+      <div class="studio-adapter-grid">
+        <div class="studio-adapter-card">
+          <div class="studio-adapter-num">A1</div>
+          <div class="studio-adapter-body">
+            <h4>Provider adapter</h4>
+            <p>Routes inference requests to your authorized provider account. Provider keys stay in your environment.</p>
+          </div>
+        </div>
+        <div class="studio-adapter-card">
+          <div class="studio-adapter-num">A2</div>
+          <div class="studio-adapter-body">
+            <h4>Memory adapter</h4>
+            <p>Connects Studio sessions to your VMN namespace. Retrieval and storage stay consistent with ExergyCode sessions.</p>
+          </div>
+        </div>
+        <div class="studio-adapter-card">
+          <div class="studio-adapter-num">A3</div>
+          <div class="studio-adapter-body">
+            <h4>Authority adapter</h4>
+            <p>Routes execution proposals to the ExergyNet authority layer. Decisions are independent of the inference provider.</p>
+          </div>
+        </div>
+        <div class="studio-adapter-card">
+          <div class="studio-adapter-num">A4</div>
+          <div class="studio-adapter-body">
+            <h4>Telemetry adapter</h4>
+            <p>Records session events, resource consumption (RHO), and checkpoint state. Local-first; remote sync requires API key.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUALIFICATION STATUS -->
+  <section class="section" id="release-status" aria-labelledby="qual-heading">
+    <div class="wrap">
+      <div class="section-heading">
+        <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Verification</div>
+        <h2 id="qual-heading">What has been qualified.</h2>
+        <p>Automated qualification results for Studio v0.5.0-alpha.6. These are test results, not production deployment claims.</p>
+      </div>
+      <div class="studio-table-wrap">
+        <table class="studio-qual-table">
+          <thead>
+            <tr>
+              <th>Test class</th>
+              <th>Result</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Automated tests (overall)</td>
+              <td><span class="stu-badge stu-badge-green">21/21 PASS</span></td>
+              <td>Full test suite, v0.5.0-alpha.6</td>
+            </tr>
+            <tr>
+              <td>Sequential 3-agent sessions</td>
+              <td><span class="stu-badge stu-badge-green">9/9 PASS</span></td>
+              <td>Sequential sessions, persistent memory across transitions</td>
+            </tr>
+            <tr>
+              <td>Concurrent swarm sessions</td>
+              <td><span class="stu-badge stu-badge-green">7/7 PASS</span></td>
+              <td>Swarm Command Center, concurrent multi-agent coordination</td>
+            </tr>
+            <tr>
+              <td>Provider adapter connectivity</td>
+              <td><span class="stu-badge stu-badge-green">PASS</span></td>
+              <td>All 4 adapters qualified in automated environment</td>
+            </tr>
+            <tr>
+              <td>Authority resolution</td>
+              <td><span class="stu-badge stu-badge-amber">DEGRADED (observed)</span></td>
+              <td>Degraded authority state observed in prior sessions. Not resolved by automated qualification alone.</td>
+            </tr>
+            <tr>
+              <td>VMN connectivity</td>
+              <td><span class="stu-badge stu-badge-amber">CONDITIONAL</span></td>
+              <td>Local VMN qualified. Cloud sync connectivity not independently verified in current environment.</td>
+            </tr>
+            <tr>
+              <td>Inference provider timeout</td>
+              <td><span class="stu-badge stu-badge-amber">CONDITIONAL</span></td>
+              <td>Provider timeout condition observed. Not resolved by qualification alone.</td>
+            </tr>
+            <tr>
+              <td>Legal / license approval</td>
+              <td><span class="stu-badge stu-badge-gray">PENDING</span></td>
+              <td>Proprietary alpha license pending final approval. No public distribution until authorized.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ec-notice">
+        <strong>Important:</strong> Automated qualification does not resolve the previously observed degraded authority, VMN connectivity, and inference timeout conditions. These remain open and are tracked separately. Studio is classified as Alpha, not production-ready.
+      </div>
+    </div>
+  </section>
+
+  <!-- EXERGYCODE RELATIONSHIP -->
+  <section class="section section-alt" aria-labelledby="ec-rel-heading">
+    <div class="wrap" style="max-width:720px;margin-inline:auto;text-align:center">
+      <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Start here</div>
+      <h2 id="ec-rel-heading" style="font-size:clamp(30px,3.8vw,44px);margin:14px 0 16px">New to ExergyNet?<br>Start with ExergyCode.</h2>
+      <p style="font-size:16px;color:var(--muted);line-height:1.75;margin-bottom:28px">ExergyCode is the terminal-first entry point for ExergyNet. When ExergyCode reaches general availability, Studio becomes the graphical companion workspace. Both share the same runtime — your sessions, checkpoints, and memory namespace are the same in both interfaces.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <a class="btn btn-lg" href="exergycode.html">Explore ExergyCode <span aria-hidden="true">→</span></a>
+        <a class="btn btn-outline btn-lg" href="continuity.html">Get Agent Continuity now <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ACCESS -->
+  <section class="section" aria-labelledby="access-heading">
+    <div class="wrap">
+      <div class="section-heading">
+        <div class="eyebrow"><span class="dot" aria-hidden="true"></span>Access</div>
+        <h2 id="access-heading">Studio access and distribution.</h2>
+        <p>How to access Studio now and when it reaches general availability.</p>
+      </div>
+      <div class="studio-access-grid">
+        <div class="studio-feat-card">
+          <div class="studio-feat-icon" aria-hidden="true">▣</div>
+          <h3>studio.exergynet.org</h3>
+          <p>The Studio workspace is available to authorized ExergyNet Portal users at studio.exergynet.org. Requires a Portal account and authorized session.</p>
+          <a class="btn btn-outline btn-sm" href="https://studio.exergynet.org" target="_blank" rel="noopener" style="margin-top:16px">Open Studio ↗</a>
+        </div>
+        <div class="studio-feat-card">
+          <div class="studio-feat-icon" aria-hidden="true">📦</div>
+          <h3>Package distribution</h3>
+          <p>Standalone Studio distribution is pending final legal and license approval. When approved, the package will be available to ExergyNet Portal subscribers.</p>
+          <span style="display:inline-flex;gap:5px;align-items:center;margin-top:16px">
+            <span class="stu-badge stu-badge-gray">PENDING APPROVAL</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- CANONICAL:FOOTER:START -->
+<footer class="site-footer" id="company">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="brand" href="index.html" aria-label="ExergyNet home">
+          <img src="assets/nav-logo-green.png" alt="ExergyNet" class="logo-dark">
+          <img src="assets/nav-logo-navy.png" alt="ExergyNet" class="logo-light">
+        </a>
+        <p>Persistent state. Bounded context.<br>Independent authority for machine intelligence.</p>
+      </div>
+      <div class="foot-col">
+        <strong>Products</strong>
+        <a href="exergycode.html">ExergyCode</a>
+        <a href="studio.html">ExergyNet Studio</a>
+        <a href="continuity.html">Agent Continuity</a>
+        <a href="security.html">Security</a>
+      </div>
+      <div class="foot-col">
+        <strong>Build</strong>
+        <a href="docs.html">Documentation</a>
+        <a href="https://github.com/ezumba/vanguard-memory-node">Open source ↗</a>
+        <a href="api-integration.html">API reference</a>
+        <a href="proof.html">Verification status</a>
+      </div>
+      <div class="foot-col">
+        <strong>Research</strong>
+        <a href="whitepaper.html">White paper V5</a>
+        <a href="benchmarks.html">Benchmarks</a>
+        <a href="vanguard.html">Vanguard</a>
+        <a href="https://x.com/ExergyNet">Follow ExergyNet ↗</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 EDT INC. · Infrastructure for machine intelligence.</span>
+      <div class="footer-links">
+        <a href="intellectual-property.html">Intellectual Property</a>
+        <a href="legal.html">Legal</a>
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- CANONICAL:FOOTER:END -->
+
+<!-- CANONICAL:SEARCH:START -->
+<dialog class="search-dialog" id="search-dialog" aria-label="Search">
+  <div class="search-top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 5 5"/></svg>
+    <label class="sr-only" for="site-search">Search pages and guides</label>
+    <input id="site-search" type="search" placeholder="Search pages and guides…" autocomplete="off">
+    <button class="search-esc" aria-label="Close search" type="button">Esc</button>
+  </div>
+  <div class="search-results" role="listbox"></div>
+  <div class="search-footer-bar">Tab to navigate · Enter to open · Esc to close</div>
+</dialog>
+
+<div class="toast" role="status" aria-live="polite" hidden></div>
+<!-- CANONICAL:SEARCH:END -->
+<script src="app.js"></script>
+</body>
+</html>

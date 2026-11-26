@@ -13,6 +13,8 @@ PARTIALS = ROOT / "partials"
 
 PAGES = {
     "index.html": "index.html#platform",
+    "exergycode.html": "exergycode.html",
+    "studio.html": "studio.html",
     "legal.html": "legal.html",
     "intellectual-property.html": "intellectual-property.html",
 }
